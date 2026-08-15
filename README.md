@@ -192,6 +192,12 @@ Verified against the live `esma_registers_upreg` core:
   free-text word matching.
 * `fq=entity_type:(ae OR aeActivity)` → 52,759 documents (13,930 + 38,829),
   i.e. boolean grouping inside a field works as expected.
+* **`_root_` is sortable, and sorting on it is the trick worth knowing.**
+  `sort=_root_ asc,id asc` still satisfies the cursor requirement (it ends in
+  the unique `id`) but makes every entity's parent and children **contiguous in
+  the result stream**, instead of `id asc` putting all 13,930 parents first and
+  all the children afterwards. This tool uses it for `upreg`; without it,
+  sampling the first N documents shows you nothing but parents.
 
 #### Cores
 
@@ -205,7 +211,9 @@ Verified live, with document counts on 2026-08-15:
 | `esma_registers_bench_entities` | Benchmark administrators (BMR) | 28,134 |
 | `esma_registers_mmf04` | Money market funds | 671 |
 
-Additional cores named in ESMA's A2A help page but **not** probed here:
+Additional cores named in ESMA's documentation but **not** probed here — the
+first eight from the A2A help page, the rest from the databases-and-registers
+index:
 `esma_registers_sanctions`, `esma_registers_mifid_shsexs`,
 `esma_registers_coder58`, `esma_registers_bench_benchmarks`,
 `esma_registers_stsre`, `esma_registers_priii_documents`,
@@ -592,10 +600,10 @@ value, run `--list-values FIELD`. Note that Solr `q`/`--query` has no default
 search field, so `--query Bybit` legitimately matches nothing — write
 `--query 'ae_entityName:bybit*'`.
 
-**Memory.** `upreg` is buffered in full before flattening, because a parent and
-its children are not adjacent under the `id asc` sort required for cursor
-paging. The whole core is ~100k documents; narrow it with `--select` when you
-can, or cap it with `--max-docs`.
+**Memory.** The whole result set is buffered before flattening, so that a
+filter can match on a child record and still return the entity row. The whole
+`upreg` core is ~100k documents — narrow it with `--select` when you can, or cap
+it with `--max-docs`.
 
 ---
 

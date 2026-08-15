@@ -246,7 +246,10 @@ def solr_params(core: str, args) -> dict[str, Any]:
 def iter_solr(fetcher: Fetcher, core: str, args) -> Iterator[dict[str, Any]]:
     url = f"{SOLR_BASE}/{core}/select"
     params = solr_params(core, args)
-    params.update({"rows": max(1, min(args.page_size, 1000)), "sort": "id asc"})
+    # Leading with _root_ keeps each entity's parent and children contiguous;
+    # cursor paging only needs the sort to end in the unique id field.
+    sort = "_root_ asc,id asc" if core == "esma_registers_upreg" else "id asc"
+    params.update({"rows": max(1, min(args.page_size, 1000)), "sort": sort})
     cursor, page, seen = "*", 0, 0
     while True:
         page += 1

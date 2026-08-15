@@ -103,6 +103,20 @@ class TestPaging:
         assert len(responses.calls) == 1
 
     @responses.activate
+    def test_block_cores_sort_by_root_so_entities_stay_contiguous(self, fetcher):
+        responses.add(responses.GET, URL, json={"response": {"docs": []}}, status=200)
+        list(UPREG.iter_records(fetcher, Query()))
+        assert "sort=_root_+asc%2Cid+asc" in responses.calls[0].request.url
+
+    @responses.activate
+    def test_flat_cores_sort_by_id_alone(self, fetcher):
+        core = solr_source_for_core("esma_registers_mmf04")
+        flat_url = "https://registers.esma.europa.eu/solr/esma_registers_mmf04/select"
+        responses.add(responses.GET, flat_url, json={"response": {"docs": []}}, status=200)
+        list(core.iter_records(fetcher, Query()))
+        assert "sort=id+asc" in responses.calls[0].request.url
+
+    @responses.activate
     def test_page_size_is_capped_at_the_documented_maximum(self, fetcher):
         responses.add(responses.GET, URL, json={"response": {"docs": []}}, status=200)
         list(UPREG.iter_records(fetcher, Query(page_size=999_999)))

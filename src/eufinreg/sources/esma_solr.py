@@ -48,6 +48,11 @@ class SolrSource(Source):
     history_doc_types: tuple[str, ...] = ()
     #: Parent field a ``--select`` value is matched against.
     select_field: str = ""
+    #: Cursor paging requires a deterministic sort ending in the unique ``id``.
+    #: For block-structured cores, leading with ``_root_`` makes each entity's
+    #: parent and children contiguous in the stream instead of scattering them
+    #: across pages — which is what lets ``--inspect`` sample whole entities.
+    sort: str = "id asc"
     base_url: str = SOLR_BASE
     multi_value_fields: dict[str, str] = field(default_factory=dict)
 
@@ -97,7 +102,7 @@ class SolrSource(Source):
             "q": self.build_q(query),
             "wt": "json",
             "rows": rows,
-            "sort": "id asc",
+            "sort": self.sort,
             "cursorMark": "*",
         }
         fq = self.build_fq(query)
@@ -179,6 +184,7 @@ UPREG = SolrSource(
     "crowdfunding providers, trading venues)",
     block_structured=True,
     select_field="ae_entityTypeCode",
+    sort="_root_ asc,id asc",
     default_doc_types=("ae", "aeActivity", "aeNotHostMmbSt"),
     history_doc_types=("aeActivityHistory",),
     enum_fields=(
