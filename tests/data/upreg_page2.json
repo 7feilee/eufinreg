@@ -1,0 +1,90 @@
+{
+ "responseHeader": {
+  "status": 0,
+  "QTime": 2
+ },
+ "response": {
+  "numFound": 8,
+  "start": 0,
+  "numFoundExact": true,
+  "docs": [
+   {
+    "id": "aeActivity207802",
+    "ac_serviceName": "[WITHOUT] Facilitation of granting of loans WITHOUT individual portfolio management of loans",
+    "ac_authorisationNotificationDateStr": "24/10/2023",
+    "ac_status": "Active",
+    "ac_comment": "",
+    "entity_type": "aeActivity",
+    "_root_": "ae47828",
+    "type_s": "child",
+    "ac_authorisationEndDate": "",
+    "ac_authorisationNotificationDate": "2023-10-24T00:00:00Z",
+    "_version_": 1862000899246784512,
+    "timestamp": "2026-04-09T13:47:14.732Z"
+   },
+   {
+    "id": "aeActivity207803",
+    "ac_serviceName": "Payment services",
+    "ac_authorisationNotificationDateStr": "24/10/2023",
+    "ac_status": "Active",
+    "ac_comment": "",
+    "entity_type": "aeActivity",
+    "_root_": "ae47828",
+    "type_s": "child",
+    "ac_authorisationEndDate": "",
+    "ac_authorisationNotificationDate": "2023-10-24T00:00:00Z",
+    "_version_": 1862000899246784512,
+    "timestamp": "2026-04-09T13:47:14.732Z"
+   },
+   {
+    "id": "ae47834",
+    "ae_entityTypeCode": "CSP",
+    "ae_lastUpdate": "2024-02-07T00:00:00Z",
+    "ae_lastUpdateStr": "07/02/2024",
+    "ae_micLeiEsmaId": "KRS0000820021",
+    "ae_lei": "259400QRIFD5Q6R6CN41",
+    "ae_headOfficeLei": "",
+    "ae_entityName": "Emiteo sp. z o.o.",
+    "collectorParent": [
+     "Emiteo sp. z o.o."
+    ],
+    "ae_officeType": "Head office",
+    "ae_competentAuthority": "Polish Financial Supervisory Authority (KNF)",
+    "ae_homeMemberState": "POLAND",
+    "ae_hostMemberState": "",
+    "ae_headOfficeAddress": "ul. Wojska Polskiego 24-26, 75-712 Koszalin",
+    "ae_branchAddress": "",
+    "ae_comment": "",
+    "ae_status": "Active",
+    "ae_authorisationNotificationDate": "2023-10-27T00:00:00Z",
+    "ae_authorisationNotificationDateStr": "27/10/2023",
+    "ae_authorisationWithdrawalEndDateStr": "",
+    "entity_type": "ae",
+    "type_s": "parent",
+    "ae_entityTypeLabel": "European Crowdfunding Service Provider",
+    "_root_": "ae47834",
+    "ae_dbId": 47834,
+    "ae_website": "www.emiteo.pl",
+    "ae_commercialName": "Emiteo sp. z o.o.",
+    "ae_legalform": "sp. z o.o.",
+    "_version_": 1862001146940358657,
+    "timestamp": "2026-04-09T13:51:10.956Z"
+   },
+   {
+    "id": "aeActivity207805",
+    "ac_serviceName": "Placing without a firm commitment basis and transmission of client orders",
+    "ac_authorisationNotificationDateStr": "27/10/2023",
+    "ac_status": "Active",
+    "ac_comment": "",
+    "entity_type": "aeActivity",
+    "_root_": "ae47834",
+    "type_s": "child",
+    "ac_authorisationEndDate": "",
+    "ac_authorisationNotificationDate": "2023-10-27T00:00:00Z",
+    "_version_": 1862001146940358657,
+    "timestamp": "2026-04-09T13:51:10.956Z"
+   }
+  ]
+ },
+ "nextCursorMark": "CURSOR3"
+}

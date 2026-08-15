@@ -1,0 +1,110 @@
+{
+ "responseHeader": {
+  "status": 0,
+  "QTime": 3
+ },
+ "response": {
+  "numFound": 8,
+  "start": 0,
+  "numFoundExact": true,
+  "docs": [
+   {
+    "id": "ae47825",
+    "ae_entityTypeCode": "CSP",
+    "ae_lastUpdate": "2026-02-04T00:00:00Z",
+    "ae_lastUpdateStr": "04/02/2026",
+    "ae_micLeiEsmaId": "98450009E707663BF854",
+    "ae_lei": "98450009E707663BF854",
+    "ae_headOfficeLei": "",
+    "ae_entityName": "Bridge Real Estate S.r.l.",
+    "collectorParent": [
+     "Bridge Real Estate S.r.l."
+    ],
+    "ae_officeType": "Head office",
+    "ae_competentAuthority": "Commissione Nazionale per le Societa e la Borsa (CONSOB)",
+    "ae_homeMemberState": "ITALY",
+    "ae_hostMemberState": "",
+    "ae_headOfficeAddress": "Piazza Virgilio, 4 - 20123 - MILANO - (MI) - ITALIA",
+    "ae_branchAddress": "",
+    "ae_comment": "",
+    "ae_status": "Active",
+    "ae_authorisationNotificationDate": "2024-01-31T00:00:00Z",
+    "ae_authorisationNotificationDateStr": "31/01/2024",
+    "ae_authorisationWithdrawalEndDateStr": "",
+    "entity_type": "ae",
+    "type_s": "parent",
+    "ae_entityTypeLabel": "European Crowdfunding Service Provider",
+    "_root_": "ae47825",
+    "ae_dbId": 47825,
+    "ae_website": "www.bridgeasset.it",
+    "ae_commercialName": "Bridge Asset",
+    "ae_legalform": "Societa' a Responsabilita' Limitata",
+    "_version_": 1862000881436721153,
+    "timestamp": "2026-04-09T13:46:57.752Z"
+   },
+   {
+    "id": "aeActivity207800",
+    "ac_serviceName": "[WITHOUT] Facilitation of granting of loans WITHOUT individual portfolio management of loans",
+    "ac_authorisationNotificationDateStr": "31/01/2024",
+    "ac_status": "Active",
+    "ac_comment": "",
+    "entity_type": "aeActivity",
+    "_root_": "ae47825",
+    "type_s": "child",
+    "ac_authorisationEndDate": "",
+    "ac_authorisationNotificationDate": "2024-01-31T00:00:00Z",
+    "_version_": 1862000881436721153,
+    "timestamp": "2026-04-09T13:46:57.752Z"
+   },
+   {
+    "id": "ae47828",
+    "ae_entityTypeCode": "CSP",
+    "ae_lastUpdate": "2024-02-07T00:00:00Z",
+    "ae_lastUpdateStr": "07/02/2024",
+    "ae_micLeiEsmaId": "2440326-9",
+    "ae_lei": "743700KV4S9Y7VNJO772",
+    "ae_headOfficeLei": "",
+    "ae_entityName": "Vauraus Suomi Oyj",
+    "collectorParent": [
+     "Vauraus Suomi Oyj"
+    ],
+    "ae_officeType": "Head office",
+    "ae_competentAuthority": "Finanssivalvonta (FSA)",
+    "ae_homeMemberState": "FINLAND",
+    "ae_hostMemberState": "",
+    "ae_headOfficeAddress": "Urho Kekkosen katu 7b, 00100 Helsinki",
+    "ae_branchAddress": "",
+    "ae_comment": "",
+    "ae_status": "Active",
+    "ae_authorisationNotificationDate": "2023-10-24T00:00:00Z",
+    "ae_authorisationNotificationDateStr": "24/10/2023",
+    "ae_authorisationWithdrawalEndDateStr": "",
+    "entity_type": "ae",
+    "type_s": "parent",
+    "ae_entityTypeLabel": "European Crowdfunding Service Provider",
+    "_root_": "ae47828",
+    "ae_dbId": 47828,
+    "ae_website": "www.vauraus.fi",
+    "ae_commercialName": "Vauraus",
+    "ae_legalform": "Public limited company",
+    "_version_": 1862000899246784512,
+    "timestamp": "2026-04-09T13:47:14.732Z"
+   },
+   {
+    "id": "aeActivity207801",
+    "ac_serviceName": "[WITH] Facilitation of granting of loans WITH individual portfolio management of loans",
+    "ac_authorisationNotificationDateStr": "24/10/2023",
+    "ac_status": "Active",
+    "ac_comment": "",
+    "entity_type": "aeActivity",
+    "_root_": "ae47828",
+    "type_s": "child",
+    "ac_authorisationEndDate": "",
+    "ac_authorisationNotificationDate": "2023-10-24T00:00:00Z",
+    "_version_": 1862000899246784512,
+    "timestamp": "2026-04-09T13:47:14.732Z"
+   }
+  ]
+ },
+ "nextCursorMark": "CURSOR2"
+}

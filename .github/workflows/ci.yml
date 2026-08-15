@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Tests are fully mocked; fail loudly rather than hang if one ever isn't.
+  PYTHONUNBUFFERED: "1"
+
+jobs:
+  test:
+    name: test (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Install the project
+        # --locked fails the build if uv.lock is stale rather than silently
+        # resolving something else.
+        run: uv sync --locked --all-extras --python ${{ matrix.python-version }}
+
+      - name: Run tests
+        run: uv run --python ${{ matrix.python-version }} pytest -q
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - run: uv sync --locked --all-extras
+
+      - name: ruff check
+        run: uv run ruff check --output-format=github .
+
+      - name: ruff format
+        run: uv run ruff format --check .
+
+      - name: lockfile is current
+        run: uv lock --check
+
+  single-file-script:
+    name: PEP 723 script resolves and runs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      # No network calls: --list-sources exercises the inline metadata, the
+      # dependency resolution and the imports without touching a register.
+      - name: Run the standalone script
+        run: uv run --script scripts/eufinreg_solo.py --list-sources

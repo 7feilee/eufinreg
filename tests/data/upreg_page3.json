@@ -1,0 +1,13 @@
+{
+ "responseHeader": {
+  "status": 0,
+  "QTime": 1
+ },
+ "response": {
+  "numFound": 8,
+  "start": 0,
+  "numFoundExact": true,
+  "docs": []
+ },
+ "nextCursorMark": "CURSOR3"
+}

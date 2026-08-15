@@ -1,0 +1,29 @@
+{
+ "responseHeader": {
+  "status": 0,
+  "QTime": 5
+ },
+ "response": {
+  "numFound": 13930,
+  "start": 0,
+  "docs": []
+ },
+ "facet_counts": {
+  "facet_queries": {},
+  "facet_fields": {
+   "ae_entityTypeCode": [
+    "mif",
+    7194,
+    "aif",
+    3786,
+    "uci",
+    1705,
+    "csp",
+    259
+   ]
+  },
+  "facet_ranges": {},
+  "facet_intervals": {},
+  "facet_heatmaps": {}
+ }
+}

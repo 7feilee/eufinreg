@@ -1,0 +1,64 @@
+[project]
+name = "eufinreg"
+version = "0.1.0"
+description = "Fetch structured lists of licensed financial entities from the EU public registers (ESMA Registers A2A + ESMA interim MiCA register)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "eufinreg contributors" }]
+keywords = ["esma", "mica", "bafin", "fma", "regulatory", "register", "open-data"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Financial and Insurance Industry",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Office/Business :: Financial",
+]
+
+# Runtime dependencies are deliberately kept to one library.
+dependencies = ["requests>=2.31"]
+
+[project.optional-dependencies]
+# Only needed for `--format xlsx`. Everything else works with requests alone.
+xlsx = ["openpyxl>=3.1"]
+
+[project.scripts]
+eufinreg = "eufinreg.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/CHANGE-ME/eufinreg"
+Issues = "https://github.com/CHANGE-ME/eufinreg/issues"
+
+[dependency-groups]
+dev = ["pytest>=8.0", "responses>=0.25", "ruff>=0.6"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/eufinreg"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "C4", "RUF"]
+ignore = [
+  "E501",   # line length is handled by the formatter
+  "RUF001", # ambiguous unicode in docs/strings (register data is multilingual)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011"]
+
+[tool.ruff.format]
+quote-style = "double"
