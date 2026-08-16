@@ -22,6 +22,8 @@ condition of trading:
   * EUDAMED (medical devices, MDR/IVDR) — 48,893 manufacturers, importers and
       authorised representatives, plus the 70 notified bodies
       https://ec.europa.eu/tools/eudamed
+  * CTIS (clinical trials, Reg. 536/2014) — who sponsors trials in the EU
+      https://euclinicaltrials.eu/ctis-public/search
 
 BaFin's and FMA's own company databases sit behind a portal whose robots.txt is
 ``Disallow: /``, so this script does not touch it — even though the portal does
@@ -54,7 +56,7 @@ from typing import Any
 
 import requests
 
-VERSION = "0.3.0"
+VERSION = "0.4.0"
 DEFAULT_USER_AGENT = (
     f"eufinreg-solo/{VERSION} (+https://github.com/CHANGE-ME/eufinreg; public-register client)"
 )
@@ -90,6 +92,7 @@ SOURCES: dict[str, tuple[str, str, str]] = {
         "EUDAMED economic operators: EU medical device makers, importers, reps",
     ),
     "eudamed-nb": ("eudamed", "api/ses/", "EUDAMED notified bodies (MDR/IVDR)"),
+    "ctis": ("ctis", "search", "EU clinical trials and their sponsors (Reg. 536/2014)"),
 }
 
 # Block-structured Solr cores: parents and children share one flat docs array.
@@ -113,6 +116,7 @@ ENUM_FIELDS: dict[str, tuple[str, ...]] = {
     "eba-psd": ("EntityType", "CA_OwnerID", "ENT_COU_RES", "ENT_SER", "ENT_SER_COU"),
     "eudamed-eo": ("actorType", "actorStatus", "countryIso2Code", "countryName"),
     "eudamed-nb": ("actorType", "countryIso2Code", "legislationCodes"),
+    "ctis": ("sponsorType", "trialPhase", "trialCountries", "therapeuticAreas"),
 }
 MULTI_VALUE = {
     "ac_serviceCode_cou": "|",
@@ -120,7 +124,16 @@ MULTI_VALUE = {
     "ae_DTI": "|",
     "ENT_SER": "|",
     "ENT_SER_COU": "|",
+    "trialCountries": "|",
+    "therapeuticAreas": "|",
 }
+
+# CTIS (clinical trials). searchCriteria must be present even when empty, or the
+# API answers 200 with totalRecords 0. Paging also stops dead at 10,000 records
+# while totalRecords keeps reporting the true total — hence the warning below.
+CTIS_SEARCH = "https://euclinicaltrials.eu/ctis-public-api/search"
+CTIS_MAX_PAGE = 500
+CTIS_WINDOW = 10_000
 
 # EBA PSD2 register. The download is mandated machine-readable by Commission
 # Implementing Regulation (EU) 2019/410; the file metadata endpoint names the
@@ -243,11 +256,27 @@ class Fetcher:
     def get(
         self, url: str, params: dict[str, Any] | None = None, label: str = "response"
     ) -> requests.Response:
+        return self.request("GET", url, params, label=label)
+
+    def post_json(self, url: str, body: Any, label: str = "response") -> Any:
+        """A couple of registers put their search behind POST. Still a read."""
+        return self.request("POST", url, json_body=body, label=label).json()
+
+    def request(
+        self,
+        method: str,
+        url: str,
+        params: dict[str, Any] | None = None,
+        json_body: Any = None,
+        label: str = "response",
+    ) -> requests.Response:
         last = "no attempt"
         for attempt in range(self.retries + 1):
             self._throttle()
             try:
-                response = self.session.get(url, params=params, timeout=(10.0, self.timeout))
+                response = self.session.request(
+                    method, url, params=params, json=json_body, timeout=(10.0, self.timeout)
+                )
             except requests.RequestException as exc:
                 self._last = time.monotonic()
                 last = f"{type(exc).__name__}: {exc}"
@@ -518,6 +547,57 @@ def read_eudamed(fetcher: Fetcher, path: str, args) -> list[dict[str, Any]]:
             return rows
 
 
+def read_ctis(fetcher: Fetcher, args) -> list[dict[str, Any]]:
+    """CTIS trial search. `--query` is free text, or a raw searchCriteria object."""
+    criteria: dict[str, Any] = {}
+    if args.query and args.query.strip():
+        text = args.query.strip()
+        criteria = json.loads(text) if text.startswith("{") else {"containAll": text}
+    if args.select:
+        raise SystemExit("eufinreg-solo: ctis has no --select; use --query")
+
+    size = max(1, min(args.page_size, CTIS_MAX_PAGE))
+    rows: list[dict[str, Any]] = []
+    total = None
+    page = 1  # 1-based
+    while True:
+        body = {
+            "pagination": {"page": page, "size": size},
+            "sort": {"property": "ctNumber", "direction": "ASC"},
+            "searchCriteria": criteria,
+        }
+        payload = fetcher.post_json(CTIS_SEARCH, body, f"ctis-p{page:04d}")
+        info = payload.get("pagination") or {}
+        if total is None:
+            total = info.get("totalRecords")
+        data = payload.get("data") or []
+        for record in data:
+            row = {}
+            for name, value in record.items():
+                if value is None:
+                    row[name] = ""
+                elif isinstance(value, list):
+                    row[name] = SEP.join(str(v) for v in value if v not in (None, ""))
+                elif isinstance(value, (str, int, float, bool)):
+                    row[name] = value
+                else:
+                    row[name] = json.dumps(value, ensure_ascii=False, sort_keys=True)
+            rows.append(row)
+            if args.max_docs and len(rows) >= args.max_docs:
+                return rows
+        if not data or not info.get("nextPage"):
+            break
+        page += 1
+    if total and len(rows) < total and not args.max_docs and not args.quiet:
+        print(
+            f"eufinreg-solo: warning: CTIS returned {len(rows)} of {total} matching trials "
+            f"— its search stops at {CTIS_WINDOW:,} records however you page. "
+            f"Narrow it with --query to reach the rest.",
+            file=sys.stderr,
+        )
+    return rows
+
+
 def read_records(fetcher: Fetcher, kind: str, target: str, args) -> list[dict[str, Any]]:
     """Read a whole source, whichever kind of interface it happens to have."""
     if kind == "solr":
@@ -528,6 +608,8 @@ def read_records(fetcher: Fetcher, kind: str, target: str, args) -> list[dict[st
         return read_eba_psd(fetcher, args)
     if kind == "eudamed":
         return read_eudamed(fetcher, target, args)
+    if kind == "ctis":
+        return read_ctis(fetcher, args)
     raise SystemExit(f"eufinreg-solo: unknown source kind {kind!r}")
 
 

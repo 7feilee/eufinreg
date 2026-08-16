@@ -19,6 +19,7 @@ PSD_ZIP_URL = (
     "https://euclid.eba.europa.eu/register/downloads/PSDMD/29990101/download-PSDMD-209901010000.zip"
 )
 EUDAMED_EO_URL = "https://ec.europa.eu/tools/eudamed/api/eos"
+CTIS_URL = "https://euclinicaltrials.eu/ctis-public-api/search"
 
 FAST = ["--delay", "0", "--quiet"]
 
@@ -157,6 +158,24 @@ class TestFetch:
         # No HTTP mock registered: this must fail before any request is made.
         assert main([*FAST, "--source", "eudamed-eo", "--select", "wholesaler"]) == 2
         assert "unknown actor type" in capsys.readouterr().err
+
+    @responses.activate
+    def test_ctis_end_to_end(self, tmp_path):
+        for n in (1, 2):
+            responses.add(responses.POST, CTIS_URL, json=load_json(f"ctis_page{n}.json"))
+        out = tmp_path / "trials.csv"
+        assert main([*FAST, "--source", "ctis", "-o", str(out)]) == 0
+        rows = _read_csv(out)
+        assert len(rows) == 4
+        assert all(r["sponsor"] for r in rows)
+
+    @responses.activate
+    def test_a_truncated_ctis_result_warns_on_stderr(self, tmp_path, capsys):
+        page = load_json("ctis_page1.json")
+        page["pagination"] = {"totalRecords": 12229, "currentPage": 1, "nextPage": False}
+        responses.add(responses.POST, CTIS_URL, json=page)
+        main(["--delay", "0", "--source", "ctis", "-o", str(tmp_path / "t.csv")])
+        assert "10,000 records" in capsys.readouterr().err
 
     @responses.activate
     def test_json_output(self, tmp_path):

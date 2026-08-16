@@ -1,0 +1,91 @@
+{
+ "showWarning": false,
+ "pagination": {
+  "totalRecords": 4,
+  "currentPage": 2,
+  "totalPages": 2,
+  "nextPage": false,
+  "prevPage": true
+ },
+ "data": [
+  {
+   "ctNumber": "2022-500014-26-00",
+   "ctStatus": 5,
+   "ctTitle": "A PHASE III, RANDOMIZED, OPEN-LABEL STUDY EVALUATING THE EFFICACY AND SAFETY OF GIREDESTRANT IN COMBINATION WITH PHESGO VERSUS PHESGO AFTER INDUCTION THERAPY WITH PHESGO+TAXANE IN PATIENTS WITH PREVIOUSLY UNTREATED HER2-POSITIVE, ESTROGEN RECEPTOR-POSITIVE LOCALLY-ADVANCED OR METASTATIC BREAST CANCER",
+   "shortTitle": "WO43571",
+   "startDateEU": "24/06/2022",
+   "conditions": "Locally-Advanced unresectable or Metastatic breast cancer (MBC)",
+   "trialCountries": [
+    "Hungary:5",
+    "Italy:5",
+    "Belgium:5",
+    "Poland:5",
+    "France:5",
+    "Germany:5",
+    "Spain:5",
+    "Portugal:5"
+   ],
+   "decisionDateOverall": "16/06/2022",
+   "decisionDate": "PL: 21/06/2022, BE: 14/07/2022, FR: 17/06/2022, DE: 20/06/2022, IT: 17/06/2022, PT: 07/07/2022, HU: 17/06/2022, ES: 20/06/2022",
+   "therapeuticAreas": [
+    "Diseases [C] - Neoplasms [C04]"
+   ],
+   "sponsor": "F. Hoffmann-La Roche AG",
+   "sponsorType": "Pharmaceutical company",
+   "trialPhase": "Therapeutic confirmatory  (Phase III)",
+   "endPoint": "1. OS, defined as the time from randomization to death from any cause, 2. ORR (following randomization), defined as the proportion of participants with a CR or partial response (PR) on two consecutive occasions  >= 4 weeks apart, as determined by the investigator according to RECIST v1.1, 3. DOR (following randomization), defined as the time from the first occurrence of a documented objective response (complete response (CR) or partial response (PR) to disease progression or death from any cause (whichever occurs first), as determined by the investigator according to RECIST v1.1, 4. CBR (following randomization), defined as the proportion of participants with SD or non-CR/non-PD for ≥ 24 weeks or a CR or PR, as determined by the investigator according to RECIST v1.1, 5. Mean and mean changes from baseline score in function (role, physical) and health-related quality of life (HRQoL) by cycle and between treatment arms as assessed through the use of the Functional and GHS/QoL scales of the EORTC QLQ-C30, 6. Incidence and severity of adverse events, with severity determined according to NCI CTCAE v5.0, 7. Change from baseline in targeted clinical laboratory test results",
+   "product": "PACLITAXEL, ANASTROZOLE, EXEMESTANE, Phesgo 600 mg/600 mg solution for injection, TAMOXIFEN, LETROZOLE, Phesgo 1200 mg/600 mg solution for injection, -, DOCETAXEL, RO7197597",
+   "ageRangeSecondary": [
+    "9",
+    "7",
+    "8"
+   ],
+   "ageGroup": "18-64 years, 65+ years",
+   "gender": "Female, Male",
+   "trialRegion": 3,
+   "totalNumberEnrolled": "218",
+   "primaryEndPoint": "1. PFS, defined as the time from randomization to the first occurrence of disease progression or death from any cause (whichever occurs first), as determined by the investigator according to RECIST v1.1",
+   "resultsFirstReceived": "No",
+   "lastUpdated": "25/06/2026",
+   "lastPublicationUpdate": "26/06/2026"
+  },
+  {
+   "ctNumber": "2022-500024-30-00",
+   "ctStatus": 8,
+   "ctTitle": "A non-inferiority, randomised and controlled trial to compare the safety, tolerability and preliminary efficacy between standard and Torque Teno virus-guided immunosuppression in stable adult kidney transplant recipients with low immunological risk in the first year after transplantation",
+   "shortTitle": "TTV GUIDE IT",
+   "startDateEU": "23/08/2022",
+   "endDateEU": "26/05/2025",
+   "conditions": "Post Kidney transplantation",
+   "trialCountries": [
+    "Netherlands:8",
+    "Czechia:8",
+    "France:8",
+    "Austria:8",
+    "Germany:8",
+    "Spain:8"
+   ],
+   "decisionDateOverall": "28/06/2022",
+   "decisionDate": "DE: 01/07/2022, FR: 28/06/2022, CZ: 01/07/2022, NL: 30/06/2022, AT: 01/07/2022, ES: 08/07/2022",
+   "therapeuticAreas": [
+    "Diseases [C] - Nutritional and Metabolic Diseases [C18]"
+   ],
+   "sponsor": "Medical University Of Vienna",
+   "sponsorType": "Hospital/Clinic/Other health care facility",
+   "trialPhase": "Therapeutic exploratory (Phase II)",
+   "endPoint": "Single components of the composite primary end point, Composite of all components of the primary end point, whereas episodes of infection and graft rejection are scored by the treat- ing medical personnel, Composite of all components of the primary end point, whereas infections are restricted to severe of infections (necessitating  treatment in the inpatient or day-care ward) and rejections are  restricted to severe rejections (excluding BL TCMR), Estimated glomerular filtration rate (eGFR; current CKD EPI and  MDRD abbreviated), Rejection detected by protocol biopsy at month 12 post- transplantation: according to BANFF 2019 meeting report  (including/excluding BL TCMR) and according to molecular  microscope (MMDX), de novo donor specific antibodies (DSA), Plasma TTV load, TAC trough level and dose, Unchanged, increased, and decreased TAC trough target levels, Health related quality of live: SF-36 and MTSOSD-59R questionnaires, Drug adherence assessed according to paper-based assessment,  MEMS® Buttons (AARDEX Group, Switzerland) on TAC blisters,  BAASIS questionnaire, claimed prescriptions, psychological evaluation  and TAC trough level variability, Adverse Events and Serious Adverse Events (AEs/SAEs), Development of malignoma, The three in CTIS ID no. 1,2 and 3 mentioned secondary end-points including COVID-19, Episodes of infection due to SARS-CoV-2",
+   "product": "TACROLIMUS, TACROLIMUS, TACROLIMUS",
+   "ageRangeSecondary": [
+    "9"
+   ],
+   "ageGroup": "18-64 years, 65+ years",
+   "gender": "Female, Male",
+   "trialRegion": 1,
+   "totalNumberEnrolled": "260",
+   "primaryEndPoint": "A composite of one of the following: 1. Infectious disease event requiring one of the following:  a) Inpatient treatment (including day-care) b)\tApplication of anti-bacteria, fungal, viral and protozoal drugs c) Reduction of immunosuppression; SARS-CoV-2 infection (including positive antigen or PCR test) with or without COVID-19  is excluded; 2. Allograft rejection detected upon indication biopsy; 3. Death; 4. Graft loss",
+   "resultsFirstReceived": "Yes",
+   "lastUpdated": "19/06/2023",
+   "lastPublicationUpdate": "29/05/2026"
+  }
+ ]
+}

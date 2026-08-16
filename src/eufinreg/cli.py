@@ -289,6 +289,8 @@ def _run_fetch(source, fetcher, query, args, field_filters, log) -> int:
     log(f"fetching {source.key} ({source.title})…")
     records = list(source.iter_records(fetcher, query))
     log(f"received {len(records)} record(s)")
+    for warning in source.warnings():
+        log(f"warning: {warning}")
 
     if args.no_flatten:
         rows: list[dict[str, Any]] = [dict(r) for r in records]

@@ -25,7 +25,7 @@ import requests
 #: README. Public registers are small public-sector deployments; an anonymous
 #: hammering client is the thing that gets IP ranges blocked for everyone.
 DEFAULT_USER_AGENT = (
-    "eufinreg/0.3.0 (+https://github.com/CHANGE-ME/eufinreg; public-register client)"
+    "eufinreg/0.4.0 (+https://github.com/CHANGE-ME/eufinreg; public-register client)"
 )
 
 #: Status codes worth retrying. 408/425/429 are client-ish but transient;
@@ -217,6 +217,24 @@ class Fetcher:
         stream: bool = False,
     ) -> requests.Response:
         """GET ``url``, retrying transient failures. Raises :class:`FetchError`."""
+        return self.request("GET", url, params, label=label, stream=stream)
+
+    def request(
+        self,
+        method: str,
+        url: str,
+        params: Mapping[str, Any] | None = None,
+        *,
+        json_body: Any = None,
+        label: str = "response",
+        stream: bool = False,
+    ) -> requests.Response:
+        """One request, with the throttle, retry and recording behaviour.
+
+        ``method`` is separate from :meth:`get` only because a couple of
+        registers put their search behind ``POST`` — the etiquette is identical
+        either way, and a retried POST here is always a read.
+        """
         assert self.session is not None  # set in __post_init__
         last_error: str = "no attempt was made"
         last_status: int | None = None
@@ -224,9 +242,11 @@ class Fetcher:
         for attempt in range(self.retries + 1):
             self._throttle()
             try:
-                response = self.session.get(
+                response = self.session.request(
+                    method,
                     url,
                     params=params,
+                    json=json_body,
                     timeout=(self.connect_timeout, self.timeout),
                     stream=stream,
                 )
@@ -272,7 +292,18 @@ class Fetcher:
     def get_json(
         self, url: str, params: Mapping[str, Any] | None = None, *, label: str = "response"
     ) -> Any:
-        response = self.get(url, params, label=label)
+        return self._json(self.get(url, params, label=label))
+
+    def post_json(self, url: str, body: Any, *, label: str = "response") -> Any:
+        """POST a JSON body and decode a JSON reply.
+
+        Used by registers whose only search interface is a POST — the request is
+        still a read, so it inherits the same delay and retry policy.
+        """
+        return self._json(self.request("POST", url, json_body=body, label=label))
+
+    @staticmethod
+    def _json(response: requests.Response) -> Any:
         try:
             return response.json()
         except ValueError as exc:

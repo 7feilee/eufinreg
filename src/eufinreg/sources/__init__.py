@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from .base import Query, Source
+from .ctis import CTIS_SOURCES
 from .eba_psd import EBA_SOURCES
 from .esma_mica import MICA_SOURCES
 from .esma_solr import SOLR_SOURCES, solr_source_for_core
@@ -13,6 +14,7 @@ ALL_SOURCES: tuple[Source, ...] = (
     *MICA_SOURCES,
     *EBA_SOURCES,
     *EUDAMED_SOURCES,
+    *CTIS_SOURCES,
 )
 
 _BY_KEY = {source.key: source for source in ALL_SOURCES}

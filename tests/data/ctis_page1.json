@@ -1,0 +1,79 @@
+{
+ "showWarning": false,
+ "pagination": {
+  "totalRecords": 4,
+  "currentPage": 1,
+  "totalPages": 2,
+  "nextPage": true,
+  "prevPage": false
+ },
+ "data": [
+  {
+   "ctNumber": "2022-500007-52-00",
+   "ctStatus": 8,
+   "ctTitle": "A study comparing exposure of semaglutide and dapagliflozin dosed orally as mono-components versus in a fixed-dose combination",
+   "shortTitle": "NN9917-4751",
+   "startDateEU": "14/06/2022",
+   "endDateEU": "13/04/2023",
+   "conditions": "Diabetes Mellitus, Type 2",
+   "trialCountries": [
+    "Germany:8"
+   ],
+   "decisionDateOverall": "02/06/2022",
+   "decisionDate": "DE: 25/08/2022",
+   "therapeuticAreas": [
+    "Diseases [C] - Nutritional and Metabolic Diseases [C18]"
+   ],
+   "sponsor": "Novo Nordisk A/S",
+   "sponsorType": "Pharmaceutical company",
+   "trialPhase": "Human Pharmacology (Phase I)- Bioequivalence Study",
+   "endPoint": "Cmax,(sema,ss): maximum observed semaglutide plasma concentration during a dosing interval (0 to 24 hours) at steady state, Cmax,(dapa,ss): maximum observed dapagliflozin plasma concentration during a dosing interval (0 to 24 hours) at steady state, tmax,(sema,ss): time to maximum observed semaglutide plasma concentration during a dosing interval (0 to 24) at steady state, tmax,(dapa,ss): time to maximum observed dapagliflozin plasma concentration during a dosing interval (0 to 24 hours) at steady state",
+   "product": "Semaglutide D 9 mg, Forxiga 10 mg film-coated tablets, Semaglutide D 4 mg, Semaglutide/dapagliflozin A 9/10 mg, Semaglutide D 1.5 mg, Semaglutide/dapagliflozin A 4/10 mg, Semaglutide/dapagliflozin A 1.5/10 mg",
+   "ageRangeSecondary": [
+    "9"
+   ],
+   "ageGroup": "18-64 years",
+   "gender": "Female, Male",
+   "trialRegion": 1,
+   "totalNumberEnrolled": "138",
+   "primaryEndPoint": "AUC(0-24h,sema,ss): area under the semaglutide plasma concentration−time curve during a dosing interval (0 to 24 hours) at steady state, AUC(0-24h,dapa,ss): area under the dapagliflozin plasma concentration−time curve during a dosing interval (0 to 24 hours) at steady state",
+   "resultsFirstReceived": "Yes",
+   "lastUpdated": "17/04/2023",
+   "lastPublicationUpdate": "29/10/2025"
+  },
+  {
+   "ctNumber": "2022-500013-32-01",
+   "ctStatus": 4,
+   "ctTitle": "Adjuvant mitotane vs. mitotane with cisplatin/etoposide after primary surgical resection of localised adrenocortical carcinoma with high risk of recurrence (ADIUVO-2 Trial): A pragmatic, randomised, low-intervention phase III, clinical trial with an observational arm.",
+   "shortTitle": "ADIUVO2",
+   "startDateEU": "05/07/2024",
+   "conditions": "Adrenocortical carcinoma",
+   "trialCountries": [
+    "Germany:4",
+    "Sweden:4",
+    "France:4"
+   ],
+   "decisionDateOverall": "19/12/2022",
+   "decisionDate": "FR: 21/07/2023, SE: 19/12/2022, DE: 19/12/2022",
+   "therapeuticAreas": [
+    "Diseases [C] - Neoplasms [C04]"
+   ],
+   "sponsor": "Uppsala University Hospital, Universitaetsklinikum Wuerzburg AöR, Azienda Socio Sanitaria Territoriale Degli Spedali Civili Di Brescia, Rigshospitalet, Narodowy Instytut Onkologii Im. Marii Sklodowskiej-Curie Panstwowy Instytut Badawczy, National Institute Of Endocrinology C.I. Parhon, Vall D Hebron Institute Of Oncology, Assistance Publique Hopitaux De Paris, University Hospital Centre Zagreb, Sao Joao University Hospital Center, Amsterdam UMC Stichting",
+   "sponsorType": "Hospital/Clinic/Other health care facility, Hospital/Clinic/Other health care facility, Hospital/Clinic/Other health care facility, Hospital/Clinic/Other health care facility, Hospital/Clinic/Other health care facility, Laboratory/Research/Testing facility, Laboratory/Research/Testing facility, Hospital/Clinic/Other health care facility, Hospital/Clinic/Other health care facility, Hospital/Clinic/Other health care facility, Patient organisation/association",
+   "trialPhase": "Therapeutic confirmatory  (Phase III)",
+   "endPoint": "Overall survival is defined as the time interval between the date of randomisation and the date of death from any cause., Assessment of the effect of serum mitotane levels, disease stage, Ki67 index and status of resection margins on clinical outcomes based on physical examination, complete blood count with differential, serum chemistry profile, endocrine assessment and serum mitotane measurement at baseline and until ACC recurrence. The effect will also be assessed using cross-sectional imaging (CT with contrast medium, MRI) of the chest/abdomen/pelvis or FDG PET-CT every 12 weeks until ACC recurrence., The effect of early vs. late start of adjuvant therapy on clinical outcomes will be assessed in a similar manner as above., Quality of life will be measured at baseline, 6, 12 and 24 weeks after the initiation of adjuvant therapy, after completing the 24m study treatment, and at the end of the 1y active follow-up using a validated quality of life questionnaire (EORTC QLQ-C30)., Serious adverse events, grade 3 and above, will be assessed according to the National Cancer Institute Common Terminology Criteria for Adverse Events (NCI-CTCAE, version 5.0) until one year after end of treatment.",
+   "product": "ETOPOSIDE\r, CISPLATIN, MITOTANE",
+   "ageRangeSecondary": [
+    "9"
+   ],
+   "ageGroup": "18-64 years, 65+ years",
+   "gender": "Female, Male",
+   "trialRegion": 3,
+   "totalNumberEnrolled": "120",
+   "primaryEndPoint": "RFS will be defined as the time between the date of randomisation until documentation of radiological evidence of local recurrence, radiological evidence of distant recurrence or date of death from any cause, whichever occurs first. Patients will be censored at the date of their last evaluation in which they were known to be alive and recurrence-free, regardless of whether recurrence status was verified during that contact (e.g., phone contact).",
+   "resultsFirstReceived": "No",
+   "lastUpdated": "20/04/2026",
+   "lastPublicationUpdate": "21/04/2026"
+  }
+ ]
+}

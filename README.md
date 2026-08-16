@@ -35,11 +35,13 @@ live services: the ESMA sections on **2026-08-15**, everything else on
 | **ESMA interim MiCA register** (CASPs, ART issuers, EMT issuers, white papers, non-compliant entities) | Finance | **Yes, sort of** — five stable CSV URLs regenerated weekly. No query API, but a documented, machine-readable bulk download | Downloads and parses them, normalises the messiest field |
 | **EBA PSD2 register** (payment institutions, e-money institutions, AISPs, their agents and branches) | Finance | **Yes, and it is required to be** — [Commission Implementing Regulation (EU) 2019/410](https://eur-lex.europa.eu/eli/reg_impl/2019/410/oj) obliges the EBA to publish it electronically. A nightly JSON "golden copy" with a published SHA-256 | Reads the file-metadata endpoint, downloads the archive, **verifies both checksums**, flattens it, labels the codes from the register's own metadata |
 | **EUDAMED** (medical device manufacturers, importers, authorised representatives, procedure-pack producers, notified bodies) | Medical devices | **Yes** — the JSON API the public site runs on, no authentication, not excluded by `robots.txt`. 48,893 organisations **with email and phone** | Pages it with a unique sort key, always sends the mandatory language parameter, flattens the nested reference-data blocks |
+| **CTIS** (authorised clinical trials and their sponsors) | Pharma / CRO | **Yes** — `POST /ctis-public-api/search`, no authentication. 12,229 trials, sponsor and sponsor type per trial | Pages it, and **warns when the register's 10,000-record window silently truncates the answer** |
 | **BaFin Unternehmensdatenbank / ZAG register / VGV register** (Germany) | Finance | **A human-facing one, yes; an automatable one, no** — the result pages do offer CSV/XML/Excel export links, but the whole portal host is `robots.txt: Disallow: /`. See [the evidence](#bafin-germany--an-export-button-behind-a-blanket-robots-ban) | Does **not** touch the portal. Shows you the exact export URLs to click yourself, and routes automation to the ESMA and EBA data that covers BaFin-supervised entities |
 | **FMA Unternehmensdatenbank** (Austria) | Finance | **No** — see [the evidence](#fma-austria--no-interface-at-all) | Same routing, no export to click |
 
-Nine other registers across pharma, chemicals, aviation, energy and automotive
-were probed on 2026-08-16 and are documented — with what was actually found — in
+Eight further registers across chemicals, aviation, energy, automotive and
+non-EU finance were probed on 2026-08-16 and are documented — with what was
+actually found — in
 [The same trick in other industries](#the-same-trick-in-other-industries).
 
 No HTML scraping happens anywhere in this project.
@@ -142,6 +144,12 @@ uv run eufinreg --source eudamed-eo --select importer \
 
 # The 70 notified bodies that certify those devices, with their NANDO links
 uv run eufinreg --source eudamed-nb -o notified-bodies.csv
+
+# Who sponsors CAR-T trials in the EU, and in which countries
+uv run eufinreg --source ctis --query 'CAR-T' -o car-t-trials.csv
+
+# Which sponsor types run trials at all — counted over the whole result set
+uv run eufinreg --source ctis --query 'oncology' --list-values sponsorType
 
 # Schema-drift-proof: match a string anywhere in the record
 uv run eufinreg --source mica-casp --contains bybit --format json
@@ -777,6 +785,94 @@ and Germany host 11 each, and five are in Türkiye.
 
 ---
 
+### CTIS — who runs clinical trials in Europe
+
+Since 2022, [Regulation 536/2014](https://eur-lex.europa.eu/eli/reg/2014/536/oj)
+requires every clinical trial in the EU/EEA to be authorised through CTIS, and
+the public portal publishes the result. Read as a *company* list rather than a
+science list, it answers something no commercial database answers as well: who
+is actually running trials in Europe, where, on what — with `sponsor` and
+`sponsorType` as fields.
+
+* **Public portal:** <https://euclinicaltrials.eu/ctis-public/search>
+* **Interface:** `POST https://euclinicaltrials.eu/ctis-public-api/search`. No
+  authentication. The portal's own JS names it, along with an asynchronous CSV
+  export and a second host, `/ct-public-api-services/services`.
+* **Records:** 12,229 trials on 2026-08-16.
+
+Request body — all three keys matter:
+
+```json
+{"pagination":    {"page": 1, "size": 500},
+ "sort":          {"property": "ctNumber", "direction": "ASC"},
+ "searchCriteria": {}}
+```
+
+#### `searchCriteria` is mandatory even when empty
+
+Send only `pagination` and the API replies `200` with `totalRecords: 0`. Not an
+error, not a hint — a perfectly well-formed "no results" for a request that
+should have matched all 12,229 trials. Add `"searchCriteria": {}` and the same
+request returns everything.
+
+#### Paging stops at 10,000 while `totalRecords` says 12,229
+
+The search sits behind a result window and there is no error when you hit it:
+
+| Request | Records returned |
+|---|---|
+| page 100, size 100 (records 9,901–10,000) | 100 |
+| page 101, size 100 (records 10,001+) | **0** |
+| page 20, size 500 (records 9,501–10,000) | 500 |
+| page 21, size 500 | **0** |
+
+A client that pages until it gets an empty page collects exactly 10,000 rows and
+has no way to know 2,229 are missing — the run looks clean. `eufinreg` compares
+what it collected against `totalRecords` and says so:
+
+```
+eufinreg: received 10000 record(s)
+eufinreg: warning: CTIS returned 10000 of 12229 matching trials — its search
+          stops at 10,000 records however you page. Narrow the result set with
+          --query to reach the rest.
+```
+
+The workaround is to partition: run several narrower `--query` searches, each
+under 10,000 matches, and concatenate.
+
+#### Selecting
+
+`--select` is not supported — CTIS has no server-side selector this package
+models, and inventing one would mean guessing at `searchCriteria` keys.
+`--query` covers it instead:
+
+```bash
+uv run eufinreg --source ctis --query 'CAR-T'                     # free text
+uv run eufinreg --source ctis --query '{"containAll": "vaccine"}' # raw criteria
+```
+
+A value starting with `{` is parsed and sent as the whole `searchCriteria`
+object; anything else becomes `containAll`, the portal's own free-text search.
+
+#### Fields
+
+`ctNumber` (unique, and the sort key), `ctStatus`, `ctTitle`, `shortTitle`,
+`conditions`, `trialCountries` (pipe-joined `Country:siteCount`),
+`decisionDate`, `decisionDateOverall`, `therapeuticAreas`, **`sponsor`**,
+**`sponsorType`**, `trialPhase`, `product`, `ageGroup`, `gender`,
+`totalNumberEnrolled`, `primaryEndPoint`, `endPoint`, `resultsFirstReceived`,
+`lastUpdated`, `lastPublicationUpdate`.
+
+Over the 10,000 reachable trials, `sponsorType` splits as pharmaceutical company
+5,363 · hospital/clinic 3,057 · educational institution 502 ·
+laboratory/research facility 355 · patient organisation 323 — and note the
+`Pharmaceutical company, Pharmaceutical company` bucket with 163 rows, which is
+a co-sponsored trial and *not* a separate category. The largest single sponsors
+are Merck Sharp & Dohme (253), Novartis (195), AstraZeneca (194),
+F. Hoffmann-La Roche (189) and Pfizer (124).
+
+---
+
 ### BaFin (Germany) — an export button behind a blanket robots ban
 
 > **Corrected on 2026-08-16.** Earlier versions of this file said no CSV, XML or
@@ -884,7 +980,7 @@ verdict.
 | Medical devices | [EUDAMED](https://ec.europa.eu/tools/eudamed) | 48,893 manufacturers, importers, authorised reps, pack producers + 70 notified bodies | **JSON API, no auth** — [wrapped](#eudamed--the-medical-device-industry-with-contact-details) | probed |
 | Medical devices | [NANDO](https://webgate.ec.europa.eu/single-market-compliance-space/) | Notified bodies across all CE-marking directives, not just devices | SPA on `webgate.ec.europa.eu`; for devices, EUDAMED's `api/ses/` already returns the NANDO notification URLs per body | surface |
 | Pharma / CDMO | [EudraGMDP](https://eudragmdp.ema.europa.eu/) | Every GMP manufacturing and import authorisation in the EEA — i.e. the contract-manufacturing industry | **None found.** Redirects to `/inspections?key=public`, an Apache Struts app (`.do` actions, `jsessionid` in the URL, prototype.js/scriptaculous). Same shape as BaFin's portal | surface |
-| Pharma | [CTIS](https://euclinicaltrials.eu/ctis-public/search) | Clinical trial sponsors under Regulation 536/2014 | **JSON API, no auth.** `POST /ctis-public-api/search` answers with `{pagination, data}`. `POST /ctis-public-api/search/download` returns `{"taskId": …}` — an **asynchronous** CSV job you then poll. The SPA's config also names `https://euclinicaltrials.eu/ct-public-api-services/services` | probed |
+| Pharma / CRO | [CTIS](https://euclinicaltrials.eu/ctis-public/search) | 12,229 authorised clinical trials and their sponsors | **JSON API, no auth** — [wrapped](#ctis--who-runs-clinical-trials-in-europe). There is also an **asynchronous** CSV export (`POST /search/download` → `{"taskId": …}` to poll), not used here | probed |
 | Chemicals | [ECHA CHEM](https://chem.echa.europa.eu/) | REACH registrants — every company that registered a substance | **JSON API, no auth**, but substance-first: `GET /api-substance/v1/substance?searchText=…`. `searchText` is mandatory (blank → HTTP 400 `[searchText must not be blank]`), and registrants hang off the substance detail, so a company directory means walking substances. No OpenAPI document at the usual paths | probed |
 | Energy | [MaStR](https://www.marktstammdatenregister.de/MaStR/Datendownload) (BNetzA) | Every German electricity/gas market participant and generation unit | **Open bulk data.** A daily full export at a predictable URL (`Gesamtdatenexport_YYYYMMDD_<v>.zip`), XML, explicitly licensed **Datenlizenz Deutschland – Namensnennung 2.0**. It is ~2.9 GB | probed |
 | Aviation | [EASA](https://www.easa.europa.eu/en/domains/aircraft-products/continuing-airworthiness-organisations/foreign-part-145-organisations) | Part-145 / Part-147 / Part-CAMO / Part-CAO approvals — MRO and airworthiness organisations | Dataset pages with a UI export button; the lists render client-side and no stable machine URL was found from the markup. XLSX snapshots exist under `/sites/default/files/datasets/`. **Note the scope trap:** EASA directly approves *third-country* organisations; EU-based ones are approved by national aviation authorities and are not on these lists | surface |
@@ -892,12 +988,8 @@ verdict.
 | Finance (LU/NL/CH) | CSSF, DNB, FINMA | Luxembourg funds and managers; Dutch supervised institutions; Swiss authorised institutions | Not established. The commonly cited CSSF entity-search URL 404s; DNB's and FINMA's register pages serve HTML | surface |
 | Automotive | [KBA](https://www.kba.de/) | Type-approval holders | Not established; the type-approval pages serve HTML | surface |
 
-Two of these are worth implementing next, and one deliberately is not:
+One of these is worth implementing next, and one deliberately is not:
 
-* **CTIS** is the closest to ready — a working unauthenticated JSON API. The
-  work is the asynchronous download handshake and reverse-engineering the search
-  payload, since an empty criteria object returns zero rows rather than
-  everything.
 * **ECHA** is valuable but shaped wrong for this tool: it answers "who
   registered this substance", not "list the registrants". Turning that into a
   company directory means iterating substances, which is a lot of requests
@@ -967,6 +1059,12 @@ Read this before putting the output in front of anyone.
 * **Nor are `PSD_EXC` and `PSD_ENL` licences.** They record providers *outside*
   PSD2's scope and providers entitled under national law. They are 1,995 of the
   6,407 institution records — and 942 of BaFin's 1,037.
+* **CTIS is a trial list, not a company list.** One sponsor appears once per
+  trial, so counting rows counts trials; deduplicate on `sponsor` before you
+  count organisations. And roughly a third of sponsors are hospitals and
+  universities, not industry — `sponsorType` is the field that separates them.
+  `Pharmaceutical company, Pharmaceutical company` is a co-sponsored trial, not
+  a distinct type.
 
 **Personal data.**
 
@@ -1015,6 +1113,8 @@ Read this before putting the output in front of anyone.
 * `eudamed-eo` / `eudamed-nb`: live, no published cadence. Each record carries
   `versionNumber` and `latestVersion`; economic operators also carry
   `dateOfRegistration`.
+* `ctis`: live. Per-record `lastUpdated` and `lastPublicationUpdate` are the
+  dates to trust.
 * BaFin states its own database is updated daily. That is the one advantage of
   clicking its export by hand over reading the EBA's copy of the same filings.
 
@@ -1062,7 +1162,7 @@ These are small public-sector deployments funded by nobody's ad revenue.
   48,893 you do not.
 
 **Change the User-Agent.** The default is
-`eufinreg/0.3.0 (+https://github.com/CHANGE-ME/eufinreg; public-register client)`.
+`eufinreg/0.4.0 (+https://github.com/CHANGE-ME/eufinreg; public-register client)`.
 Set it to something that identifies *you*, so an operator who sees unusual
 traffic can find out who to contact instead of blocking a range:
 
@@ -1124,6 +1224,16 @@ Both are the same class of bug and neither reports an error:
 
 `eufinreg` handles both. If you are writing your own client, those are the two
 things to get right — and `--raw` will show you what the wire actually said.
+
+**`ctis` says it returned fewer trials than it matched.** That warning is real
+and the data really is incomplete: the search cannot reach past record 10,000
+however you page. Split the query into narrower `--query` searches, each
+matching under 10,000, and concatenate the results.
+
+**A hand-rolled CTIS client returns zero rows.** `searchCriteria` is mandatory.
+Omit it and the API answers HTTP 200 with `totalRecords: 0`, which reads exactly
+like "nothing matched" rather than "you left out a required key". Send
+`"searchCriteria": {}`.
 
 ---
 
@@ -1213,6 +1323,15 @@ BaFin 监管的支付与电子货币机构 1,037 家（其中真正持牌的是 
    `api/ses/` 则按语言逐条复制，70 家公告机构变成 1,890 行（同一个 `uuid`
    重复约 27 次，只有 `countryName` 的语言不同）。翻页必须用
    `sort=ulid,ASC`（`eudamedIdentifier` 排序会 500，`name` 不唯一）。
+5. CTIS（欧盟临床试验数据库，`POST /ctis-public-api/search`，无需认证，
+   共 12,229 项试验，带 `sponsor` 和 `sponsorType`）也有两个静默坑：
+   `searchCriteria` 即使为空也必须传，否则返回 200 且 `totalRecords: 0`——
+   看起来像"没匹配到"，其实是少了必填字段；翻页在 **第 10,000 条截断**，
+   而 `totalRecords` 照旧报 12,229，翻到空页就停的客户端会不知不觉少 2,229 条。
+   本工具会拿实际条数和 `totalRecords` 对比并**明确告警**，让你用 `--query`
+   拆成多个小于一万条的查询。另外 CTIS 是"试验表"不是"公司表"，一个申办方
+   有几项试验就出现几行，统计公司数前要先按 `sponsor` 去重；约三分之一的
+   申办方是医院和大学，不是企业。
 
 **跑之前先跑这三条**（对应 `--inspect` / `--list-values` / `--raw`）：
 
@@ -1226,8 +1345,7 @@ uv run eufinreg --source mica-casp --raw ./raw -o casps.csv   # 留一份原始�
 Happy Eyeballs（curl 有），在没有 IPv6 出口的网络上会一路等超时。加 `-4` 即可。
 `eba-psd` 每次都要下 19 MB、解析后峰值内存约 1.4 GB，结果请存成文件重复使用。
 
-**其他行业同理**（README 有一张 2026-08-16 实测表）：临床试验 **CTIS** 有可用的
-无认证 JSON API（`POST /ctis-public-api/search`，CSV 下载是异步任务）；化学品
+**其他行业同理**（README 有一张 2026-08-16 实测表）：化学品
 **ECHA CHEM** 有 JSON API 但以物质为中心，`searchText` 必填，注册人挂在物质
 详情下；德国能源 **MaStR** 每日发布约 2.9 GB 的 XML 全量导出，采用
 Datenlizenz Deutschland 开放许可（本工具不包装它——2.9 GB 需要流式解析，

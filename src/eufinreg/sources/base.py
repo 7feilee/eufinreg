@@ -64,6 +64,16 @@ class Source(ABC):
         it is exact over the whole register rather than over a sample.
         """
 
+    def warnings(self) -> list[str]:
+        """Things the caller must be told about the result set just produced.
+
+        Overridden by sources that can return an incomplete answer without the
+        register reporting an error — a deep-paging window, for instance. The
+        CLI prints these to stderr, because a silently truncated register is
+        indistinguishable from a small one.
+        """
+        return []
+
     def describe(self) -> str:
         return f"{self.key:<14} {self.title}"
 
