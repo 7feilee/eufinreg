@@ -34,6 +34,9 @@ examples:
   eufinreg --source upreg --field ae_competentAuthority="Federal Financial Supervisory Authority (BaFin)" \\
            --raw ./raw -o bafin.csv
 
+  # BaFin-supervised payment and e-money institutions, which upreg does not cover
+  eufinreg --source eba-psd --field CA_OwnerID=DE_BAFIN -o bafin-payments.csv
+
   # schema-drift-proof search across every field
   eufinreg --source mica-casp --contains bybit --format json
 """
@@ -44,7 +47,7 @@ def build_parser() -> argparse.ArgumentParser:
         prog="eufinreg",
         description=(
             "Fetch structured lists of licensed financial entities from the EU public "
-            "registers (ESMA Registers A2A + ESMA interim MiCA register)."
+            "registers (ESMA Registers A2A, ESMA interim MiCA register, EBA PSD2 register)."
         ),
         epilog=EPILOG,
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -319,6 +322,8 @@ def render_sources() -> str:
     for source in ALL_SOURCES:
         lines.append(f"  {source.key.ljust(width)}  {source.title}")
         lines.append(f"  {' '.ljust(width)}  docs: {source.docs_url}")
+        if source.select_help:
+            lines.append(f"  {' '.ljust(width)}  --select: {source.select_help}")
     lines += [
         "",
         "  solr:<core>     any ESMA Solr core by name, e.g. solr:esma_registers_priii_documents",

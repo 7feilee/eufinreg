@@ -1,0 +1,237 @@
+[
+ {
+  "MessageType": "PSDMD",
+  "DataCollectionCode": "PSD_MD",
+  "CodeLists": [
+   {
+    "CodeListCode": "ENT_TYP_PSD",
+    "CodeListName": "PSD-Entity Type",
+    "Values": [
+     {
+      "CodeValue": "PSD_PI",
+      "CodeValueDisplay": "Payments institution",
+      "CodeListOrder": 1010,
+      "CodeDescription": "Type of natural or legal person: ‘Payment institution’;"
+     },
+     {
+      "CodeValue": "PSD_EMI",
+      "CodeValueDisplay": "Electronic-money institution",
+      "CodeListOrder": 1020,
+      "CodeDescription": "Type of natural or legal person: ‘Electronic money institution’;"
+     },
+     {
+      "CodeValue": "PSD_AISP",
+      "CodeValueDisplay": "Account Information Service Provider",
+      "CodeListOrder": 1030,
+      "CodeDescription": "Type of natural or legal person: ‘Payment institution’;"
+     },
+     {
+      "CodeValue": "PSD_EXC",
+      "CodeValueDisplay": "Service Provider Excluded from Scope of PSD2",
+      "CodeListOrder": 1040,
+      "CodeDescription": "Type of natural or legal person: ‘Service provider excluded from the scope of PSD2’.\r\nThese are service providers carrying out services under points (i) and (ii) of point (k) and point (l) of Article 3 of PSD2 that have notified a CA in accordance with Article 37 of PSD2;"
+     },
+     {
+      "CodeValue": "PSD_BR",
+      "CodeValueDisplay": "Branch",
+      "CodeListOrder": 1060,
+      "CodeDescription": "Branch of a payment institution, electronic money institution or account information service provider;"
+     },
+     {
+      "CodeValue": "PSD_AG",
+      "CodeValueDisplay": "Agent",
+      "CodeListOrder": 1070,
+      "CodeDescription": "Type of natural or legal person: ‘Agent’;"
+     }
+    ]
+   },
+   {
+    "CodeListCode": "ENUM_ENT_EXC",
+    "CodeListName": "Exclusions",
+    "Values": [
+     {
+      "CodeValue": "EXCL_101",
+      "CodeValueDisplay": "1.1. instruments allowing the holder to acquire goods or services only in the premises of the issuer or within a limited network of service providers under direct commercial agreement with a professional issuer",
+      "CodeListOrder": 1,
+      "CodeDescription": "1. Services based on specific payment instruments that can be used only in a limited way that meet one of the following conditions: 1.1. instruments allowing the holder to acquire goods or services only in the premises of the issuer or within a limited network of service providers under direct commercial agreement with a professional issuer"
+     },
+     {
+      "CodeValue": "EXCL_102",
+      "CodeValueDisplay": "1.2. instruments which can be used only to acquire a very limited range of goods or services",
+      "CodeListOrder": 1,
+      "CodeDescription": "1. Services based on specific payment instruments that can be used only in a limited way that meet one of the following conditions: 1.2. instruments which can be used only to acquire a very limited range of goods or services"
+     }
+    ]
+   },
+   {
+    "CodeListCode": "RDL_COM_AUT_PSD",
+    "CodeListName": "PSD National Competent Authority",
+    "Values": [
+     {
+      "CodeValue": "BG_BNB",
+      "CodeValueDisplay": "Bulgarian National Bank",
+      "CodeListOrder": 3532,
+      "CodeDescription": "Българска народна банка"
+     },
+     {
+      "CodeValue": "CY_CBC",
+      "CodeValueDisplay": "Central Bank of Cyprus",
+      "CodeListOrder": 5843,
+      "CodeDescription": "Κεντρική Τράπεζα της Κύπρου"
+     },
+     {
+      "CodeValue": "CZ_CNB",
+      "CodeValueDisplay": "Czech National Bank ",
+      "CodeListOrder": 5947,
+      "CodeDescription": "Ceská národní banka"
+     },
+     {
+      "CodeValue": "DE_BAFIN",
+      "CodeValueDisplay": "Federal Financial Supervisory Authority",
+      "CodeListOrder": 8370,
+      "CodeDescription": "Bundesanstalt für Finanzdienstleistungsaufsicht"
+     },
+     {
+      "CodeValue": "IE_CBI",
+      "CodeValueDisplay": "Central Bank of Ireland",
+      "CodeListOrder": 10787
+     },
+     {
+      "CodeValue": "SE_FINA",
+      "CodeValueDisplay": "Swedish Financial Supervisory Authority",
+      "CodeListOrder": 21648,
+      "CodeDescription": "Finansinspektionen"
+     }
+    ]
+   },
+   {
+    "CodeListCode": "RDL_COU_COD_EEA",
+    "CodeListName": "EEA Countries",
+    "Values": [
+     {
+      "CodeValue": "BG",
+      "CodeValueDisplay": "Bulgaria",
+      "CodeListOrder": 35,
+      "CodeDescription": "Bulgaria"
+     },
+     {
+      "CodeValue": "CY",
+      "CodeValueDisplay": "Cyprus",
+      "CodeListOrder": 58,
+      "CodeDescription": "Cyprus"
+     },
+     {
+      "CodeValue": "CZ",
+      "CodeValueDisplay": "Czech",
+      "CodeListOrder": 59,
+      "CodeDescription": "Czech"
+     },
+     {
+      "CodeValue": "DE",
+      "CodeValueDisplay": "Germany",
+      "CodeListOrder": 83,
+      "CodeDescription": "Germany"
+     },
+     {
+      "CodeValue": "IE",
+      "CodeValueDisplay": "Ireland",
+      "CodeListOrder": 107,
+      "CodeDescription": "Ireland"
+     },
+     {
+      "CodeValue": "SE",
+      "CodeValueDisplay": "Sweden",
+      "CodeListOrder": 215,
+      "CodeDescription": "Sweden"
+     }
+    ]
+   }
+  ],
+  "ServiceDefinition": [
+   {
+    "CodeValue": "ES_010",
+    "CodeValueDisplay": "Issuing, distribution and redemption of electronic money",
+    "CodeListOrder": 100,
+    "CodeDescription": "Issuing, distribution and redemption of electronic money"
+   },
+   {
+    "CodeValue": "PS_010",
+    "CodeValueDisplay": "1. Services enabling cash to be placed on a payment account",
+    "CodeListOrder": 110,
+    "CodeDescription": "1. Services enabling cash to be placed on a payment account as well as all the operations required for operating a payment account"
+   },
+   {
+    "CodeValue": "PS_020",
+    "CodeValueDisplay": "2. Services enabling cash withdrawals from a payment account",
+    "CodeListOrder": 120,
+    "CodeDescription": "2. Services enabling cash withdrawals from a payment account as well as all the operations required for operating a payment account"
+   },
+   {
+    "CodeValue": "PS_03A",
+    "CodeValueDisplay": "3a. Execution of direct debits",
+    "CodeListOrder": 131,
+    "CodeDescription": "3a. Execution of direct debits, including one-off direct debits"
+   },
+   {
+    "CodeValue": "PS_03B",
+    "CodeValueDisplay": "3b. Execution of payment transactions",
+    "CodeListOrder": 132,
+    "CodeDescription": "3b. Execution of payment transactions through a payment card or a similar device"
+   },
+   {
+    "CodeValue": "PS_03C",
+    "CodeValueDisplay": "3c. Execution of credit transfers",
+    "CodeListOrder": 133,
+    "CodeDescription": "3c. Execution of credit transfers, including standing orders"
+   },
+   {
+    "CodeValue": "PS_04A",
+    "CodeValueDisplay": "4a. Execution of direct debits (covered by a credit line)",
+    "CodeListOrder": 141,
+    "CodeDescription": "4a. Execution of direct debits, including one-off direct debits (covered by a credit line)"
+   },
+   {
+    "CodeValue": "PS_04B",
+    "CodeValueDisplay": "4b. Execution of payment transactions (covered by a credit line)",
+    "CodeListOrder": 142,
+    "CodeDescription": "4b. Execution of payment transactions through a payment card or a similar device (covered by a credit line)"
+   },
+   {
+    "CodeValue": "PS_04C",
+    "CodeValueDisplay": "4c. Execution of credit transfers (covered by a credit line)",
+    "CodeListOrder": 143,
+    "CodeDescription": "4c. Execution of credit transfers, including standing orders (covered by a credit line)"
+   },
+   {
+    "CodeValue": "PS_05A",
+    "CodeValueDisplay": "5. Issuing of payment instruments",
+    "CodeListOrder": 151,
+    "CodeDescription": "5. Issuing of payment instruments"
+   },
+   {
+    "CodeValue": "PS_05B",
+    "CodeValueDisplay": "5. Acquiring of payment transactions",
+    "CodeListOrder": 152,
+    "CodeDescription": "5. Acquiring of payment transactions"
+   },
+   {
+    "CodeValue": "PS_060",
+    "CodeValueDisplay": "6. Money remittance",
+    "CodeListOrder": 160,
+    "CodeDescription": "6. Money remittance"
+   },
+   {
+    "CodeValue": "PS_070",
+    "CodeValueDisplay": "7. Payment initiation services",
+    "CodeListOrder": 170,
+    "CodeDescription": "7. Payment initiation services"
+   },
+   {
+    "CodeValue": "PS_080",
+    "CodeValueDisplay": "8. Account information services",
+    "CodeListOrder": 180,
+    "CodeDescription": "8. Account information services"
+   }
+  ]
+ }
+]

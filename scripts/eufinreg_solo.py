@@ -14,10 +14,14 @@ registers:
       https://registers.esma.europa.eu/publication/helpApp
   * ESMA interim MiCA register (weekly CSV files, MiCA Art. 109/110)
       https://www.esma.europa.eu/esmas-activities/digital-finance-and-innovation/markets-crypto-assets-regulation-mica
+  * EBA PSD2 register (nightly JSON golden copy with a SHA-256, machine-readable
+      by law under Commission Implementing Regulation (EU) 2019/410)
+      https://euclid.eba.europa.eu/register/pir/registerDownload
 
-BaFin and FMA publish no machine interface for their company databases; this
-script does not scrape them. See the project README for the evidence and for
-what the ESMA route does and does not cover.
+BaFin's and FMA's own company databases sit behind a portal whose robots.txt is
+``Disallow: /``, so this script does not touch it — even though the portal does
+offer per-search CSV/XML/Excel export links for a human to click. See the
+project README for the evidence and for what the EU-level route covers instead.
 
 Licensed != hiring, licensed != operating, registered address != office.
 Read the README's limitations section before using the output for anything.
@@ -45,7 +49,7 @@ from typing import Any
 
 import requests
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 DEFAULT_USER_AGENT = (
     f"eufinreg-solo/{VERSION} (+https://github.com/CHANGE-ME/eufinreg; public-register client)"
 )
@@ -70,6 +74,11 @@ SOURCES: dict[str, tuple[str, str, str]] = {
     "mica-emt": ("csv", "EMTWP.csv", "MiCA e-money token issuers"),
     "mica-other": ("csv", "OTHER.csv", "MiCA white papers, other crypto-assets"),
     "mica-ncasp": ("csv", "NCASP.csv", "MiCA NON-COMPLIANT entities — not a licence list"),
+    "eba-psd": (
+        "eba",
+        "PSDMD",
+        "EBA PSD2 register: payment + e-money institutions, agents, branches",
+    ),
 }
 
 # Block-structured Solr cores: parents and children share one flat docs array.
@@ -90,8 +99,23 @@ ENUM_FIELDS: dict[str, tuple[str, ...]] = {
     "mica-emt": ("ae_competentAuthority", "ae_homeMemberState"),
     "mica-other": ("ae_competentAuthority", "ae_homeMemberState"),
     "mica-ncasp": ("ae_competentAuthority", "ae_homeMemberState"),
+    "eba-psd": ("EntityType", "CA_OwnerID", "ENT_COU_RES", "ENT_SER", "ENT_SER_COU"),
 }
-MULTI_VALUE = {"ac_serviceCode_cou": "|", "ae_offerCode_cou": "|", "ae_DTI": "|"}
+MULTI_VALUE = {
+    "ac_serviceCode_cou": "|",
+    "ae_offerCode_cou": "|",
+    "ae_DTI": "|",
+    "ENT_SER": "|",
+    "ENT_SER_COU": "|",
+}
+
+# EBA PSD2 register. The download is mandated machine-readable by Commission
+# Implementing Regulation (EU) 2019/410; the file metadata endpoint names the
+# current nightly ZIP and its SHA-256.
+EBA_REGISTER = "https://euclid.eba.europa.eu/register"
+EBA_FILE_METADATA = f"{EBA_REGISTER}/api/filemetadata"
+# Agents alone are ~322k of the ~329k records, so they are out unless asked for.
+EBA_INSTITUTIONS = ("PSD_PI", "PSD_EPI", "PSD_EMI", "PSD_EEMI", "PSD_AISP", "PSD_EXC", "PSD_ENL")
 
 
 # ---------------------------------------------------------------- http ----
@@ -291,6 +315,108 @@ def read_mica_csv(fetcher: Fetcher, filename: str, args) -> list[dict[str, Any]]
         if args.max_docs and len(rows) >= args.max_docs:
             break
     return rows
+
+
+def read_eba_psd(fetcher: Fetcher, args) -> list[dict[str, Any]]:
+    """The EBA PSD2 register, from its nightly checksum-verified golden copy.
+
+    Properties arrive as a list of single-key objects and Services as a map
+    keyed by ISO-2 country — the latter is the passporting footprint, and the
+    only place the real geographic reach of an institution is recorded.
+    """
+    import hashlib
+    import zipfile
+
+    meta = fetcher.get(EBA_FILE_METADATA, label="eba-filemetadata").json()
+    base = (meta.get("golden_copy_path_context") or f"{EBA_REGISTER}/downloads/PSDMD/").rstrip("/")
+    relative = meta.get("latest_version_relative_zip_path") or ""
+    if not relative:
+        raise SystemExit("eufinreg-solo: EBA file metadata names no download")
+    url = f"{base}/{relative.lstrip('/')}"
+
+    archive = fetcher.get(url, label="eba-goldencopy").content
+    expected = str(meta.get("sha256_hash") or "").strip().lower()
+    actual = hashlib.sha256(archive).hexdigest()
+    if expected and actual != expected:
+        raise SystemExit(
+            f"eufinreg-solo: {url} failed its SHA-256 check "
+            f"(register says {expected}, got {actual}) — truncated download, retry"
+        )
+
+    with zipfile.ZipFile(io.BytesIO(archive)) as bundle:
+        names = [n for n in bundle.namelist() if n.lower().endswith(".json")]
+        if not names:
+            raise SystemExit(f"eufinreg-solo: {url} contains no .json member")
+        body = bundle.read(names[0])
+        sidecar = f"{names[0]}.sha256"
+        if sidecar in bundle.namelist():
+            want = bundle.read(sidecar).decode("ascii", "replace").strip().lower()
+            if want and hashlib.sha256(body).hexdigest() != want:
+                raise SystemExit(f"eufinreg-solo: {names[0]} failed its SHA-256 check")
+
+    payload = json.loads(body.decode("utf-8-sig"))
+    records: list[dict[str, Any]] = []
+    stack: list[Any] = [payload]
+    while stack:  # the entity array is nested; find it rather than index into it
+        node = stack.pop()
+        if isinstance(node, list):
+            found = [x for x in node if isinstance(x, dict) and "EntityCode" in x]
+            if len(found) > len(records):
+                records = found
+            stack.extend(x for x in node if isinstance(x, list))
+
+    wanted = (args.select or "").strip().upper()
+    if wanted == "ALL":
+        selected = None
+    elif wanted:
+        selected = {
+            code if code.startswith("PSD_") else f"PSD_{code}"
+            for code in (part.strip() for part in wanted.split(","))
+            if code
+        }
+    else:
+        selected = set(EBA_INSTITUTIONS)
+
+    rows: list[dict[str, Any]] = []
+    for record in records:
+        if selected is not None and record.get("EntityType") not in selected:
+            continue
+        row: dict[str, Any] = {
+            "CA_OwnerID": record.get("CA_OwnerID", ""),
+            "EntityCode": record.get("EntityCode", ""),
+            "EntityType": record.get("EntityType", ""),
+        }
+        for entry in record.get("Properties") or []:
+            for name, value in (entry or {}).items():
+                row[name] = SEP.join(str(v) for v in value) if isinstance(value, list) else value
+        services: OrderedDict[str, list[str]] = OrderedDict()
+        for entry in record.get("Services") or []:
+            for country, codes in (entry or {}).items():
+                bucket = services.setdefault(country, [])
+                for code in codes if isinstance(codes, list) else [codes]:
+                    if code and code not in bucket:
+                        bucket.append(code)
+        countries = sorted(services)
+        row["ENT_SER"] = SEP.join(sorted({c for codes in services.values() for c in codes}))
+        row["ENT_SER_COU"] = SEP.join(countries)
+        row["ENT_SER_COU_count"] = str(len(countries))
+        row["ENT_SER_BY_COU"] = SEP.join(f"{c}={','.join(services[c])}" for c in countries)
+        row["__EBA_EntityVersion"] = record.get("__EBA_EntityVersion", "")
+        rows.append(row)
+        if args.max_docs and len(rows) >= args.max_docs:
+            break
+    return rows
+
+
+def read_records(fetcher: Fetcher, kind: str, target: str, args) -> list[dict[str, Any]]:
+    """Read a whole source, whichever kind of interface it happens to have."""
+    if kind == "solr":
+        return list(iter_solr(fetcher, target, args))
+    if kind == "csv":
+        return read_mica_csv(fetcher, target, args)
+    if kind == "eba":
+        return read_eba_psd(fetcher, args)
+    raise SystemExit(f"eufinreg-solo: unknown source kind {kind!r}")
 
 
 # ----------------------------------------------- MiCA service normalising --
@@ -524,7 +650,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--list-values", action="append", default=[], metavar="FIELD")
     parser.add_argument("--list-enums", action="store_true")
-    parser.add_argument("--select", metavar="VALUE", help="upreg: entity type code, e.g. CSP")
+    parser.add_argument(
+        "--select",
+        metavar="VALUE",
+        help="upreg: entity type code, e.g. CSP. eba-psd: ALL, or codes such as "
+        "PI/EMI/AISP (default: institutions only, excluding ~322k agents)",
+    )
     parser.add_argument("--query", metavar="Q", help="raw Solr query")
     parser.add_argument("--include-history", action="store_true")
     parser.add_argument("--contains", action="append", default=[], metavar="TEXT")
@@ -594,7 +725,7 @@ def main(argv: list[str] | None = None) -> int:
                 file=sys.stderr,
             )
     if fields:
-        rows = read_mica_csv(fetcher, target, args) if kind == "csv" else []
+        rows = [] if kind == "solr" else read_records(fetcher, kind, target, args)
         for name in fields:
             pairs = (
                 solr_facet(fetcher, target, name, args)
@@ -607,11 +738,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.inspect is not None:
         size = max(1, args.inspect)
         args.max_docs = min(args.max_docs or 10_000, max(size * 4, size + 50))
-        records = (
-            read_mica_csv(fetcher, target, args)
-            if kind == "csv"
-            else list(iter_solr(fetcher, target, args))
-        )
+        records = read_records(fetcher, kind, target, args)
         print(profile(records[:size], f"{args.source} — fields as received"))
         if any(r.get("type_s") for r in records):
             print(
@@ -622,11 +749,7 @@ def main(argv: list[str] | None = None) -> int:
             )
         return 0
 
-    records = (
-        read_mica_csv(fetcher, target, args)
-        if kind == "csv"
-        else list(iter_solr(fetcher, target, args))
-    )
+    records = read_records(fetcher, kind, target, args)
     if not args.quiet:
         print(f"eufinreg-solo: received {len(records)} record(s)", file=sys.stderr)
     rows: list[dict[str, Any]] = records if args.no_flatten else flatten(records)

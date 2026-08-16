@@ -25,7 +25,7 @@ import requests
 #: README. Public registers are small public-sector deployments; an anonymous
 #: hammering client is the thing that gets IP ranges blocked for everyone.
 DEFAULT_USER_AGENT = (
-    "eufinreg/0.1.0 (+https://github.com/CHANGE-ME/eufinreg; public-register client)"
+    "eufinreg/0.2.0 (+https://github.com/CHANGE-ME/eufinreg; public-register client)"
 )
 
 #: Status codes worth retrying. 408/425/429 are client-ish but transient;

@@ -9,11 +9,15 @@ import pytest
 import responses
 
 from eufinreg.cli import main
+from eufinreg.sources.eba_psd import FILE_METADATA_URL, METADATA_URL
 
-from .conftest import load_json, load_text
+from .conftest import load_bytes, load_json, load_text
 
 SOLR_URL = "https://registers.esma.europa.eu/solr/esma_registers_upreg/select"
 CSV_URL = "https://www.esma.europa.eu/sites/default/files/2024-12/CASPS.csv"
+PSD_ZIP_URL = (
+    "https://euclid.eba.europa.eu/register/downloads/PSDMD/29990101/download-PSDMD-209901010000.zip"
+)
 
 FAST = ["--delay", "0", "--quiet"]
 
@@ -21,6 +25,17 @@ FAST = ["--delay", "0", "--quiet"]
 def _mock_upreg() -> None:
     for n in (1, 2, 3):
         responses.add(responses.GET, SOLR_URL, json=load_json(f"upreg_page{n}.json"), status=200)
+
+
+def _mock_eba_psd() -> None:
+    responses.add(responses.GET, FILE_METADATA_URL, json=load_json("eba_filemetadata.json"))
+    responses.add(
+        responses.GET,
+        PSD_ZIP_URL,
+        body=load_bytes("eba_psd_goldencopy.zip"),
+        content_type="application/zip",
+    )
+    responses.add(responses.GET, METADATA_URL, json=load_json("eba_metadata.json"))
 
 
 def _mock_casps() -> None:
@@ -42,7 +57,13 @@ class TestArgumentHandling:
     def test_list_sources(self, capsys):
         assert main(["--list-sources"]) == 0
         out = capsys.readouterr().out
-        assert "upreg" in out and "mica-casp" in out and "solr:<core>" in out
+        assert "upreg" in out and "mica-casp" in out and "eba-psd" in out
+        assert "solr:<core>" in out
+
+    def test_list_sources_explains_a_non_obvious_select(self, capsys):
+        # eba-psd defaults to institutions only; that has to be discoverable.
+        main(["--list-sources"])
+        assert "INSTITUTIONS (the default" in capsys.readouterr().out
 
     def test_unknown_source_is_rejected(self, capsys):
         with pytest.raises(SystemExit) as excinfo:
@@ -88,6 +109,33 @@ class TestFetch:
         out = tmp_path / "e.csv"
         main([*FAST, "--source", "upreg", "--no-flatten", "-o", str(out)])
         assert len(_read_csv(out)) == 8
+
+    @responses.activate
+    def test_eba_psd_writes_one_row_per_institution(self, tmp_path):
+        _mock_eba_psd()
+        out = tmp_path / "psd.csv"
+        assert main([*FAST, "--source", "eba-psd", "-o", str(out)]) == 0
+        rows = _read_csv(out)
+        assert rows
+        assert {r["EntityType"] for r in rows}.isdisjoint({"PSD_AG", "PSD_BR"})
+        assert all(r["ENT_NAM"] for r in rows)
+
+    @responses.activate
+    def test_eba_psd_filters_to_one_national_authority(self, tmp_path):
+        _mock_eba_psd()
+        out = tmp_path / "bafin.csv"
+        main([*FAST, "--source", "eba-psd", "--field", "CA_OwnerID=DE_BAFIN", "-o", str(out)])
+        rows = _read_csv(out)
+        assert rows
+        assert {r["CA_OwnerID"] for r in rows} == {"DE_BAFIN"}
+        assert {r["CA_OwnerName"] for r in rows} == {"Federal Financial Supervisory Authority"}
+
+    @responses.activate
+    def test_eba_psd_select_all_brings_back_the_agents(self, tmp_path):
+        _mock_eba_psd()
+        out = tmp_path / "all.csv"
+        main([*FAST, "--source", "eba-psd", "--select", "ALL", "-o", str(out)])
+        assert "PSD_AG" in {r["EntityType"] for r in _read_csv(out)}
 
     @responses.activate
     def test_json_output(self, tmp_path):
