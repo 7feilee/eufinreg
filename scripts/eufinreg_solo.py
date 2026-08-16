@@ -7,8 +7,10 @@
 
     uv run https://raw.githubusercontent.com/CHANGE-ME/eufinreg/main/scripts/eufinreg_solo.py --help
 
-Pulls structured lists of licensed financial entities from the EU public
-registers:
+Pulls structured lists of licensed and registered companies from the EU public
+registers. Any industry that needs a licence has a regulator holding a company
+list more complete than any commercial database, because being on it is a
+condition of trading:
 
   * ESMA Registers A2A (read-only Apache Solr, no authentication)
       https://registers.esma.europa.eu/publication/helpApp
@@ -17,6 +19,9 @@ registers:
   * EBA PSD2 register (nightly JSON golden copy with a SHA-256, machine-readable
       by law under Commission Implementing Regulation (EU) 2019/410)
       https://euclid.eba.europa.eu/register/pir/registerDownload
+  * EUDAMED (medical devices, MDR/IVDR) — 48,893 manufacturers, importers and
+      authorised representatives, plus the 70 notified bodies
+      https://ec.europa.eu/tools/eudamed
 
 BaFin's and FMA's own company databases sit behind a portal whose robots.txt is
 ``Disallow: /``, so this script does not touch it — even though the portal does
@@ -49,7 +54,7 @@ from typing import Any
 
 import requests
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 DEFAULT_USER_AGENT = (
     f"eufinreg-solo/{VERSION} (+https://github.com/CHANGE-ME/eufinreg; public-register client)"
 )
@@ -79,6 +84,12 @@ SOURCES: dict[str, tuple[str, str, str]] = {
         "PSDMD",
         "EBA PSD2 register: payment + e-money institutions, agents, branches",
     ),
+    "eudamed-eo": (
+        "eudamed",
+        "api/eos",
+        "EUDAMED economic operators: EU medical device makers, importers, reps",
+    ),
+    "eudamed-nb": ("eudamed", "api/ses/", "EUDAMED notified bodies (MDR/IVDR)"),
 }
 
 # Block-structured Solr cores: parents and children share one flat docs array.
@@ -100,6 +111,8 @@ ENUM_FIELDS: dict[str, tuple[str, ...]] = {
     "mica-other": ("ae_competentAuthority", "ae_homeMemberState"),
     "mica-ncasp": ("ae_competentAuthority", "ae_homeMemberState"),
     "eba-psd": ("EntityType", "CA_OwnerID", "ENT_COU_RES", "ENT_SER", "ENT_SER_COU"),
+    "eudamed-eo": ("actorType", "actorStatus", "countryIso2Code", "countryName"),
+    "eudamed-nb": ("actorType", "countryIso2Code", "legislationCodes"),
 }
 MULTI_VALUE = {
     "ac_serviceCode_cou": "|",
@@ -116,6 +129,24 @@ EBA_REGISTER = "https://euclid.eba.europa.eu/register"
 EBA_FILE_METADATA = f"{EBA_REGISTER}/api/filemetadata"
 # Agents alone are ~322k of the ~329k records, so they are out unless asked for.
 EBA_INSTITUTIONS = ("PSD_PI", "PSD_EPI", "PSD_EMI", "PSD_EEMI", "PSD_AISP", "PSD_EXC", "PSD_ENL")
+
+# EUDAMED (medical devices). Two traps, neither of which reports an error:
+# `size` is silently capped at 300, and `languageIso2Code` is a filter, not a
+# display setting — omit it and api/eos returns HTTP 500 while api/ses/ returns
+# one row per language (70 notified bodies become 1,890).
+EUDAMED_BASE = "https://ec.europa.eu/tools/eudamed"
+EUDAMED_MAX_PAGE = 300
+EUDAMED_SORT = "ulid,ASC"  # unique; sorting on eudamedIdentifier returns 500
+EUDAMED_ACTOR_TYPES = {
+    "manufacturer": "refdata.actor-type.manufacturer",
+    "importer": "refdata.actor-type.importer",
+    "authorised-representative": "refdata.actor-type.authorised-representative",
+    "system-procedure-pack-producer": "refdata.actor-type.system-procedure-pack-producer",
+    "mf": "refdata.actor-type.manufacturer",
+    "im": "refdata.actor-type.importer",
+    "ar": "refdata.actor-type.authorised-representative",
+    "sppp": "refdata.actor-type.system-procedure-pack-producer",
+}
 
 
 # ---------------------------------------------------------------- http ----
@@ -408,6 +439,85 @@ def read_eba_psd(fetcher: Fetcher, args) -> list[dict[str, Any]]:
     return rows
 
 
+def read_eudamed(fetcher: Fetcher, path: str, args) -> list[dict[str, Any]]:
+    """One paginated EUDAMED actor endpoint.
+
+    ``languageIso2Code`` is mandatory (see EUDAMED_BASE above) and ``size`` is
+    clamped, because the server caps it at 300 without saying so.
+    """
+    params: dict[str, Any] = {
+        "languageIso2Code": "en",
+        "size": max(1, min(args.page_size, EUDAMED_MAX_PAGE)),
+        "sort": EUDAMED_SORT,
+    }
+    if args.select and args.select.strip().upper() != "ALL":
+        codes = []
+        for part in args.select.replace(";", ",").split(","):
+            token = part.strip().lower()
+            if not token:
+                continue
+            code = token if token.startswith("refdata.") else EUDAMED_ACTOR_TYPES.get(token)
+            if not code:
+                raise SystemExit(
+                    f"eufinreg-solo: unknown actor type {part.strip()!r}; try ALL, "
+                    f"manufacturer, importer, authorised-representative or "
+                    f"system-procedure-pack-producer"
+                )
+            if code not in codes:
+                codes.append(code)
+        if codes:
+            params["actorTypeCode"] = ",".join(codes)
+    if args.query:
+        for chunk in args.query.split("&"):
+            if "=" not in chunk:
+                raise SystemExit(
+                    f"eufinreg-solo: --query for EUDAMED expects url parameters, got {chunk!r}"
+                )
+            name, _, value = chunk.partition("=")
+            params[name.strip()] = value.strip()
+
+    rows: list[dict[str, Any]] = []
+    page = 0
+    while True:
+        params["page"] = page
+        payload = fetcher.get(f"{EUDAMED_BASE}/{path}", params, f"eudamed-p{page:04d}").json()
+        content = payload.get("content") or []
+        for record in content:
+            row: dict[str, Any] = {}
+            for name, value in record.items():
+                if value is None:
+                    row[name] = ""
+                elif isinstance(value, (str, int, float, bool)):
+                    row[name] = value
+                elif isinstance(value, dict) and "code" in value:
+                    row[name] = value["code"]
+                    for extra in ("srnCode", "category"):
+                        if value.get(extra) is not None:
+                            row[f"{name}_{extra}"] = value[extra]
+                elif isinstance(value, dict) and "texts" in value:
+                    row[name] = SEP.join(
+                        str(t.get("text")) for t in value["texts"] or [] if t.get("text")
+                    )
+                elif name == "legislationLinks" and isinstance(value, list):
+                    row["legislationCodes"] = SEP.join(
+                        str(e.get("legislationCode")) for e in value if e.get("legislationCode")
+                    )
+                    row["legislationLinks"] = SEP.join(
+                        str(e.get("link")) for e in value if e.get("link")
+                    )
+                else:
+                    row[name] = json.dumps(value, ensure_ascii=False, sort_keys=True)
+            rows.append(row)
+            if args.max_docs and len(rows) >= args.max_docs:
+                return rows
+        if payload.get("last") is True or not content:
+            return rows
+        page += 1
+        total = payload.get("totalPages")
+        if isinstance(total, int) and page >= total:
+            return rows
+
+
 def read_records(fetcher: Fetcher, kind: str, target: str, args) -> list[dict[str, Any]]:
     """Read a whole source, whichever kind of interface it happens to have."""
     if kind == "solr":
@@ -416,6 +526,8 @@ def read_records(fetcher: Fetcher, kind: str, target: str, args) -> list[dict[st
         return read_mica_csv(fetcher, target, args)
     if kind == "eba":
         return read_eba_psd(fetcher, args)
+    if kind == "eudamed":
+        return read_eudamed(fetcher, target, args)
     raise SystemExit(f"eufinreg-solo: unknown source kind {kind!r}")
 
 

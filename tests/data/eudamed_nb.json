@@ -1,0 +1,292 @@
+{
+ "content": [
+  {
+   "uuid": "EF254BF7A3483126E0533EE4A79E7DB2",
+   "ulid": "01EX1WAXZ6QTJTX7NTYDWCWVJA",
+   "name": "CeCert Sp. z o.o.",
+   "names": {
+    "texts": [
+     {
+      "language": null,
+      "text": "CeCert Sp. z o.o.",
+      "allLanguagesApplicable": true
+     }
+    ],
+    "textByDefaultLanguage": null
+   },
+   "actorType": {
+    "code": "refdata.actor-type.notified-body",
+    "srnCode": "NB",
+    "category": "SUPERVISING_ENTITY"
+   },
+   "actorStatus": null,
+   "actorStatusFromDate": null,
+   "roleName": null,
+   "countryIso2Code": "PL",
+   "countryName": "Poland",
+   "countryType": "EU_MEMBER_STATE",
+   "dateOfRegistration": null,
+   "eudamedIdentifier": "2934",
+   "electronicMail": "biuro@cecert.pl",
+   "telephone": "+48 721-721-527",
+   "geographicalAddress": "ul. Warecka 11a, 00-034 Warszawa",
+   "buildingNumber": null,
+   "streetName": null,
+   "postbox": null,
+   "addressComplement": null,
+   "postalZone": null,
+   "cityName": null,
+   "abbreviatedName": null,
+   "abbreviatedNames": null,
+   "latestVersion": true,
+   "versionNumber": 0,
+   "associatedToUser": false,
+   "registrationUlid": null,
+   "legislationLinks": [
+    {
+     "legislationCode": "refdata.applicable-legislation.ivdd",
+     "link": null
+    }
+   ],
+   "selectable": true,
+   "actorValidated": null,
+   "nbStatus": null,
+   "srn": "2934"
+  },
+  {
+   "uuid": "1d0054c0-8039-43b2-b110-79e25780a7f1",
+   "ulid": "01EX1WAXZ6QTJTX7NTYDWCWVJF",
+   "name": "3EC International a.s.",
+   "names": {
+    "texts": [
+     {
+      "language": null,
+      "text": "3EC International a.s.",
+      "allLanguagesApplicable": true
+     }
+    ],
+    "textByDefaultLanguage": null
+   },
+   "actorType": {
+    "code": "refdata.actor-type.notified-body",
+    "srnCode": "NB",
+    "category": "SUPERVISING_ENTITY"
+   },
+   "actorStatus": null,
+   "actorStatusFromDate": null,
+   "roleName": null,
+   "countryIso2Code": "SK",
+   "countryName": "Slovakia",
+   "countryType": "EU_MEMBER_STATE",
+   "dateOfRegistration": null,
+   "eudamedIdentifier": "2265",
+   "electronicMail": "info@3ec.sk",
+   "telephone": "+421 2 58318343",
+   "geographicalAddress": "3EC International a.s.  Hranicna 18  Bratislava  82105  SLOVAKIA, Bratislava\r\n82105 Bratislava\r\n82105",
+   "buildingNumber": null,
+   "streetName": null,
+   "postbox": null,
+   "addressComplement": null,
+   "postalZone": null,
+   "cityName": null,
+   "abbreviatedName": null,
+   "abbreviatedNames": null,
+   "latestVersion": true,
+   "versionNumber": 0,
+   "associatedToUser": false,
+   "registrationUlid": null,
+   "legislationLinks": [
+    {
+     "legislationCode": "refdata.applicable-legislation.ivdr",
+     "link": "https://ec.europa.eu/growth/tools-databases/nando/index.cfm?fuseaction=notification.html&ntf_id=1026983&version_no=5"
+    },
+    {
+     "legislationCode": "refdata.applicable-legislation.mdr",
+     "link": "https://ec.europa.eu/growth/tools-databases/nando/index.cfm?fuseaction=notification.html&ntf_id=1009482&version_no=4"
+    },
+    {
+     "legislationCode": "refdata.applicable-legislation.ivdd",
+     "link": null
+    },
+    {
+     "legislationCode": "refdata.applicable-legislation.mdd",
+     "link": null
+    }
+   ],
+   "selectable": true,
+   "actorValidated": null,
+   "nbStatus": null,
+   "srn": "2265"
+  },
+  {
+   "uuid": "58894fe7-e756-4149-a530-882e4d033127",
+   "ulid": "01EX1WAY0ZYHGP2FZYPPBXRMBK",
+   "name": "CENTRO NACIONAL DE CERTIFICACION DE PRODUCTOS SANITARIOS",
+   "names": {
+    "texts": [
+     {
+      "language": null,
+      "text": "CENTRO NACIONAL DE CERTIFICACION DE PRODUCTOS SANITARIOS",
+      "allLanguagesApplicable": true
+     }
+    ],
+    "textByDefaultLanguage": null
+   },
+   "actorType": {
+    "code": "refdata.actor-type.notified-body",
+    "srnCode": "NB",
+    "category": "SUPERVISING_ENTITY"
+   },
+   "actorStatus": null,
+   "actorStatusFromDate": null,
+   "roleName": null,
+   "countryIso2Code": "ES",
+   "countryName": "Spain",
+   "countryType": "EU_MEMBER_STATE",
+   "dateOfRegistration": null,
+   "eudamedIdentifier": "0318",
+   "electronicMail": "on0318@certificaps.gob.es",
+   "telephone": "+34:91:822 51 30",
+   "geographicalAddress": "Campezo 1. Edificio 7., 28022 MADRID 28022 MADRID",
+   "buildingNumber": null,
+   "streetName": null,
+   "postbox": null,
+   "addressComplement": null,
+   "postalZone": null,
+   "cityName": null,
+   "abbreviatedName": "CNCps",
+   "abbreviatedNames": {
+    "texts": [
+     {
+      "language": null,
+      "text": "CNCps",
+      "allLanguagesApplicable": true
+     }
+    ],
+    "textByDefaultLanguage": null
+   },
+   "latestVersion": true,
+   "versionNumber": 0,
+   "associatedToUser": false,
+   "registrationUlid": null,
+   "legislationLinks": [
+    {
+     "legislationCode": "refdata.applicable-legislation.ivdr",
+     "link": "https://ec.europa.eu/growth/tools-databases/nando/index.cfm?fuseaction=notification.html&ntf_id=1015143&version_no=1"
+    },
+    {
+     "legislationCode": "refdata.applicable-legislation.mdr",
+     "link": "https://ec.europa.eu/growth/tools-databases/nando/index.cfm?fuseaction=notification.html&ntf_id=322216&version_no=2"
+    },
+    {
+     "legislationCode": "refdata.applicable-legislation.ivdd",
+     "link": null
+    },
+    {
+     "legislationCode": "refdata.applicable-legislation.mdd",
+     "link": null
+    }
+   ],
+   "selectable": true,
+   "actorValidated": null,
+   "nbStatus": null,
+   "srn": "0318"
+  },
+  {
+   "uuid": "CD48A569E43C8334E05343E4A79E78D8",
+   "ulid": "01EX1WAY11S19W4J8JNZJBAMWQ",
+   "name": "BSI Assurance UK Ltd",
+   "names": {
+    "texts": [
+     {
+      "language": null,
+      "text": "BSI Assurance UK Ltd",
+      "allLanguagesApplicable": true
+     }
+    ],
+    "textByDefaultLanguage": null
+   },
+   "actorType": {
+    "code": "refdata.actor-type.notified-body",
+    "srnCode": "NB",
+    "category": "SUPERVISING_ENTITY"
+   },
+   "actorStatus": null,
+   "actorStatusFromDate": null,
+   "roleName": null,
+   "countryIso2Code": "UK",
+   "countryName": "United Kingdom (excl. Northern Ireland)",
+   "countryType": "NON_EU",
+   "dateOfRegistration": null,
+   "eudamedIdentifier": "0086",
+   "electronicMail": "product.certification@bsigroup.com",
+   "telephone": "44 (0) 8450 809000",
+   "geographicalAddress": "Kitemark Court Davy Avenue Knowlhill, 8PP Milton Keynes",
+   "buildingNumber": null,
+   "streetName": null,
+   "postbox": null,
+   "addressComplement": null,
+   "postalZone": null,
+   "cityName": null,
+   "abbreviatedName": null,
+   "abbreviatedNames": null,
+   "latestVersion": true,
+   "versionNumber": 0,
+   "associatedToUser": false,
+   "registrationUlid": null,
+   "legislationLinks": [
+    {
+     "legislationCode": "refdata.applicable-legislation.ivdd",
+     "link": null
+    },
+    {
+     "legislationCode": "refdata.applicable-legislation.aimdd",
+     "link": null
+    },
+    {
+     "legislationCode": "refdata.applicable-legislation.mdd",
+     "link": null
+    }
+   ],
+   "selectable": true,
+   "actorValidated": null,
+   "nbStatus": null,
+   "srn": "0086"
+  }
+ ],
+ "pageable": {
+  "sort": [
+   {
+    "direction": "ASC",
+    "property": "ulid",
+    "ignoreCase": false,
+    "nullHandling": "NATIVE",
+    "ascending": true,
+    "descending": false
+   }
+  ],
+  "offset": 0,
+  "pageSize": 300,
+  "pageNumber": 0,
+  "unpaged": false,
+  "paged": true
+ },
+ "last": true,
+ "totalElements": 4,
+ "totalPages": 1,
+ "size": 300,
+ "number": 0,
+ "sort": [
+  {
+   "direction": "ASC",
+   "property": "ulid",
+   "ignoreCase": false,
+   "nullHandling": "NATIVE",
+   "ascending": true,
+   "descending": false
+  }
+ ],
+ "first": true,
+ "numberOfElements": 4,
+ "empty": false
+}

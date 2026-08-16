@@ -222,6 +222,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     except FetchError as exc:
         print(f"eufinreg: {exc}", file=sys.stderr)
         return 1
+    except ValueError as exc:
+        # A source rejecting a --select / --query it cannot express. That is a
+        # usage error, and deserves the message rather than a traceback.
+        print(f"eufinreg: {exc}", file=sys.stderr)
+        return 2
     except KeyboardInterrupt:  # pragma: no cover - interactive only
         print("eufinreg: interrupted", file=sys.stderr)
         return 130

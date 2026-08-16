@@ -1,0 +1,222 @@
+{
+ "content": [
+  {
+   "uuid": "cde87b2c-6a37-44fd-8493-d30fd51411de",
+   "ulid": "01ERD64E6DMDZPDPE1ZXCJ1D6N",
+   "name": "Aesculap AG",
+   "names": {
+    "texts": [
+     {
+      "language": {
+       "isoCode": "de",
+       "name": "German"
+      },
+      "text": "Aesculap AG",
+      "allLanguagesApplicable": null
+     }
+    ],
+    "textByDefaultLanguage": null
+   },
+   "actorType": {
+    "code": "refdata.actor-type.manufacturer",
+    "srnCode": "MF",
+    "category": "ECONOMIC_ENTITY"
+   },
+   "actorStatus": {
+    "code": "refdata.actor-status.active"
+   },
+   "actorStatusFromDate": null,
+   "roleName": "Manufacturer",
+   "countryIso2Code": "DE",
+   "countryName": "Germany",
+   "countryType": "EU_MEMBER_STATE",
+   "dateOfRegistration": "2021-05-27T13:06:40.268",
+   "eudamedIdentifier": "DE-MF-000005504",
+   "electronicMail": "eudamed@bbraun.com",
+   "telephone": null,
+   "geographicalAddress": "Am Aesculap-Platz, 78532 Tuttlingen ",
+   "buildingNumber": null,
+   "streetName": null,
+   "postbox": null,
+   "addressComplement": null,
+   "postalZone": "78532",
+   "cityName": "Tuttlingen ",
+   "abbreviatedName": null,
+   "abbreviatedNames": null,
+   "latestVersion": true,
+   "versionNumber": 3,
+   "associatedToUser": false,
+   "registrationUlid": "01ERD64EA546KQE1C9RJQ2EK4P",
+   "legislationLinks": null,
+   "selectable": true,
+   "actorValidated": null,
+   "nbStatus": null,
+   "srn": "DE-MF-000005504"
+  },
+  {
+   "uuid": "09a64a0d-eb69-46ed-a6a5-b1dade3ac894",
+   "ulid": "01ERDCGX4B37TWSWJB8CJ5R17P",
+   "name": "Medical Technology Promedt Consulting GmbH",
+   "names": {
+    "texts": [
+     {
+      "language": {
+       "isoCode": "de",
+       "name": "German"
+      },
+      "text": "Medical Technology Promedt Consulting GmbH",
+      "allLanguagesApplicable": null
+     }
+    ],
+    "textByDefaultLanguage": null
+   },
+   "actorType": {
+    "code": "refdata.actor-type.authorised-representative",
+    "srnCode": "AR",
+    "category": "ECONOMIC_ENTITY"
+   },
+   "actorStatus": {
+    "code": "refdata.actor-status.active"
+   },
+   "actorStatusFromDate": null,
+   "roleName": "Authorised Representative",
+   "countryIso2Code": "DE",
+   "countryName": "Germany",
+   "countryType": "EU_MEMBER_STATE",
+   "dateOfRegistration": "2020-12-04T09:51:19.322",
+   "eudamedIdentifier": "DE-AR-000000085",
+   "electronicMail": "ear@mt-procons.com",
+   "telephone": "+49 6894 581020",
+   "geographicalAddress": "Ernst-Heckel-Straße, 7 66386 St. Ingbert",
+   "buildingNumber": null,
+   "streetName": null,
+   "postbox": null,
+   "addressComplement": null,
+   "postalZone": "66386",
+   "cityName": "St. Ingbert",
+   "abbreviatedName": "MT Promedt Consulting GmbH",
+   "abbreviatedNames": {
+    "texts": [
+     {
+      "language": {
+       "isoCode": "de",
+       "name": "German"
+      },
+      "text": "MT Promedt Consulting GmbH",
+      "allLanguagesApplicable": null
+     }
+    ],
+    "textByDefaultLanguage": null
+   },
+   "latestVersion": true,
+   "versionNumber": 6,
+   "associatedToUser": false,
+   "registrationUlid": "01ERDCGX52S2NVCRHMWDA2YZJY",
+   "legislationLinks": null,
+   "selectable": true,
+   "actorValidated": null,
+   "nbStatus": null,
+   "srn": "DE-AR-000000085"
+  },
+  {
+   "uuid": "bc64d2e2-adc5-4a26-8ff2-c35cc9803cfb",
+   "ulid": "01ERDD5W456C2K4DHSYHXXWZ1F",
+   "name": "AST VisionCare Inc.",
+   "names": {
+    "texts": [
+     {
+      "language": {
+       "isoCode": "en",
+       "name": "English"
+      },
+      "text": "AST VisionCare Inc.",
+      "allLanguagesApplicable": null
+     }
+    ],
+    "textByDefaultLanguage": "AST VisionCare Inc."
+   },
+   "actorType": {
+    "code": "refdata.actor-type.manufacturer",
+    "srnCode": "MF",
+    "category": "ECONOMIC_ENTITY"
+   },
+   "actorStatus": {
+    "code": "refdata.actor-status.active"
+   },
+   "actorStatusFromDate": null,
+   "roleName": "Manufacturer",
+   "countryIso2Code": "US",
+   "countryName": "United States",
+   "countryType": "NON_EU",
+   "dateOfRegistration": "2022-03-22T17:57:10.325",
+   "eudamedIdentifier": "US-MF-000021852",
+   "electronicMail": "ra@astvc.com",
+   "telephone": null,
+   "geographicalAddress": "Linnell Circle, 9 01821 Billerica",
+   "buildingNumber": null,
+   "streetName": null,
+   "postbox": null,
+   "addressComplement": null,
+   "postalZone": "01821",
+   "cityName": "Billerica",
+   "abbreviatedName": "ASTVC",
+   "abbreviatedNames": {
+    "texts": [
+     {
+      "language": {
+       "isoCode": "en",
+       "name": "English"
+      },
+      "text": "ASTVC",
+      "allLanguagesApplicable": null
+     }
+    ],
+    "textByDefaultLanguage": "ASTVC"
+   },
+   "latestVersion": true,
+   "versionNumber": 5,
+   "associatedToUser": false,
+   "registrationUlid": "01ERDD5W4G1T2FEJJN4TTFXTGN",
+   "legislationLinks": null,
+   "selectable": true,
+   "actorValidated": null,
+   "nbStatus": null,
+   "srn": "US-MF-000021852"
+  }
+ ],
+ "pageable": {
+  "sort": [
+   {
+    "direction": "ASC",
+    "property": "ulid",
+    "ignoreCase": false,
+    "nullHandling": "NATIVE",
+    "ascending": true,
+    "descending": false
+   }
+  ],
+  "offset": 0,
+  "pageSize": 3,
+  "pageNumber": 0,
+  "unpaged": false,
+  "paged": true
+ },
+ "last": false,
+ "totalElements": 6,
+ "totalPages": 2,
+ "size": 3,
+ "number": 0,
+ "sort": [
+  {
+   "direction": "ASC",
+   "property": "ulid",
+   "ignoreCase": false,
+   "nullHandling": "NATIVE",
+   "ascending": true,
+   "descending": false
+  }
+ ],
+ "first": true,
+ "numberOfElements": 3,
+ "empty": false
+}

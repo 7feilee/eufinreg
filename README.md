@@ -1,7 +1,19 @@
 # eufinreg
 
-Pull structured lists of **licensed financial entities** out of the EU public
-registers — as CSV/JSON, from the command line, with one runtime dependency.
+Pull structured lists of **licensed and registered companies** out of the EU
+public registers — as CSV/JSON, from the command line, with one runtime
+dependency.
+
+**The premise.** Any industry that needs a licence, a registration, a
+certification, a subsidy or an approval has a regulator sitting on a company
+directory more complete than any commercial database — because inclusion is a
+legal condition of trading, not a marketing decision. Those directories are
+public, free, structured and, more often than people assume, machine-readable.
+This tool reads them.
+
+> **Name note:** the package started as a financial-registers client and still
+> carries the name. It now covers medical devices too, and the sector survey
+> below maps the rest. A rename is pending; the CLI is stable in the meantime.
 
 The point of this repository is only half the code. The other half is the
 **interface documentation below**, which is the result of reading the regulators'
@@ -10,20 +22,25 @@ Public registers tend to have interfaces that are undocumented, half-documented,
 or documented somewhere nobody links to.
 
 Everything in the "How the interfaces work" section was verified against the
-live services: the ESMA sections on **2026-08-15**, the EBA and BaFin sections on
+live services: the ESMA sections on **2026-08-15**, everything else on
 **2026-08-16**. Counts will drift; the shapes should not.
 
 ---
 
 ## TL;DR — what has an interface and what does not
 
-| Register | Official machine interface? | What this tool does |
-|---|---|---|
-| **ESMA Registers** (MiFID investment firms, AIFMs, UCITS management companies, crowdfunding providers, trading venues, benchmark administrators, funds, MMFs…) | **Yes** — a read-only Apache Solr A2A endpoint, no authentication, [documented by ESMA](https://registers.esma.europa.eu/publication/helpApp) | Reads it directly, pages with `cursorMark`, flattens parent/child blocks into one row per entity |
-| **ESMA interim MiCA register** (CASPs, ART issuers, EMT issuers, white papers, non-compliant entities) | **Yes, sort of** — five stable CSV URLs regenerated weekly. No query API, but a documented, machine-readable bulk download | Downloads and parses them, normalises the messiest field |
-| **EBA PSD2 register** (payment institutions, e-money institutions, AISPs, their agents and branches) | **Yes, and it is required to be** — [Commission Implementing Regulation (EU) 2019/410](https://eur-lex.europa.eu/eli/reg_impl/2019/410/oj) obliges the EBA to publish it electronically. A nightly JSON "golden copy" with a published SHA-256 | Reads the file-metadata endpoint, downloads the archive, **verifies both checksums**, flattens it, labels the codes from the register's own metadata |
-| **BaFin Unternehmensdatenbank / ZAG register / VGV register** (Germany) | **A human-facing one, yes; an automatable one, no** — the result pages do offer CSV/XML/Excel export links, but the whole portal host is `robots.txt: Disallow: /`. See [the evidence](#bafin-germany--an-export-button-behind-a-blanket-robots-ban) | Does **not** touch the portal. Shows you the exact export URLs to click yourself, and routes automation to the ESMA and EBA data that covers BaFin-supervised entities |
-| **FMA Unternehmensdatenbank** (Austria) | **No** — see [the evidence](#fma-austria--no-interface-at-all) | Same routing, no export to click |
+| Register | Sector | Official machine interface? | What this tool does |
+|---|---|---|---|
+| **ESMA Registers** (MiFID investment firms, AIFMs, UCITS management companies, crowdfunding providers, trading venues, benchmark administrators, funds, MMFs…) | Finance | **Yes** — a read-only Apache Solr A2A endpoint, no authentication, [documented by ESMA](https://registers.esma.europa.eu/publication/helpApp) | Reads it directly, pages with `cursorMark`, flattens parent/child blocks into one row per entity |
+| **ESMA interim MiCA register** (CASPs, ART issuers, EMT issuers, white papers, non-compliant entities) | Finance | **Yes, sort of** — five stable CSV URLs regenerated weekly. No query API, but a documented, machine-readable bulk download | Downloads and parses them, normalises the messiest field |
+| **EBA PSD2 register** (payment institutions, e-money institutions, AISPs, their agents and branches) | Finance | **Yes, and it is required to be** — [Commission Implementing Regulation (EU) 2019/410](https://eur-lex.europa.eu/eli/reg_impl/2019/410/oj) obliges the EBA to publish it electronically. A nightly JSON "golden copy" with a published SHA-256 | Reads the file-metadata endpoint, downloads the archive, **verifies both checksums**, flattens it, labels the codes from the register's own metadata |
+| **EUDAMED** (medical device manufacturers, importers, authorised representatives, procedure-pack producers, notified bodies) | Medical devices | **Yes** — the JSON API the public site runs on, no authentication, not excluded by `robots.txt`. 48,893 organisations **with email and phone** | Pages it with a unique sort key, always sends the mandatory language parameter, flattens the nested reference-data blocks |
+| **BaFin Unternehmensdatenbank / ZAG register / VGV register** (Germany) | Finance | **A human-facing one, yes; an automatable one, no** — the result pages do offer CSV/XML/Excel export links, but the whole portal host is `robots.txt: Disallow: /`. See [the evidence](#bafin-germany--an-export-button-behind-a-blanket-robots-ban) | Does **not** touch the portal. Shows you the exact export URLs to click yourself, and routes automation to the ESMA and EBA data that covers BaFin-supervised entities |
+| **FMA Unternehmensdatenbank** (Austria) | Finance | **No** — see [the evidence](#fma-austria--no-interface-at-all) | Same routing, no export to click |
+
+Nine other registers across pharma, chemicals, aviation, energy and automotive
+were probed on 2026-08-16 and are documented — with what was actually found — in
+[The same trick in other industries](#the-same-trick-in-other-industries).
 
 No HTML scraping happens anywhere in this project.
 
@@ -116,6 +133,16 @@ uv run eufinreg --source eba-psd --select EMI --contains DE -o emi.csv
 # The agents too — 322k rows, mostly natural persons; read the disclaimers first
 uv run eufinreg --source eba-psd --select ALL -o psd-everything.csv
 
+# Every EU medical device manufacturer (31,931), with address, email and phone
+uv run eufinreg --source eudamed-eo --select manufacturer -o device-makers.csv
+
+# German importers of medical devices — both filters pushed server-side
+uv run eufinreg --source eudamed-eo --select importer \
+  --query 'countryIso2Code=DE' -o de-importers.csv
+
+# The 70 notified bodies that certify those devices, with their NANDO links
+uv run eufinreg --source eudamed-nb -o notified-bodies.csv
+
 # Schema-drift-proof: match a string anywhere in the record
 uv run eufinreg --source mica-casp --contains bybit --format json
 
@@ -145,7 +172,7 @@ uv run eufinreg --source mica-casp --format xlsx -o casps.xlsx
 | `--contains TEXT` | Case-insensitive substring across **all** fields. Repeatable, ANDed. Survives field renames. |
 | `--field NAME=VALUE` | Case-insensitive **exact** match on one field. Repeatable, ANDed. Warns loudly if `NAME` does not exist in any fetched record. |
 | `--select VALUE` | Source-specific selector. On Solr it is pushed down into `q` and is genuinely cheap; on a bulk-file source such as `eba-psd` it filters after the download. Run `--list-sources` for each source's accepted values. |
-| `--query Q` | Raw source-native query, passed through untouched. Solr only. |
+| `--query Q` | Raw source-native query, passed through untouched: a Solr `q` on the ESMA cores, `key=value&key=value` URL parameters on EUDAMED. |
 | `--no-flatten` | Emit records exactly as received. |
 | `--no-derived` | Drop the added helper columns (`ac_serviceCode_normalised`, the `eba-psd` `*_label` columns). Also skips the extra request that fetches the labels. |
 | `--delay SEC` | Pause between requests. Default **1.0 s**. |
@@ -649,6 +676,107 @@ published as PDF and XLSX at a URL whose date segment changes each release.
 
 ---
 
+### EUDAMED — the medical device industry, with contact details
+
+Same premise, different industry. Under [MDR 2017/745](https://eur-lex.europa.eu/eli/reg/2017/745/oj)
+and [IVDR 2017/746](https://eur-lex.europa.eu/eli/reg/2017/746/oj), you cannot
+place a medical device on the EU market without registering in EUDAMED as an
+*economic operator*. So EUDAMED is a near-complete directory of the European
+medical device industry — **48,893 organisations on 2026-08-16** — and unlike the
+financial registers it carries an email address and a phone number for almost
+every one.
+
+* **Public site:** <https://ec.europa.eu/tools/eudamed>
+* **Interface:** the JSON API the public site itself runs on. No authentication,
+  no key, no registration.
+* **`robots.txt`:** `ec.europa.eu/robots.txt` carries 201 `Disallow` rules for
+  `*`; none of them matches `/tools/eudamed/`. (Contrast BaFin below.)
+* **Documented by the Commission?** No. This is an application backend, not a
+  published API — treat the field list as observed, not promised, and run
+  `--inspect` before trusting it.
+
+| Source key | Endpoint | Contents | Records |
+|---|---|---|---|
+| `eudamed-eo` | `api/eos` | Economic operators — the company directory | 48,893 |
+| `eudamed-nb` | `api/ses/` | Notified bodies, cross-linked to their NANDO notifications | 70 |
+
+#### `languageIso2Code` is not a display setting — it is a filter
+
+This is the trap, and it is a bad one:
+
+| Request | `totalElements` |
+|---|---|
+| `api/ses/?page=0&size=1` | **1,890** |
+| `api/ses/?page=0&size=1&languageIso2Code=en` | **70** |
+
+Omit the parameter and the endpoint returns **one row per notified body per
+language**. A 300-record page contains 12 distinct organisations, each repeated
+about 25 times with `countryName` in Bulgarian, English, German, Croatian and so
+on — same `uuid`, same `ulid`, different language. There are 70 notified bodies;
+1,890 is 70 × 27 languages. Nothing in the response says so.
+
+On `api/eos` the same omission is at least loud: it returns **HTTP 500**.
+
+`eufinreg` always sends `languageIso2Code=en`, and there is a test asserting it.
+
+#### `size` is silently capped at 300
+
+`size=500` and `size=1000` both return exactly 300 records, with HTTP 200 and no
+warning. A client that asks for 1000, receives 300, and concludes "fewer than I
+asked for, so that must be everything" will report 300 medical device companies
+in Europe. `eufinreg` clamps `--page-size` to 300 and pages on the `last` flag.
+
+#### Paging needs `sort=ulid,ASC`
+
+Deep paging is only stable on a unique key. Verified on the live endpoint:
+
+* `sort=eudamedIdentifier,ASC` → **HTTP 500**
+* `sort=name,ASC` → works, but names are not unique
+* `sort=ulid,ASC` → works; ULIDs are unique and lexicographically ordered
+
+Page 160 (`size=300`, offset 48,000) returns a full page, so there is no hidden
+deep-paging ceiling. A full `eudamed-eo` pull is 164 requests — about three
+minutes at the default 1 s delay.
+
+#### Actor types (live counts, 2026-08-16)
+
+| `--select` | `actorTypeCode` | Organisations |
+|---|---|---|
+| `manufacturer` (`mf`) | `refdata.actor-type.manufacturer` | 31,931 |
+| `importer` (`im`) | `refdata.actor-type.importer` | 12,363 |
+| `authorised-representative` (`ar`) | `refdata.actor-type.authorised-representative` | 2,938 |
+| `system-procedure-pack-producer` (`sppp`) | `refdata.actor-type.system-procedure-pack-producer` | 1,661 |
+
+Those four sum to exactly 48,893, which is how you know the type list is
+complete. `--select` is pushed server-side, so it is genuinely cheap; an unknown
+value is an error rather than a silently ignored filter.
+
+`--query` takes raw URL parameters for filters this package does not model:
+
+```bash
+uv run eufinreg --source eudamed-eo --query 'countryIso2Code=DE' -o de-devices.csv
+```
+
+#### Fields
+
+Scalar fields keep EUDAMED's own names: `name`, `eudamedIdentifier` (the Single
+Registration Number, also as `srn`), `countryIso2Code`, `geographicalAddress`,
+`postalZone`, `cityName`, `electronicMail`, `telephone`, `dateOfRegistration`,
+`versionNumber`, `latestVersion`.
+
+The nested blocks are flattened: reference-data objects become their `code`
+(`actorType`, `actorStatus`) plus `_srnCode` / `_category` companions;
+multilingual `names` blocks are pipe-joined; and a notified body's
+`legislationLinks` split into `legislationCodes` (`…mdr`, `…ivdr`, `…mdd`,
+`…ivdd`, `…aimdd`) and the matching NANDO URLs. Anything nested that this
+package does not recognise is preserved as compact JSON under its own name
+rather than dropped, so a new field shows up in `--inspect`.
+
+Of the 70 notified bodies, 52 are MDR-designated and 19 IVDR-designated; Italy
+and Germany host 11 each, and five are in Türkiye.
+
+---
+
 ### BaFin (Germany) — an export button behind a blanket robots ban
 
 > **Corrected on 2026-08-16.** Earlier versions of this file said no CSV, XML or
@@ -738,6 +866,73 @@ BaFin with the EBA, published under an interface built for automation.
 
 ---
 
+## The same trick in other industries
+
+Finance is not special. Wherever the law makes a licence, registration,
+certification or approval a condition of trading, the regulator ends up holding
+the authoritative company list for that industry — and usually publishes it.
+EUDAMED above is the medical-device instance of exactly the same pattern.
+
+Below is what an afternoon of probing found on **2026-08-16**. The "Depth"
+column is deliberate: *probed* means requests were made against the interface
+and the shapes checked, *surface* means the landing page was fetched and the
+obvious machine endpoints tried, nothing more. Do not read a surface row as a
+verdict.
+
+| Industry | Register | What it lists | Interface found | Depth |
+|---|---|---|---|---|
+| Medical devices | [EUDAMED](https://ec.europa.eu/tools/eudamed) | 48,893 manufacturers, importers, authorised reps, pack producers + 70 notified bodies | **JSON API, no auth** — [wrapped](#eudamed--the-medical-device-industry-with-contact-details) | probed |
+| Medical devices | [NANDO](https://webgate.ec.europa.eu/single-market-compliance-space/) | Notified bodies across all CE-marking directives, not just devices | SPA on `webgate.ec.europa.eu`; for devices, EUDAMED's `api/ses/` already returns the NANDO notification URLs per body | surface |
+| Pharma / CDMO | [EudraGMDP](https://eudragmdp.ema.europa.eu/) | Every GMP manufacturing and import authorisation in the EEA — i.e. the contract-manufacturing industry | **None found.** Redirects to `/inspections?key=public`, an Apache Struts app (`.do` actions, `jsessionid` in the URL, prototype.js/scriptaculous). Same shape as BaFin's portal | surface |
+| Pharma | [CTIS](https://euclinicaltrials.eu/ctis-public/search) | Clinical trial sponsors under Regulation 536/2014 | **JSON API, no auth.** `POST /ctis-public-api/search` answers with `{pagination, data}`. `POST /ctis-public-api/search/download` returns `{"taskId": …}` — an **asynchronous** CSV job you then poll. The SPA's config also names `https://euclinicaltrials.eu/ct-public-api-services/services` | probed |
+| Chemicals | [ECHA CHEM](https://chem.echa.europa.eu/) | REACH registrants — every company that registered a substance | **JSON API, no auth**, but substance-first: `GET /api-substance/v1/substance?searchText=…`. `searchText` is mandatory (blank → HTTP 400 `[searchText must not be blank]`), and registrants hang off the substance detail, so a company directory means walking substances. No OpenAPI document at the usual paths | probed |
+| Energy | [MaStR](https://www.marktstammdatenregister.de/MaStR/Datendownload) (BNetzA) | Every German electricity/gas market participant and generation unit | **Open bulk data.** A daily full export at a predictable URL (`Gesamtdatenexport_YYYYMMDD_<v>.zip`), XML, explicitly licensed **Datenlizenz Deutschland – Namensnennung 2.0**. It is ~2.9 GB | probed |
+| Aviation | [EASA](https://www.easa.europa.eu/en/domains/aircraft-products/continuing-airworthiness-organisations/foreign-part-145-organisations) | Part-145 / Part-147 / Part-CAMO / Part-CAO approvals — MRO and airworthiness organisations | Dataset pages with a UI export button; the lists render client-side and no stable machine URL was found from the markup. XLSX snapshots exist under `/sites/default/files/datasets/`. **Note the scope trap:** EASA directly approves *third-country* organisations; EU-based ones are approved by national aviation authorities and are not on these lists | surface |
+| Finance (UK) | [FCA Financial Services Register](https://register.fca.org.uk/) | Every FCA-authorised firm and individual | **Official documented API, key required.** `GET /services/V0.1/Firm/{FRN}` returns HTTP 403 `{"Success":"false", "Sorry, this page is not available. Missing Headers."}` without the `X-Auth-Email` / `X-Auth-Key` headers. Registration is free; this project ships no key | probed |
+| Finance (LU/NL/CH) | CSSF, DNB, FINMA | Luxembourg funds and managers; Dutch supervised institutions; Swiss authorised institutions | Not established. The commonly cited CSSF entity-search URL 404s; DNB's and FINMA's register pages serve HTML | surface |
+| Automotive | [KBA](https://www.kba.de/) | Type-approval holders | Not established; the type-approval pages serve HTML | surface |
+
+Two of these are worth implementing next, and one deliberately is not:
+
+* **CTIS** is the closest to ready — a working unauthenticated JSON API. The
+  work is the asynchronous download handshake and reverse-engineering the search
+  payload, since an empty criteria object returns zero rows rather than
+  everything.
+* **ECHA** is valuable but shaped wrong for this tool: it answers "who
+  registered this substance", not "list the registrants". Turning that into a
+  company directory means iterating substances, which is a lot of requests
+  against a public service and needs a design decision about politeness before
+  any code.
+* **MaStR** is genuine open government data under an open licence, and this tool
+  still should not wrap it as-is: `eufinreg` buffers a whole result set in memory
+  before flattening, and a 2.9 GB XML export needs streaming. Use it directly, or
+  a purpose-built tool. The URL and licence are recorded here so you do not have
+  to go looking.
+
+### How to check one of these yourself
+
+The method that produced the table, in order — it is the same every time:
+
+1. **Open the register in a browser and watch the network tab.** Public-sector
+   search UIs are overwhelmingly SPAs calling a JSON backend. That backend is
+   the interface, whether or not anyone documented it.
+2. **If there is no network tab handy, read the JS bundle.** Angular and React
+   builds keep their endpoint list in a config object —
+   `grep -oE '"api/[a-zA-Z0-9_/{}-]+"' main.*.js` found every EUDAMED endpoint in
+   one command, and the CTIS bundle names its API hosts in plain text.
+3. **Look for a bulk download before you look for a query API.** MiCA, the EBA
+   PSD2 register and MaStR are all "just a file at a stable URL", which is a
+   better interface than a paginated search for most purposes.
+4. **Check `robots.txt` before writing any client.** It is what separates
+   EUDAMED (allowed) from BaFin (`Disallow: /`) — and it is the difference
+   between a tool and a nuisance.
+5. **Verify the totals add up.** EUDAMED's four actor types sum to exactly its
+   reported total, which is how you know nothing is being hidden by a default
+   filter. When they do not add up, you have found the filter you did not know
+   about — like `languageIso2Code`.
+
+---
+
 ## Limitations and disclaimers
 
 Read this before putting the output in front of anyone.
@@ -757,8 +952,16 @@ Read this before putting the output in front of anyone.
   footprint is `ac_serviceCode_cou`; in the EBA PSD2 data it is `ENT_SER_COU`,
   not `ae_homeMemberState` or `ENT_COU_RES`.
 * **Registered address ≠ office address.** `ae_headOfficeAddress`, MiCA's
-  `ae_address` and PSD2's `ENT_ADD` are the addresses notified to a regulator.
-  Expect law firms, company formation agents and holding-company letterboxes.
+  `ae_address`, PSD2's `ENT_ADD` and EUDAMED's `geographicalAddress` are the
+  addresses notified to a regulator. Expect law firms, company formation agents
+  and holding-company letterboxes.
+* **A registration is not an establishment.** EUDAMED's economic operators
+  include non-EU manufacturers who register in order to sell into the EU — the
+  first page sorted by `ulid` includes companies in Taiwan, Australia and the
+  United States. `countryIso2Code` is where the operator is, not where the work
+  is. That is also why every non-EU manufacturer needs an
+  `authorised-representative`, and why that 2,938-row table is the one that maps
+  onto actual EU presence.
 * **`mica-ncasp` is the opposite of a licence list.** It names entities ESMA or
   an NCA considers non-compliant. Do not merge it into a "licensed firms" table.
 * **Nor are `PSD_EXC` and `PSD_ENL` licences.** They record providers *outside*
@@ -775,6 +978,17 @@ Read this before putting the output in front of anyone.
   your decision to justify, not the register's.
 * 195,920 of those agents are flagged `DER_CHI_ENT_AUT=Inactive`. A withdrawn
   agent staying in the file is not a current business relationship.
+* **`eudamed-eo` carries an email address and a phone number for nearly every
+  one of its 48,893 organisations.** Most are company mailboxes; some are sole
+  traders, where the "company" contact *is* a person. Those details are
+  published so that patients, regulators and buyers can identify who is
+  responsible for a device. That is the purpose they were collected for, and it
+  is not the same purpose as a marketing list. Bulk unsolicited mail to a
+  regulatory contact address is, at best, a fast way to get a register's API
+  closed to everyone — and in most member states it is also unlawful.
+* A licence register is a *lawful basis* question, not just an availability
+  question. "It was published" is not by itself a legal basis for processing it
+  under GDPR Article 6. Decide yours before you fetch, not after.
 
 **Data quality.**
 
@@ -798,6 +1012,9 @@ Read this before putting the output in front of anyone.
 * `eba-psd`: regenerated **nightly**; national authorities are required to
   update at least daily. The `timestamp` in the file metadata is the generation
   time, and each record carries its own `__EBA_EntityVersion`.
+* `eudamed-eo` / `eudamed-nb`: live, no published cadence. Each record carries
+  `versionNumber` and `latestVersion`; economic operators also carry
+  `dateOfRegistration`.
 * BaFin states its own database is updated daily. That is the one advantage of
   clicking its export by hand over reading the EBA's copy of the same filings.
 
@@ -834,13 +1051,18 @@ These are small public-sector deployments funded by nobody's ad revenue.
   the interface is a single file — so `--select` saves you memory, not their
   bandwidth.
 * Cache. If you need the data twice today, write it to a file the first time.
-  This matters most for `eba-psd`: 19 MB per run, and the file only changes once
-  a night.
+  This matters most for `eba-psd` (19 MB per run, changes once a night) and
+  `eudamed-eo` (164 requests for a full pull).
 * Respect `robots.txt`. It is why this project reads BaFin's data from the EBA
-  rather than from BaFin.
+  rather than from BaFin, and why it reads EUDAMED directly.
+* An undocumented application backend — EUDAMED's, and most of the ones in the
+  sector survey — is a courtesy, not a contract. It is there to serve a web UI
+  used by a few people at a time. `--select` and `--query` push filters at the
+  server precisely so you can ask for the 2,938 rows you want instead of the
+  48,893 you do not.
 
 **Change the User-Agent.** The default is
-`eufinreg/0.2.0 (+https://github.com/CHANGE-ME/eufinreg; public-register client)`.
+`eufinreg/0.3.0 (+https://github.com/CHANGE-ME/eufinreg; public-register client)`.
 Set it to something that identifies *you*, so an operator who sees unusual
 traffic can find out who to contact instead of blocking a range:
 
@@ -891,6 +1113,18 @@ the archive.
 selection is institutions only. Add `--select ALL` for the agents and branches,
 which are ~98% of the records.
 
+**A hand-rolled EUDAMED client returns 300 rows, or 27 copies of everything.**
+Both are the same class of bug and neither reports an error:
+
+* `size` is silently capped at **300**, so asking for 1000 and stopping when you
+  get fewer than you asked for reads exactly one page.
+* `languageIso2Code` is mandatory in practice. `api/eos` returns HTTP 500
+  without it; `api/ses/` returns one row per language, turning 70 notified
+  bodies into 1,890 near-identical rows sharing 70 `uuid`s.
+
+`eufinreg` handles both. If you are writing your own client, those are the two
+things to get right — and `--raw` will show you what the wire actually said.
+
 ---
 
 ## Development
@@ -923,11 +1157,26 @@ otherwise pass vacuously.
 
 ## 中文速览
 
-**结论先行。** 三个欧盟层面的登记库都有官方机器接口：**ESMA** 的 Solr A2A
+**核心前提。** 凡是需要许可、注册、认证、补贴或审批才能经营的行业，监管机构
+手里都有一份比任何商业数据库都完整的企业名录——因为"在册"是合法经营的前提，
+不是企业的营销选择。这些名录公开、免费、结构化，而且比多数人以为的更常带有
+机器接口。本项目就是读这些名录的。（项目名 `eufinreg` 是金融时代留下的，
+现已扩展到医疗器械，改名待办。）
+
+**结论先行。** 四个已实现的登记库都有官方机器接口：**ESMA** 的 Solr A2A
 （无需认证、无需 API key）、**MiCA** 每周重新生成的 5 个固定 URL 的 CSV、
-以及 **EBA 的 PSD2 支付/电子货币机构登记册**——最后这个是四者中最规范的，
-因为欧盟实施条例 (EU) 2019/410 直接**以法律形式要求**它可机读：每晚重新生成
-一份 JSON 全量快照，并公布 SHA-256 校验值（本工具会强制校验，不匹配直接报错）。
+**EBA 的 PSD2 支付/电子货币机构登记册**——这个最规范，因为欧盟实施条例
+(EU) 2019/410 直接**以法律形式要求**它可机读：每晚重新生成一份 JSON 全量快照，
+并公布 SHA-256 校验值（本工具会强制校验，不匹配直接报错）——以及新增的
+**EUDAMED**（欧盟医疗器械数据库）。
+
+**EUDAMED 是"同一个套路换个行业"的最好例子。** 按 MDR 2017/745 / IVDR
+2017/746，产品要进欧盟市场就必须在 EUDAMED 注册为"经济经营者"，所以它等于
+一份近乎完整的欧洲医疗器械行业企业名录：2026-08-16 共 **48,893 家**
+（制造商 31,931、进口商 12,363、欧盟授权代表 2,938、系统/程序包生产商 1,661，
+四者相加正好等于总数），而且**几乎每家都带邮箱和电话**；另有 70 家公告机构
+（notified body），附 NANDO 链接。接口就是官网自己用的 JSON API，无需认证，
+`ec.europa.eu/robots.txt` 的 201 条 `Disallow` 规则没有一条命中 `/tools/eudamed/`。
 
 **关于 BaFin，先前版本的说法是错的，这一版已更正。** BaFin 的
 Unternehmensdatenbank / ZAG 登记册 / 绑定代理人登记册确实**有**导出功能：
@@ -958,6 +1207,12 @@ BaFin 监管的支付与电子货币机构 1,037 家（其中真正持牌的是 
    所以默认只返回 6,407 家机构，要全量得显式加 `--select ALL`。另外
    `Properties` 是"每个对象只有一个键"的数组、值可能是字符串也可能是列表，
    `Services` 按 ISO-2 国家代码分组——那才是真正的护照通行（passporting）范围。
+4. EUDAMED 有两个不报错的坑：一是 `size` **静默封顶 300**，你请求 1000 也只
+   给 300，"拿到的比要的少"在这里不代表已经取完；二是 `languageIso2Code`
+   名义上是显示语言，实际是过滤条件——不带它，`api/eos` 直接 HTTP 500，
+   `api/ses/` 则按语言逐条复制，70 家公告机构变成 1,890 行（同一个 `uuid`
+   重复约 27 次，只有 `countryName` 的语言不同）。翻页必须用
+   `sort=ulid,ASC`（`eudamedIdentifier` 排序会 500，`name` 不唯一）。
 
 **跑之前先跑这三条**（对应 `--inspect` / `--list-values` / `--raw`）：
 
@@ -971,9 +1226,23 @@ uv run eufinreg --source mica-casp --raw ./raw -o casps.csv   # 留一份原始�
 Happy Eyeballs（curl 有），在没有 IPv6 出口的网络上会一路等超时。加 `-4` 即可。
 `eba-psd` 每次都要下 19 MB、解析后峰值内存约 1.4 GB，结果请存成文件重复使用。
 
+**其他行业同理**（README 有一张 2026-08-16 实测表）：临床试验 **CTIS** 有可用的
+无认证 JSON API（`POST /ctis-public-api/search`，CSV 下载是异步任务）；化学品
+**ECHA CHEM** 有 JSON API 但以物质为中心，`searchText` 必填，注册人挂在物质
+详情下；德国能源 **MaStR** 每日发布约 2.9 GB 的 XML 全量导出，采用
+Datenlizenz Deutschland 开放许可（本工具不包装它——2.9 GB 需要流式解析，
+与本项目"全量载入内存再扁平化"的架构不兼容）；制药 **EudraGMDP** 和德国
+**BaFin** 一样是老式 Struts `.do` 应用，没找到接口；英国 **FCA** 有官方 API
+但需免费申请 key。
+
 **免责要点：**持牌 ≠ 在招人，持牌 ≠ 在实际经营，持牌实体 ≠ 运营实体，
-注册地址 ≠ 办公地址；`mica-ncasp` 是"不合规实体"名单，`PSD_EXC` / `PSD_ENL`
+注册地址 ≠ 办公地址，**注册地 ≠ 经营地**（EUDAMED 里有大量为进入欧盟市场而
+注册的非欧盟制造商，真正对应欧盟落地的是那 2,938 家授权代表）；
+`mica-ncasp` 是"不合规实体"名单，`PSD_EXC` / `PSD_ENL`
 是"不属于 PSD2 范围"和"依国内法有权经营"，这三类都别混进持牌表。
+**EUDAMED 的邮箱电话是为了让患者和监管机构找到器械责任人而公布的，
+不是营销名单**——群发邮件在多数成员国违法，也是让公共 API 对所有人关闭的
+最快方式；"数据是公开的"本身不构成 GDPR 第 6 条的处理合法性基础。
 BaFin、ESMA、EBA 各自都声明不对数据完整性与正确性负责——EBA 更直接写明
 该登记册"不具法律效力，也不创设任何法律权利"。
 
@@ -981,6 +1250,6 @@ BaFin、ESMA、EBA 各自都声明不对数据完整性与正确性负责——E
 
 ## Licence
 
-MIT — see [LICENSE](LICENSE). The register data itself belongs to ESMA, the EBA
-and the national competent authorities and carries their terms, not this
-project's.
+MIT — see [LICENSE](LICENSE). The register data itself belongs to ESMA, the EBA,
+the European Commission and the national competent authorities and carries their
+terms, not this project's.

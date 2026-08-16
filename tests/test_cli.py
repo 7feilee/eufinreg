@@ -18,6 +18,7 @@ CSV_URL = "https://www.esma.europa.eu/sites/default/files/2024-12/CASPS.csv"
 PSD_ZIP_URL = (
     "https://euclid.eba.europa.eu/register/downloads/PSDMD/29990101/download-PSDMD-209901010000.zip"
 )
+EUDAMED_EO_URL = "https://ec.europa.eu/tools/eudamed/api/eos"
 
 FAST = ["--delay", "0", "--quiet"]
 
@@ -36,6 +37,11 @@ def _mock_eba_psd() -> None:
         content_type="application/zip",
     )
     responses.add(responses.GET, METADATA_URL, json=load_json("eba_metadata.json"))
+
+
+def _mock_eudamed_eo() -> None:
+    for n in (1, 2):
+        responses.add(responses.GET, EUDAMED_EO_URL, json=load_json(f"eudamed_eo_page{n}.json"))
 
 
 def _mock_casps() -> None:
@@ -136,6 +142,21 @@ class TestFetch:
         out = tmp_path / "all.csv"
         main([*FAST, "--source", "eba-psd", "--select", "ALL", "-o", str(out)])
         assert "PSD_AG" in {r["EntityType"] for r in _read_csv(out)}
+
+    @responses.activate
+    def test_eudamed_end_to_end(self, tmp_path):
+        _mock_eudamed_eo()
+        out = tmp_path / "eo.csv"
+        assert main([*FAST, "--source", "eudamed-eo", "-o", str(out)]) == 0
+        rows = _read_csv(out)
+        assert len(rows) == 6
+        assert all(r["eudamedIdentifier"] for r in rows)
+        assert all(r["actorType"].startswith("refdata.actor-type.") for r in rows)
+
+    def test_an_unknown_actor_type_exits_with_a_usage_error(self, capsys):
+        # No HTTP mock registered: this must fail before any request is made.
+        assert main([*FAST, "--source", "eudamed-eo", "--select", "wholesaler"]) == 2
+        assert "unknown actor type" in capsys.readouterr().err
 
     @responses.activate
     def test_json_output(self, tmp_path):

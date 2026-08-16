@@ -6,8 +6,14 @@ from .base import Query, Source
 from .eba_psd import EBA_SOURCES
 from .esma_mica import MICA_SOURCES
 from .esma_solr import SOLR_SOURCES, solr_source_for_core
+from .eudamed import EUDAMED_SOURCES
 
-ALL_SOURCES: tuple[Source, ...] = (*SOLR_SOURCES, *MICA_SOURCES, *EBA_SOURCES)
+ALL_SOURCES: tuple[Source, ...] = (
+    *SOLR_SOURCES,
+    *MICA_SOURCES,
+    *EBA_SOURCES,
+    *EUDAMED_SOURCES,
+)
 
 _BY_KEY = {source.key: source for source in ALL_SOURCES}
 

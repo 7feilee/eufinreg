@@ -1,0 +1,222 @@
+{
+ "content": [
+  {
+   "uuid": "be840645-615d-45d3-9b33-61015f1b7a81",
+   "ulid": "01ERDDB2SMWM0P862SW0RPWSXA",
+   "name": "Starpharma Pty Ltd",
+   "names": {
+    "texts": [
+     {
+      "language": {
+       "isoCode": "en",
+       "name": "English"
+      },
+      "text": "Starpharma Pty Ltd",
+      "allLanguagesApplicable": null
+     }
+    ],
+    "textByDefaultLanguage": "Starpharma Pty Ltd"
+   },
+   "actorType": {
+    "code": "refdata.actor-type.manufacturer",
+    "srnCode": "MF",
+    "category": "ECONOMIC_ENTITY"
+   },
+   "actorStatus": {
+    "code": "refdata.actor-status.active"
+   },
+   "actorStatusFromDate": null,
+   "roleName": "Manufacturer",
+   "countryIso2Code": "AU",
+   "countryName": "Australia",
+   "countryType": "NON_EU",
+   "dateOfRegistration": "2021-08-25T09:20:36.77",
+   "eudamedIdentifier": "AU-MF-000012162",
+   "electronicMail": "regulatory@starpharma.com",
+   "telephone": "+61(0)3 8532 2700",
+   "geographicalAddress": "Southampton Crescent, 4-6  3067  Abbotsford ",
+   "buildingNumber": null,
+   "streetName": null,
+   "postbox": null,
+   "addressComplement": null,
+   "postalZone": "3067 ",
+   "cityName": "Abbotsford ",
+   "abbreviatedName": "SPL",
+   "abbreviatedNames": {
+    "texts": [
+     {
+      "language": {
+       "isoCode": "en",
+       "name": "English"
+      },
+      "text": "SPL",
+      "allLanguagesApplicable": null
+     }
+    ],
+    "textByDefaultLanguage": "SPL"
+   },
+   "latestVersion": true,
+   "versionNumber": 3,
+   "associatedToUser": false,
+   "registrationUlid": "01ERDDB2SZBX7MGNV8C2X5NF4V",
+   "legislationLinks": null,
+   "selectable": true,
+   "actorValidated": null,
+   "nbStatus": null,
+   "srn": "AU-MF-000012162"
+  },
+  {
+   "uuid": "7a433031-6abf-40b4-ab1c-1b42d18c153c",
+   "ulid": "01ERDEEGW1HBGRM0HSY7XDK52P",
+   "name": "Bausch & Lomb Incorporated",
+   "names": {
+    "texts": [
+     {
+      "language": {
+       "isoCode": "en",
+       "name": "English"
+      },
+      "text": "Bausch & Lomb Incorporated",
+      "allLanguagesApplicable": null
+     }
+    ],
+    "textByDefaultLanguage": "Bausch & Lomb Incorporated"
+   },
+   "actorType": {
+    "code": "refdata.actor-type.authorised-representative",
+    "srnCode": "AR",
+    "category": "ECONOMIC_ENTITY"
+   },
+   "actorStatus": {
+    "code": "refdata.actor-status.active"
+   },
+   "actorStatusFromDate": null,
+   "roleName": "Authorised Representative",
+   "countryIso2Code": "IE",
+   "countryName": "Ireland",
+   "countryType": "EU_MEMBER_STATE",
+   "dateOfRegistration": "2020-12-04T13:52:12.071",
+   "eudamedIdentifier": "IE-AR-000000094",
+   "electronicMail": "EUAR-PRRC_Ireland@bausch.com",
+   "telephone": "+353 51 355001",
+   "geographicalAddress": "Cork Road Industrial Estate, X91 V383 Waterford",
+   "buildingNumber": null,
+   "streetName": null,
+   "postbox": null,
+   "addressComplement": null,
+   "postalZone": "X91 V383",
+   "cityName": "Waterford",
+   "abbreviatedName": null,
+   "abbreviatedNames": null,
+   "latestVersion": true,
+   "versionNumber": 8,
+   "associatedToUser": false,
+   "registrationUlid": "01ERDEEGWR2K4CXYG242GDD9EC",
+   "legislationLinks": null,
+   "selectable": true,
+   "actorValidated": null,
+   "nbStatus": null,
+   "srn": "IE-AR-000000094"
+  },
+  {
+   "uuid": "b3f285d1-faa6-4ab9-8432-0a32bf2bf67b",
+   "ulid": "01ERDF1H853Z9VJX8ARSCGR5J5",
+   "name": "Neos Surgery, S.L.",
+   "names": {
+    "texts": [
+     {
+      "language": {
+       "isoCode": "es",
+       "name": "Spanish"
+      },
+      "text": "Neos Surgery, S.L.",
+      "allLanguagesApplicable": null
+     }
+    ],
+    "textByDefaultLanguage": null
+   },
+   "actorType": {
+    "code": "refdata.actor-type.manufacturer",
+    "srnCode": "MF",
+    "category": "ECONOMIC_ENTITY"
+   },
+   "actorStatus": {
+    "code": "refdata.actor-status.active"
+   },
+   "actorStatusFromDate": null,
+   "roleName": "Manufacturer",
+   "countryIso2Code": "ES",
+   "countryName": "Spain",
+   "countryType": "EU_MEMBER_STATE",
+   "dateOfRegistration": "2020-12-14T08:17:51.649",
+   "eudamedIdentifier": "ES-MF-000000221",
+   "electronicMail": "regulatory@neosurgery.com",
+   "telephone": "+34935944726",
+   "geographicalAddress": "Ceramistes, 2 08290 Cerdanyola del Valles",
+   "buildingNumber": null,
+   "streetName": null,
+   "postbox": null,
+   "addressComplement": null,
+   "postalZone": "08290",
+   "cityName": "Cerdanyola del Valles",
+   "abbreviatedName": "Neos",
+   "abbreviatedNames": {
+    "texts": [
+     {
+      "language": {
+       "isoCode": "es",
+       "name": "Spanish"
+      },
+      "text": "Neos",
+      "allLanguagesApplicable": null
+     }
+    ],
+    "textByDefaultLanguage": null
+   },
+   "latestVersion": true,
+   "versionNumber": 1,
+   "associatedToUser": false,
+   "registrationUlid": "01ERDF1H8N35QF5CQJCP5PH4PZ",
+   "legislationLinks": null,
+   "selectable": true,
+   "actorValidated": null,
+   "nbStatus": null,
+   "srn": "ES-MF-000000221"
+  }
+ ],
+ "pageable": {
+  "sort": [
+   {
+    "direction": "ASC",
+    "property": "ulid",
+    "ignoreCase": false,
+    "nullHandling": "NATIVE",
+    "ascending": true,
+    "descending": false
+   }
+  ],
+  "offset": 3,
+  "pageSize": 3,
+  "pageNumber": 1,
+  "unpaged": false,
+  "paged": true
+ },
+ "last": true,
+ "totalElements": 6,
+ "totalPages": 2,
+ "size": 3,
+ "number": 1,
+ "sort": [
+  {
+   "direction": "ASC",
+   "property": "ulid",
+   "ignoreCase": false,
+   "nullHandling": "NATIVE",
+   "ascending": true,
+   "descending": false
+  }
+ ],
+ "first": false,
+ "numberOfElements": 3,
+ "empty": false
+}
