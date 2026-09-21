@@ -5,7 +5,7 @@
 # ///
 """eufinreg-solo — one-file version of eufinreg, no clone and no venv required.
 
-    uv run https://raw.githubusercontent.com/CHANGE-ME/eufinreg/main/scripts/eufinreg_solo.py --help
+    uv run https://raw.githubusercontent.com/7feilee/eufinreg/main/scripts/eufinreg_solo.py --help
 
 Pulls structured lists of licensed and registered companies from the EU public
 registers. Any industry that needs a licence has a regulator holding a company
@@ -24,6 +24,13 @@ condition of trading:
       https://ec.europa.eu/tools/eudamed
   * CTIS (clinical trials, Reg. 536/2014) — who sponsors trials in the EU
       https://euclinicaltrials.eu/ctis-public/search
+  * FINMA (Switzerland) — every Swiss authorisation holder, with its UID.
+      Switzerland is outside the EEA, so no EU register contains a Swiss licence
+      https://www.finma.ch/en/finma-public/authorised-institutions-individuals-and-products/
+
+Two further DACH sources live in the full package rather than here, because
+neither fits one file with one dependency: the Swiss UID register (SOAP) and
+GISA, Austria's 1.03 M trade licences (7-Zip). See the project README.
 
 BaFin's and FMA's own company databases sit behind a portal whose robots.txt is
 ``Disallow: /``, so this script does not touch it — even though the portal does
@@ -56,13 +63,16 @@ from typing import Any
 
 import requests
 
-VERSION = "0.4.0"
+VERSION = "0.5.0"
 DEFAULT_USER_AGENT = (
-    f"eufinreg-solo/{VERSION} (+https://github.com/CHANGE-ME/eufinreg; public-register client)"
+    f"eufinreg-solo/{VERSION} (+https://github.com/7feilee/eufinreg; public-register client)"
 )
 RETRY_STATUS = frozenset({408, 425, 429, 500, 502, 503, 504})
 SOLR_BASE = "https://registers.esma.europa.eu/solr"
 MICA_BASE = "https://www.esma.europa.eu/sites/default/files/2024-12"
+# FINMA publishes its authorisation list here, regenerated daily. The ?hash=
+# parameter its own links carry is a Sitecore media hash and is not required.
+FINMA_BASE = "https://www.finma.ch/en/~/media/finma/dokumente/bewilligungstraeger/csv"
 SEP = " | "
 
 # name -> (kind, target, notes). Verified live; see the README for counts.
@@ -93,6 +103,11 @@ SOURCES: dict[str, tuple[str, str, str]] = {
     ),
     "eudamed-nb": ("eudamed", "api/ses/", "EUDAMED notified bodies (MDR/IVDR)"),
     "ctis": ("ctis", "search", "EU clinical trials and their sponsors (Reg. 536/2014)"),
+    "finma": (
+        "finma",
+        "uid.csv",
+        "FINMA authorisation holders (Switzerland) — one row per authorisation",
+    ),
 }
 
 # Block-structured Solr cores: parents and children share one flat docs array.
@@ -117,6 +132,7 @@ ENUM_FIELDS: dict[str, tuple[str, ...]] = {
     "eudamed-eo": ("actorType", "actorStatus", "countryIso2Code", "countryName"),
     "eudamed-nb": ("actorType", "countryIso2Code", "legislationCodes"),
     "ctis": ("sponsorType", "trialPhase", "trialCountries", "therapeuticAreas"),
+    "finma": ("AuthorisationTypeEN", "AuthorisationTypeDE", "City"),
 }
 MULTI_VALUE = {
     "ac_serviceCode_cou": "|",
@@ -610,7 +626,39 @@ def read_records(fetcher: Fetcher, kind: str, target: str, args) -> list[dict[st
         return read_eudamed(fetcher, target, args)
     if kind == "ctis":
         return read_ctis(fetcher, args)
+    if kind == "finma":
+        return read_finma(fetcher, target, args)
     raise SystemExit(f"eufinreg-solo: unknown source kind {kind!r}")
+
+
+def read_finma(fetcher: Fetcher, filename: str, args) -> list[dict[str, Any]]:
+    """FINMA's authorisation list: one CSV, semicolon-separated, UTF-8 with a BOM.
+
+    One row is one *authorisation*, not one institution — Zurcher Kantonalbank
+    appears as both `Bank` and `Custodian bank`. 2,938 rows describe 2,744
+    distinct UIDs. The full package groups them; this file does not, and says so.
+    """
+    response = fetcher.get(f"{FINMA_BASE}/{filename}", label=filename)
+    if response.encoding is None or "charset" not in (response.headers.get("Content-Type") or ""):
+        response.encoding = "utf-8-sig"
+    rows: list[dict[str, Any]] = []
+    for raw in csv.DictReader(io.StringIO(response.text), delimiter=";"):
+        row = {(k or "").strip(): (v or "").strip() for k, v in raw.items() if k}
+        if not any(row.values()):
+            continue
+        if not args.no_derived and row.get("UID"):
+            # The nine bare digits are what the UID register's web service wants.
+            row["uid_digits"] = "".join(ch for ch in row["UID"] if ch.isdigit())
+        rows.append(row)
+        if args.max_docs and len(rows) >= args.max_docs:
+            break
+    if not args.quiet:
+        print(
+            f"eufinreg-solo: note: {len(rows)} row(s) is one row per authorisation; "
+            f"group on UID for institutions (the full package does this for you)",
+            file=sys.stderr,
+        )
+    return rows
 
 
 # ----------------------------------------------- MiCA service normalising --

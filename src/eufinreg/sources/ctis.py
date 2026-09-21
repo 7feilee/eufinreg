@@ -98,6 +98,11 @@ class CtisSource(Source):
         "(Regulation 536/2014)"
     )
     docs_url: str = PUBLIC_SITE
+    key_columns: tuple[str, ...] = ("ctNumber",)
+    identifier_columns: tuple[str, ...] = ("ctNumber",)
+    name_columns: tuple[str, ...] = ("sponsor",)
+    expected_fields: tuple[str, ...] = ("ctNumber", "sponsor", "sponsorType", "ctStatus")
+    cadence_hours: float | None = 24.0
     enum_fields: tuple[str, ...] = (
         "sponsorType",
         "trialPhase",

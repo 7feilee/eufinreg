@@ -1,0 +1,20 @@
+# /etc/systemd/system/eufinreg-ingest.service  (+ .timer below)
+[Unit]
+Description=eufinreg nightly register ingest
+Documentation=https://github.com/7feilee/eufinreg/blob/main/docs/OPERATIONS.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=eufinreg
+Group=eufinreg
+ExecStart=/usr/local/bin/eufinreg ingest --config /etc/eufinreg/eufinreg.config.json --json
+# The archive is the asset; nothing else on the box needs writing to.
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
+ReadWritePaths=/var/lib/eufinreg /var/log/eufinreg
+# A full DACH run is minutes, not hours. If it hangs, something is wrong.
+TimeoutStartSec=45min

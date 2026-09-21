@@ -53,6 +53,11 @@ def scalar(value: Any, *, separator: str = DEFAULT_SEPARATOR) -> str:
         return "true" if value else "false"
     if isinstance(value, (str, int, float)):
         return str(value)
+    if isinstance(value, (bytes, bytearray)):
+        # A register that sends an undecodable field would otherwise put
+        # b'\xff\xfe…' through the CSV writer verbatim. Decode what can be
+        # decoded and keep the rest visible rather than crashing at write time.
+        return bytes(value).decode("utf-8", errors="replace")
     if isinstance(value, (list, tuple)):
         return separator.join(scalar(v, separator=separator) for v in value)
     if isinstance(value, Mapping):

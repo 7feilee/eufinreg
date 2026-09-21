@@ -42,6 +42,13 @@ class SolrSource(Source):
     enum_fields: tuple[str, ...] = ()
     block_structured: bool = False
     select_help: str = ""
+    key_columns: tuple[str, ...] = ("id",)
+    identifier_columns: tuple[str, ...] = ("id",)
+    name_columns: tuple[str, ...] = ()
+    expected_fields: tuple[str, ...] = ("id",)
+    #: ESMA publishes no update cadence for the A2A endpoint; ae_lastUpdate
+    #: is per record. Claiming a number here would be inventing one.
+    cadence_hours: float | None = None
     #: ``entity_type`` values kept by default (block-structured cores only).
     default_doc_types: tuple[str, ...] = ()
     #: ``entity_type`` values added by ``--include-history``.
@@ -179,6 +186,9 @@ def _quote_term(value: str) -> str:
 
 UPREG = SolrSource(
     key="upreg",
+    identifier_columns=("ae_lei", "id"),
+    name_columns=("ae_entityName", "ae_commercialName"),
+    expected_fields=("ae_entityName", "ae_entityTypeCode", "ae_status", "_root_"),
     core="esma_registers_upreg",
     title="ESMA register of authorised entities (MiFID firms, AIFMs, UCITS mancos, "
     "crowdfunding providers, trading venues)",

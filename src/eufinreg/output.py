@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import io
 import json
 import sys
 from collections.abc import Mapping, Sequence
@@ -49,6 +50,13 @@ def write_rows(
         if fmt == "jsonl":
             return _write_jsonl(rows, handle)
         return _write_json(rows, handle)
+
+
+def rows_to_csv(rows: Sequence[Mapping[str, Any]], columns: Sequence[str] | None = None) -> str:
+    """Same CSV, as a string — for callers that serve it rather than save it."""
+    buffer = io.StringIO()
+    _write_csv(rows, list(columns) if columns is not None else column_order(rows), buffer)
+    return buffer.getvalue()
 
 
 def _write_csv(rows: Sequence[Mapping[str, Any]], cols: Sequence[str], handle: TextIO) -> int:

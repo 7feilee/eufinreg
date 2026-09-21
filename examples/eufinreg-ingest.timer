@@ -1,0 +1,14 @@
+# /etc/systemd/system/eufinreg-ingest.timer
+[Unit]
+Description=Run eufinreg ingest nightly
+
+[Timer]
+OnCalendar=*-*-* 04:12:00 UTC
+# Spread load if several hosts run this; the registers see one client per host.
+RandomizedDelaySec=20min
+# A missed night (host down) is caught up rather than skipped: a gap in the
+# archive cannot be filled in later, because the register has moved on.
+Persistent=true
+
+[Install]
+WantedBy=timers.target

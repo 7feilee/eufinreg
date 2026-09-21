@@ -1,0 +1,1 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body><SearchResponse xmlns="http://www.uid.admin.ch/xmlns/uid-wse"><SearchResult/></SearchResponse></s:Body></s:Envelope>

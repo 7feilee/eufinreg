@@ -7,15 +7,25 @@ import sys
 from collections.abc import Sequence
 from typing import Any
 
-from . import __version__
+from . import __version__, commands
 from .filters import FieldFilter, apply_filters
 from .flatten import column_order, flatten_auto
 from .http import DEFAULT_USER_AGENT, Fetcher, FetchError, RawRecorder, force_ipv4
 from .output import FORMATS, write_rows
 from .profile import profile_records, render_profile, render_values
+from .snapshot import diff_snapshots, read_snapshot, summarise, write_snapshot
 from .sources import ALL_SOURCES, DEFAULT_SOURCE, Query, UnknownSource, get_source
 
 EPILOG = """\
+commands (run `eufinreg COMMAND --help` for each):
+  ingest    fetch every configured register into the snapshot store
+  watch     report changes affecting a watchlist of entities
+  receipt   build an evidence bundle for one entity from the archive
+  store     status / list / verify / prune the archive
+  runs      what previous ingests did: timings, requests, retries, failures
+  doctor    check every register is alive and still the expected shape
+  serve     read-only HTTP API and web UI
+
 examples:
   # what can I read?
   eufinreg --list-sources
@@ -84,6 +94,22 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="print distinct values for every field this source treats as an enumeration",
     )
+    modes.add_argument(
+        "--diff",
+        nargs=2,
+        metavar=("OLD", "NEW"),
+        help="compare two files written by --snapshot and report what changed. "
+        "Reads nothing from the network.",
+    )
+    modes.add_argument(
+        "--serve",
+        nargs="?",
+        type=int,
+        const=8000,
+        metavar="PORT",
+        help="run the read-only HTTP API and web UI on PORT (default 8000) instead of "
+        "fetching; development server, see docs/ARCHITECTURE.md",
+    )
 
     selection = parser.add_argument_group("selection (pushed to the server where supported)")
     selection.add_argument("--select", metavar="VALUE", help="source-specific server-side selector")
@@ -122,6 +148,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--raw",
         metavar="DIR",
         help="also save every untouched response body to DIR, with a manifest.jsonl",
+    )
+    out.add_argument(
+        "--snapshot",
+        metavar="PATH",
+        help="write the result as a snapshot (sorted JSONL + a .sha256 sidecar) that "
+        "--diff can compare against a later one",
     )
     out.add_argument(
         "--no-flatten",
@@ -170,12 +202,32 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if commands.is_verb(argv):
+        # `eufinreg ingest …` and friends. Anything else is the reading tool,
+        # whose flag-only interface predates the verbs and is left alone.
+        return commands.main(argv)
+
     parser = build_parser()
     args = parser.parse_args(argv)
 
     if args.list_sources:
         print(render_sources())
         return 0
+
+    log = _make_logger(args.quiet)
+
+    if args.diff:
+        try:
+            return _run_diff(args, log)
+        except (OSError, ValueError) as exc:
+            print(f"eufinreg: {exc}", file=sys.stderr)
+            return 2
+
+    if args.serve is not None:
+        from .server import serve  # imported here: nothing else needs http.server
+
+        return serve(port=args.serve, log=log, defaults=args)
 
     try:
         source = get_source(args.source)
@@ -187,7 +239,6 @@ def main(argv: Sequence[str] | None = None) -> int:
     except ValueError as exc:
         parser.error(str(exc))
 
-    log = _make_logger(args.quiet)
     if args.ipv4:
         force_ipv4()
     recorder = RawRecorder(args.raw) if args.raw else None
@@ -309,9 +360,45 @@ def _run_fetch(source, fetcher, query, args, field_filters, log) -> int:
     for warning in report.warnings():
         log(f"warning: {warning}")
 
+    if args.snapshot:
+        path, digest = write_snapshot(
+            args.snapshot,
+            filtered,
+            source=source.key,
+            key_columns=source.key_columns,
+            meta={
+                "select": args.select or "",
+                "query": args.query or "",
+                "user_agent": args.user_agent,
+                "tool_version": __version__,
+            },
+        )
+        log(f"wrote snapshot {path} ({len(filtered)} row(s), sha256 {digest[:16]}…)")
+        if not source.key_columns:
+            log(
+                f"note: {source.key} declares no stable key, so --diff will match rows by "
+                f"content — a modified row will read as one removal plus one addition"
+            )
+        if not args.output:
+            return 0
+
     columns = column_order(rows) if rows else []
     written = write_rows(filtered, fmt=args.format, path=args.output, columns=columns)
     log(f"wrote {written} row(s){' to ' + args.output if args.output else ''}")
+    return 0
+
+
+def _run_diff(args, log) -> int:
+    """Compare two snapshots. Deliberately offline: no register is contacted."""
+    old = read_snapshot(args.diff[0])
+    new = read_snapshot(args.diff[1])
+    changes = diff_snapshots(old, new)
+    log(summarise(changes, old=old, new=new))
+
+    rows = [change.as_row() for change in changes]
+    columns = column_order(rows) if rows else []
+    written = write_rows(rows, fmt=args.format, path=args.output, columns=columns)
+    log(f"wrote {written} change row(s){' to ' + args.output if args.output else ''}")
     return 0
 
 

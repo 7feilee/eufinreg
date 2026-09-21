@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>eufinreg — public register browser</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --ink: #16181d;
+    --ink-soft: #5b6270;
+    --paper: #fbfaf7;
+    --panel: #ffffff;
+    --rule: #d9d5cb;
+    --accent: #1f5f4b;
+    --warn-bg: #fdf3e3;
+    --warn-ink: #7a4a06;
+    --warn-rule: #e0b877;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    --sans: ui-sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e8e6e1; --ink-soft: #9aa0ab; --paper: #14151a; --panel: #1b1d23;
+      --rule: #333741; --accent: #6dd3ac; --warn-bg: #2c2416; --warn-ink: #e8c98a;
+      --warn-rule: #6b5324;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 15px; line-height: 1.5;
+  }
+  header {
+    border-bottom: 1px solid var(--rule); padding: 18px 24px;
+    display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+  }
+  h1 { font-size: 17px; margin: 0; letter-spacing: -0.01em; }
+  h1 span { color: var(--ink-soft); font-weight: 400; }
+  .status { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--ink-soft); }
+  .status.degraded { color: var(--warn-ink); background: var(--warn-bg);
+                     border: 1px solid var(--warn-rule); border-radius: 3px; padding: 2px 7px; }
+  main { display: grid; grid-template-columns: minmax(280px, 340px) 1fr; min-height: calc(100vh - 62px); }
+  @media (max-width: 860px) { main { grid-template-columns: 1fr; } }
+  aside { border-right: 1px solid var(--rule); padding: 20px 24px; }
+  @media (max-width: 860px) { aside { border-right: none; border-bottom: 1px solid var(--rule); } }
+  section.results { padding: 20px 24px; overflow: hidden; }
+  label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em;
+          color: var(--ink-soft); margin: 16px 0 5px; }
+  select, input, button {
+    width: 100%; padding: 7px 9px; font: inherit; font-size: 14px;
+    background: var(--panel); color: var(--ink);
+    border: 1px solid var(--rule); border-radius: 3px;
+  }
+  input, select { font-family: var(--mono); font-size: 13px; }
+  button {
+    margin-top: 18px; background: var(--accent); color: var(--paper);
+    border-color: var(--accent); font-weight: 600; cursor: pointer;
+  }
+  button:disabled { opacity: 0.5; cursor: progress; }
+  button.secondary { background: transparent; color: var(--accent); margin-top: 8px; }
+  .hint { font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
+  .hint a { color: inherit; }
+  .note {
+    background: var(--warn-bg); color: var(--warn-ink); border: 1px solid var(--warn-rule);
+    border-radius: 3px; padding: 9px 11px; font-size: 13px; margin: 12px 0;
+  }
+  .note b { font-weight: 700; }
+  .meta { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); margin-bottom: 10px; }
+  .tablewrap { overflow: auto; max-height: calc(100vh - 220px); border: 1px solid var(--rule); border-radius: 3px; }
+  table { border-collapse: collapse; font-family: var(--mono); font-size: 12px; width: max-content; min-width: 100%; }
+  th, td { text-align: left; padding: 5px 10px; border-bottom: 1px solid var(--rule); white-space: pre; }
+  th { position: sticky; top: 0; background: var(--panel); border-bottom: 2px solid var(--rule);
+       font-weight: 600; z-index: 1; }
+  td { max-width: 460px; overflow: hidden; text-overflow: ellipsis; }
+  tbody tr:hover td { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+  .empty { color: var(--ink-soft); padding: 40px 0; text-align: center; }
+  .values { font-family: var(--mono); font-size: 12px; }
+  .values div { display: flex; gap: 10px; border-bottom: 1px solid var(--rule); padding: 3px 0; }
+  .values .n { color: var(--accent); min-width: 60px; text-align: right; }
+  a.download { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+  .badge {
+    display: inline-block; font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 6px;
+    border: 1px solid currentColor; border-radius: 2px; margin-right: 8px;
+  }
+  .badge.archive { color: var(--accent); }
+  .badge.live { color: var(--warn-ink); background: var(--warn-bg); border-color: var(--warn-rule); }
+  .chg { font-weight: 700; }
+  .chg.added { color: var(--accent); }
+  .chg.removed { color: #b3261e; }
+  @media (prefers-color-scheme: dark) { .chg.removed { color: #f2a6a0; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>eufinreg <span>— licensed and registered companies, from the registers themselves</span></h1>
+  <div class="status" id="status">connecting…</div>
+</header>
+
+<main>
+  <aside>
+    <label for="source">Register</label>
+    <select id="source"></select>
+    <div class="hint" id="sourceTitle"></div>
+    <div class="note" id="expensive" hidden></div>
+
+    <label for="select">--select</label>
+    <input id="select" placeholder="source-specific selector" autocomplete="off">
+    <div class="hint" id="selectHelp"></div>
+
+    <label for="query">--query</label>
+    <input id="query" placeholder="raw, source-native" autocomplete="off">
+
+    <label for="contains">--contains</label>
+    <input id="contains" placeholder="substring, any field" autocomplete="off">
+
+    <label for="limit">--limit</label>
+    <input id="limit" type="number" min="1" max="5000" value="200">
+
+    <button id="run">Fetch rows</button>
+    <button class="secondary" id="changesBtn">What changed</button>
+    <a class="download" id="csv" hidden>↓ same query as CSV</a>
+
+    <label for="field">Distinct values of</label>
+    <select id="field"></select>
+    <button class="secondary" id="countBtn">Count values</button>
+  </aside>
+
+  <section class="results">
+    <div class="meta" id="meta"></div>
+    <div id="warnings"></div>
+    <div id="panel"><div class="empty">Pick a register and fetch.</div></div>
+  </section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let catalogue = [];
+
+const api = async (path) => {
+  const response = await fetch(path);
+  const payload = await response.json().catch(() => ({ error: response.statusText }));
+  if (!response.ok) throw new Error(payload.error || `HTTP ${response.status}`);
+  return payload;
+};
+
+const currentSource = () => catalogue.find((s) => s.key === $("source").value);
+
+function queryString(extra = {}) {
+  const params = new URLSearchParams({ source: $("source").value });
+  const optional = { select: $("select").value, query: $("query").value,
+                     contains: $("contains").value, limit: $("limit").value };
+  for (const [name, value] of Object.entries({ ...optional, ...extra })) {
+    if (value) params.set(name, value);
+  }
+  return params.toString();
+}
+
+function describeSource() {
+  const source = currentSource();
+  if (!source) return;
+  $("sourceTitle").innerHTML =
+    `${source.title} · <a href="${source.docs_url}" target="_blank" rel="noreferrer">docs</a>`;
+  $("selectHelp").textContent = source.select_help || "not supported by this source";
+  const expensive = $("expensive");
+  expensive.hidden = !source.expensive;
+  if (source.expensive) {
+    expensive.innerHTML = `<b>Heavy.</b> This register ${source.expensive}. ` +
+      `The answer is cached for ${Math.round(source.cache_ttl / 3600)} h, so the second ` +
+      `question is free — the first is not.`;
+  }
+  const field = $("field");
+  field.innerHTML = "";
+  for (const name of source.enum_fields) {
+    field.append(new Option(name, name));
+  }
+  if (!source.enum_fields.length) field.append(new Option("(none declared)", ""));
+}
+
+function renderWarnings(warnings) {
+  $("warnings").innerHTML = (warnings || [])
+    .map((text) => `<div class="note"><b>warning:</b> ${escapeHtml(text)}</div>`)
+    .join("");
+}
+
+const escapeHtml = (value) =>
+  String(value ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function renderTable(payload) {
+  if (!payload.rows.length) {
+    $("panel").innerHTML = `<div class="empty">No rows matched. That is usually a wrong
+      field name or a wrong value — try counting the distinct values first.</div>`;
+    return;
+  }
+  const columns = payload.columns.filter((c) => payload.rows.some((r) => r[c] !== "" && r[c] != null));
+  const head = columns.map((c) => `<th>${escapeHtml(c)}</th>`).join("");
+  const body = payload.rows
+    .map((row) => `<tr>${columns.map((c) => `<td title="${escapeHtml(row[c])}">${escapeHtml(row[c])}</td>`).join("")}</tr>`)
+    .join("");
+  $("panel").innerHTML = `<div class="tablewrap"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+}
+
+async function run() {
+  const button = $("run");
+  button.disabled = true;
+  button.textContent = "Fetching…";
+  $("meta").textContent = "asking the register (one request at a time, with a delay between)…";
+  renderWarnings([]);
+  try {
+    const payload = await api(`/api/rows?${queryString()}`);
+    const provenance = payload.origin === "store"
+      ? `<span class="badge archive">archive ${escapeHtml(payload.snapshot)}</span>`
+      : `<span class="badge live">live fetch</span>`;
+    $("meta").innerHTML = provenance +
+      `${payload.returned_rows} of ${payload.total_rows} row(s) · read ${payload.fetched_at}` +
+      ` · held until ${payload.cached_until}`;
+    renderWarnings(payload.warnings);
+    renderTable(payload);
+    const csv = $("csv");
+    csv.hidden = false;
+    csv.href = `/api/rows?${queryString({ format: "csv" })}`;
+    csv.setAttribute("download", `${$("source").value}.csv`);
+  } catch (error) {
+    $("meta").textContent = "";
+    renderWarnings([error.message]);
+    $("panel").innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`;
+  } finally {
+    button.disabled = false;
+    button.textContent = "Fetch";
+  }
+}
+
+async function showChanges() {
+  const source = $("source").value;
+  $("meta").textContent = `reading recorded changes for ${source}…`;
+  renderWarnings([]);
+  try {
+    const payload = await api(`/api/changes?source=${encodeURIComponent(source)}&limit=500`);
+    if (!payload.count) {
+      $("panel").innerHTML = `<div class="empty">No change events recorded for
+        ${escapeHtml(source)} yet. Events appear once <code>eufinreg ingest</code> has run
+        at least twice — a change is a statement about two points in time.</div>`;
+      $("meta").textContent = "";
+      return;
+    }
+    $("meta").innerHTML = `<span class="badge archive">archive</span>` +
+      `${payload.count} recorded event(s) for ${escapeHtml(source)}`;
+    const rows = payload.events.slice().reverse();
+    const body = rows.map((event) => `<tr>
+        <td class="chg ${escapeHtml(event._change)}">${escapeHtml(event._change)}</td>
+        <td>${escapeHtml(event._snapshot)}</td>
+        <td>${escapeHtml(event._key)}</td>
+        <td>${escapeHtml(event._changed_columns || "")}</td>
+      </tr>`).join("");
+    $("panel").innerHTML = `<div class="tablewrap"><table><thead><tr>
+        <th>change</th><th>snapshot</th><th>entity</th><th>columns</th>
+      </tr></thead><tbody>${body}</tbody></table></div>`;
+  } catch (error) {
+    $("meta").textContent = "";
+    renderWarnings([error.message]);
+    $("panel").innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`;
+  }
+}
+
+async function countValues() {
+  const field = $("field").value;
+  if (!field) return;
+  $("meta").textContent = `counting distinct values of ${field}…`;
+  try {
+    const payload = await api(`/api/values?${queryString({ field })}`);
+    $("meta").textContent = `${payload.values.length} distinct value(s) of ${field} — ${payload.note}`;
+    $("panel").innerHTML = `<div class="values">` +
+      payload.values.map((v) => `<div><span class="n">${v.count}</span><span>${escapeHtml(v.value)}</span></div>`).join("") +
+      `</div>`;
+    renderWarnings([]);
+  } catch (error) {
+    renderWarnings([error.message]);
+  }
+}
+
+(async function start() {
+  try {
+    const health = await api("/api/health");
+    const archive = health.store
+      ? `${health.archive.length} archived` + (health.stale.length ? ` · ${health.stale.length} STALE` : "")
+      : "no archive — every request reaches a register";
+    // The writer is what usually breaks, so its last outcome belongs here too.
+    const run = health.last_run && health.last_run.run_id
+      ? ` · last run ${health.last_run.run_id.slice(0, 15)}` +
+        (health.last_run.failed ? ` (${health.last_run.failed} FAILED)` : " ok")
+      : "";
+    $("status").textContent = `v${health.version} · ${health.sources} registers · ${archive}${run}` +
+      (health.default_user_agent ? " · default User-Agent" : "");
+    if (health.status !== "ok") $("status").classList.add("degraded");
+    catalogue = (await api("/api/sources")).sources;
+    for (const source of catalogue) $("source").append(new Option(source.key, source.key));
+    describeSource();
+  } catch (error) {
+    $("status").textContent = `backend unreachable: ${error.message}`;
+  }
+})();
+
+$("source").addEventListener("change", describeSource);
+$("run").addEventListener("click", run);
+$("countBtn").addEventListener("click", countValues);
+$("changesBtn").addEventListener("click", showChanges);
+for (const id of ["select", "query", "contains", "limit"]) {
+  $(id).addEventListener("keydown", (e) => { if (e.key === "Enter") run(); });
+}
+</script>
+</body>
+</html>

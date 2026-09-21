@@ -1,0 +1,386 @@
+{
+ "meta": {
+  "goldenCopy": {
+   "publishDate": "2026-08-16T00:00:00Z"
+  },
+  "pagination": {
+   "currentPage": 2,
+   "perPage": 3,
+   "from": 4,
+   "to": 6,
+   "total": 6,
+   "lastPage": 2
+  }
+ },
+ "links": {
+  "first": "https://api.gleif.org/api/v1/lei-records?filter%5Bentity.legalAddress.country%5D=LI&page%5Bnumber%5D=1&page%5Bsize%5D=3",
+  "prev": "https://api.gleif.org/api/v1/lei-records?filter%5Bentity.legalAddress.country%5D=LI&page%5Bnumber%5D=1&page%5Bsize%5D=3",
+  "next": "https://api.gleif.org/api/v1/lei-records?filter%5Bentity.legalAddress.country%5D=LI&page%5Bnumber%5D=3&page%5Bsize%5D=3",
+  "last": "https://api.gleif.org/api/v1/lei-records?filter%5Bentity.legalAddress.country%5D=LI&page%5Bnumber%5D=5141&page%5Bsize%5D=3"
+ },
+ "data": [
+  {
+   "type": "lei-records",
+   "id": "52990002NEPGPLP4HW78",
+   "attributes": {
+    "lei": "52990002NEPGPLP4HW78",
+    "entity": {
+     "legalName": {
+      "name": "Oberlechner Stiftung",
+      "language": "de"
+     },
+     "otherNames": [],
+     "transliteratedOtherNames": [],
+     "legalAddress": {
+      "language": "de",
+      "addressLines": [
+       "c/o CONSILIUM TREUHAND AG, Austrasse 15"
+      ],
+      "addressNumber": null,
+      "addressNumberWithinBuilding": null,
+      "mailRouting": null,
+      "city": "Triesen",
+      "region": "LI-09",
+      "country": "LI",
+      "postalCode": "9495"
+     },
+     "headquartersAddress": {
+      "language": "de",
+      "addressLines": [
+       "c/o CONSILIUM TREUHAND AG, Austrasse 15"
+      ],
+      "addressNumber": null,
+      "addressNumberWithinBuilding": null,
+      "mailRouting": null,
+      "city": "Triesen",
+      "region": "LI-09",
+      "country": "LI",
+      "postalCode": "9495"
+     },
+     "registeredAt": {
+      "id": "RA000428",
+      "other": null
+     },
+     "registeredAs": "FL-0002.755.666-3",
+     "jurisdiction": "LI",
+     "category": "GENERAL",
+     "legalForm": {
+      "id": "BSZ8",
+      "other": null
+     },
+     "associatedEntity": {
+      "lei": null,
+      "name": null
+     },
+     "status": "ACTIVE",
+     "expiration": {
+      "date": null,
+      "reason": null
+     },
+     "successorEntity": {
+      "lei": null,
+      "name": null
+     },
+     "successorEntities": [],
+     "creationDate": "2026-04-27T22:00:00Z",
+     "subCategory": null,
+     "otherAddresses": [],
+     "eventGroups": []
+    },
+    "registration": {
+     "initialRegistrationDate": "2026-08-14T09:56:43Z",
+     "lastUpdateDate": "2026-08-14T09:56:43Z",
+     "status": "ISSUED",
+     "nextRenewalDate": "2027-08-14T09:56:43Z",
+     "managingLou": "5299000J2N45DDNE4Y28",
+     "corroborationLevel": "FULLY_CORROBORATED",
+     "validatedAt": {
+      "id": "RA000428",
+      "other": null
+     },
+     "validatedAs": "FL-0002.755.666-3",
+     "otherValidationAuthorities": []
+    },
+    "bic": null,
+    "mic": null,
+    "ocid": null,
+    "qcc": null,
+    "gem": null,
+    "spglobal": null,
+    "conformityFlag": null
+   },
+   "relationships": {
+    "managing-lou": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/52990002NEPGPLP4HW78/managing-lou"
+     }
+    },
+    "lei-issuer": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/52990002NEPGPLP4HW78/lei-issuer"
+     }
+    },
+    "field-modifications": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/52990002NEPGPLP4HW78/field-modifications"
+     }
+    },
+    "direct-parent": {
+     "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/52990002NEPGPLP4HW78/direct-parent-reporting-exception"
+     }
+    },
+    "ultimate-parent": {
+     "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/52990002NEPGPLP4HW78/ultimate-parent-reporting-exception"
+     }
+    }
+   },
+   "links": {
+    "self": "https://api.gleif.org/api/v1/lei-records/52990002NEPGPLP4HW78"
+   }
+  },
+  {
+   "type": "lei-records",
+   "id": "391200OQZOHEOYRF5F46",
+   "attributes": {
+    "lei": "391200OQZOHEOYRF5F46",
+    "entity": {
+     "legalName": {
+      "name": "Revalier Aktiengesellschaft",
+      "language": "de"
+     },
+     "otherNames": [],
+     "transliteratedOtherNames": [],
+     "legalAddress": {
+      "language": "de",
+      "addressLines": [
+       "Pradafant 11"
+      ],
+      "addressNumber": null,
+      "addressNumberWithinBuilding": null,
+      "mailRouting": null,
+      "city": "Vaduz",
+      "region": null,
+      "country": "LI",
+      "postalCode": "9490"
+     },
+     "headquartersAddress": {
+      "language": "de",
+      "addressLines": [
+       "Pradafant 11"
+      ],
+      "addressNumber": null,
+      "addressNumberWithinBuilding": null,
+      "mailRouting": null,
+      "city": "Vaduz",
+      "region": null,
+      "country": "LI",
+      "postalCode": "9490"
+     },
+     "registeredAt": {
+      "id": "RA000428",
+      "other": null
+     },
+     "registeredAs": "FL-0002.612.289-0",
+     "jurisdiction": "LI",
+     "category": "GENERAL",
+     "legalForm": {
+      "id": "7RRP",
+      "other": null
+     },
+     "associatedEntity": {
+      "lei": null,
+      "name": null
+     },
+     "status": "ACTIVE",
+     "expiration": {
+      "date": null,
+      "reason": null
+     },
+     "successorEntity": {
+      "lei": null,
+      "name": null
+     },
+     "successorEntities": [],
+     "creationDate": "2019-05-23T22:00:00Z",
+     "subCategory": null,
+     "otherAddresses": [],
+     "eventGroups": []
+    },
+    "registration": {
+     "initialRegistrationDate": "2026-08-14T07:17:51Z",
+     "lastUpdateDate": "2026-08-14T07:17:51Z",
+     "status": "ISSUED",
+     "nextRenewalDate": "2027-08-14T07:17:51Z",
+     "managingLou": "39120001KULK7200U106",
+     "corroborationLevel": "FULLY_CORROBORATED",
+     "validatedAt": {
+      "id": "RA000428",
+      "other": null
+     },
+     "validatedAs": "FL-0002.612.289-0",
+     "otherValidationAuthorities": []
+    },
+    "bic": null,
+    "mic": null,
+    "ocid": null,
+    "qcc": null,
+    "gem": null,
+    "spglobal": null,
+    "conformityFlag": null
+   },
+   "relationships": {
+    "managing-lou": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/391200OQZOHEOYRF5F46/managing-lou"
+     }
+    },
+    "lei-issuer": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/391200OQZOHEOYRF5F46/lei-issuer"
+     }
+    },
+    "field-modifications": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/391200OQZOHEOYRF5F46/field-modifications"
+     }
+    },
+    "direct-parent": {
+     "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/391200OQZOHEOYRF5F46/direct-parent-reporting-exception"
+     }
+    },
+    "ultimate-parent": {
+     "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/391200OQZOHEOYRF5F46/ultimate-parent-reporting-exception"
+     }
+    }
+   },
+   "links": {
+    "self": "https://api.gleif.org/api/v1/lei-records/391200OQZOHEOYRF5F46"
+   }
+  },
+  {
+   "type": "lei-records",
+   "id": "391200SZZQG4XL8OPJ78",
+   "attributes": {
+    "lei": "391200SZZQG4XL8OPJ78",
+    "entity": {
+     "legalName": {
+      "name": "Stiftung Firo",
+      "language": "de"
+     },
+     "otherNames": [],
+     "transliteratedOtherNames": [],
+     "legalAddress": {
+      "language": "de",
+      "addressLines": [
+       "Kirchstrasse 12"
+      ],
+      "addressNumber": null,
+      "addressNumberWithinBuilding": null,
+      "mailRouting": "c/o AF TRUSTEES LIMITED",
+      "city": "Vaduz",
+      "region": "LI-11",
+      "country": "LI",
+      "postalCode": "9490"
+     },
+     "headquartersAddress": {
+      "language": "de",
+      "addressLines": [
+       "Kirchstrasse 12"
+      ],
+      "addressNumber": null,
+      "addressNumberWithinBuilding": null,
+      "mailRouting": "c/o AF TRUSTEES LIMITED",
+      "city": "Vaduz",
+      "region": "LI-11",
+      "country": "LI",
+      "postalCode": "9490"
+     },
+     "registeredAt": {
+      "id": "RA000428",
+      "other": null
+     },
+     "registeredAs": "FL-0002.760.324-0",
+     "jurisdiction": "LI",
+     "category": "GENERAL",
+     "legalForm": {
+      "id": "BSZ8",
+      "other": null
+     },
+     "associatedEntity": {
+      "lei": null,
+      "name": null
+     },
+     "status": "ACTIVE",
+     "expiration": {
+      "date": null,
+      "reason": null
+     },
+     "successorEntity": {
+      "lei": null,
+      "name": null
+     },
+     "successorEntities": [],
+     "creationDate": "2026-07-30T22:00:00Z",
+     "subCategory": null,
+     "otherAddresses": [],
+     "eventGroups": []
+    },
+    "registration": {
+     "initialRegistrationDate": "2026-08-13T14:33:36Z",
+     "lastUpdateDate": "2026-08-13T14:33:36Z",
+     "status": "ISSUED",
+     "nextRenewalDate": "2027-08-13T14:33:36Z",
+     "managingLou": "39120001KULK7200U106",
+     "corroborationLevel": "FULLY_CORROBORATED",
+     "validatedAt": {
+      "id": "RA000428",
+      "other": null
+     },
+     "validatedAs": "FL-0002.760.324-0",
+     "otherValidationAuthorities": []
+    },
+    "bic": null,
+    "mic": null,
+    "ocid": null,
+    "qcc": null,
+    "gem": null,
+    "spglobal": null,
+    "conformityFlag": "CONFORMING"
+   },
+   "relationships": {
+    "managing-lou": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/391200SZZQG4XL8OPJ78/managing-lou"
+     }
+    },
+    "lei-issuer": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/391200SZZQG4XL8OPJ78/lei-issuer"
+     }
+    },
+    "field-modifications": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/391200SZZQG4XL8OPJ78/field-modifications"
+     }
+    },
+    "direct-parent": {
+     "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/391200SZZQG4XL8OPJ78/direct-parent-reporting-exception"
+     }
+    },
+    "ultimate-parent": {
+     "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/391200SZZQG4XL8OPJ78/ultimate-parent-reporting-exception"
+     }
+    }
+   },
+   "links": {
+    "self": "https://api.gleif.org/api/v1/lei-records/391200SZZQG4XL8OPJ78"
+   }
+  }
+ ]
+}

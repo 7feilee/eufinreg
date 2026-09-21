@@ -200,6 +200,23 @@ class EbaPsdSource(Source):
         "official daily machine-readable download"
     )
     docs_url: str = DOWNLOAD_PAGE
+    key_columns: tuple[str, ...] = ("EntityCode",)
+    identifier_columns: tuple[str, ...] = ("EntityCode",)
+    name_columns: tuple[str, ...] = ("ENT_NAM",)
+    expected_fields: tuple[str, ...] = ("EntityCode", "EntityType", "CA_OwnerID", "ENT_NAM")
+    #: National authorities are required to update at least daily and the
+    #: golden copy is regenerated nightly.
+    cadence_hours: float | None = 24.0
+    disclaimer: str = (
+        "Unlike national registers under PSD2, this Register has no legal significance "
+        "and confers no rights in law. […] responsibility for the accuracy of that "
+        "information lies with the competent authorities at national level."
+    )
+    personal_data: str = (
+        "--select ALL returns 322,314 agent records that are largely natural persons, "
+        "named in full with an address, processed under Regulation (EU) 2018/1725. "
+        "The default selection excludes them."
+    )
     enum_fields: tuple[str, ...] = (
         "EntityType",
         "EntityTypeLabel",
@@ -228,6 +245,20 @@ class EbaPsdSource(Source):
     metadata_url: str = METADATA_URL
     _rows: dict[tuple[Any, ...], list[dict[str, Any]]] = field(default_factory=dict, repr=False)
     _labels: dict[str, dict[str, str]] | None = field(default=None, repr=False)
+
+    def personal_data_for(self, select: str | None = None) -> str:
+        """Only the agent records raise the question, and only if asked for.
+
+        The default selection is institutions, which are companies. ``--select
+        ALL`` (or an explicit ``AG``) brings back 322,314 records that are
+        largely named individuals with an address, and that is a different
+        processing decision — so it is gated separately rather than blanketing
+        the whole source.
+        """
+        types = parse_selection(select)
+        if types is None or any(code in DEPENDENT_TYPES for code in types):
+            return self.personal_data
+        return ""
 
     def reset(self) -> None:
         """Drop everything downloaded. Sources are module-level singletons."""

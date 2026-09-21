@@ -168,6 +168,12 @@ class EudamedSource(Source):
     title: str = ""
     docs_url: str = PUBLIC_SITE
     enum_fields: tuple[str, ...] = ()
+    key_columns: tuple[str, ...] = ("eudamedIdentifier",)
+    identifier_columns: tuple[str, ...] = ("eudamedIdentifier", "srn")
+    name_columns: tuple[str, ...] = ("name",)
+    expected_fields: tuple[str, ...] = ("name", "eudamedIdentifier")
+    cadence_hours: float | None = 24.0
+    personal_data: str = ""
     multi_value_fields: dict[str, str] = field(default_factory=dict)
     block_structured: bool = False
     select_help: str = ""
@@ -281,6 +287,13 @@ def _parse_raw_query(raw: str | None) -> list[tuple[str, str]]:
 
 ECONOMIC_OPERATORS = EudamedSource(
     key="eudamed-eo",
+    expected_fields=("name", "eudamedIdentifier", "actorType", "countryIso2Code"),
+    personal_data=(
+        "Nearly every one of the 48,893 organisations carries an email address and a "
+        "phone number. Some are sole traders, where the company contact is a person. "
+        "Those details were published so patients and regulators can identify who is "
+        "responsible for a device — not as a marketing list."
+    ),
     path="api/eos",
     title="EUDAMED economic operators — EU medical device manufacturers, importers, "
     "authorised representatives and system/procedure-pack producers",

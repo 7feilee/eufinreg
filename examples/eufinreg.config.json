@@ -1,0 +1,16 @@
+{
+  "store": "./eufinreg-store",
+
+  "user_agent": "acme-compliance/1.0 (+https://acme.example/about-our-bot; ops@acme.example)",
+  "delay": 1.0,
+
+  "preset": "dach",
+
+  "retention_days": 1100,
+  "keep_last": 3,
+
+  "watchlists": ["counterparties.json"],
+
+  "allow_personal_data": false,
+  "capture_raw": true
+}

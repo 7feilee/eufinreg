@@ -1,0 +1,22 @@
+# eufinreg — nightly ingest and a morning watch report.
+#
+# Registers are small public-sector deployments. Pick a time outside European
+# office hours, stagger it if you run several instances, and never run this
+# more often than the registers actually change (see `eufinreg store status`).
+
+SHELL=/bin/sh
+MAILTO=ops@acme.example
+EUFINREG_CONFIG=/etc/eufinreg/eufinreg.config.json
+
+# 04:12 rather than 04:00: every cron job in the world runs on the hour.
+12 4 * * *  eufinreg ingest  --config $EUFINREG_CONFIG --quiet --json >> /var/log/eufinreg/ingest.jsonl 2>> /var/log/eufinreg/ingest.err
+
+# The report your compliance inbox actually reads.
+30 7 * * *  eufinreg watch   --config $EUFINREG_CONFIG --since $(date -u -d yesterday +\%Y\%m\%d) -o /srv/eufinreg/changes-$(date -u +\%Y-\%m-\%d).csv
+
+# Weekly: is every register still the shape the client expects? Exits non-zero
+# on drift, so cron mails you. This one goes out to the live services.
+17 3 * * 1  eufinreg doctor  --config $EUFINREG_CONFIG --json >> /var/log/eufinreg/doctor.jsonl
+
+# Monthly: verify the archive against its own checksums.
+40 2 1 * *  eufinreg store verify --config $EUFINREG_CONFIG

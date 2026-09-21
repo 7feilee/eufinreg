@@ -1,0 +1,27 @@
+{
+ "vow": {
+  "available": true
+ },
+ "countries": [
+  {
+   "countryCode": "AT",
+   "availability": "Available"
+  },
+  {
+   "countryCode": "BE",
+   "availability": "Available"
+  },
+  {
+   "countryCode": "BG",
+   "availability": "Available"
+  },
+  {
+   "countryCode": "CY",
+   "availability": "Available"
+  },
+  {
+   "countryCode": "XX",
+   "availability": "Unavailable"
+  }
+ ]
+}

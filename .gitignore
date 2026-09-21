@@ -14,3 +14,12 @@ htmlcov/
 out/
 raw/
 *.local.csv
+
+# Archives and evidence produced by running the tool in a checkout. A zero-config
+# `eufinreg ingest` writes ./eufinreg-store, and one GISA snapshot alone is 58 MB.
+eufinreg-store/
+store/
+snapshots/
+*.jsonl.sha256
+receipt-*.zip
+doctor.json

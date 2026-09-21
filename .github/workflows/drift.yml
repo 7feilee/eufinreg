@@ -1,0 +1,80 @@
+name: Register drift
+
+# The offline test suite pins *this project's* behaviour. It cannot notice that
+# a register renamed a field overnight — and a renamed field means the flattened
+# output silently loses a column that downstream code depends on.
+#
+# So this one job is deliberately allowed to touch the live services. It is
+# scheduled weekly rather than nightly, and it pulls a handful of records per
+# register, because the point is to check the shape, not to mirror the data.
+
+on:
+  schedule:
+    # Sunday 05:40 UTC. Off the hour, and outside European office hours.
+    - cron: "40 5 * * 0"
+  workflow_dispatch:
+    inputs:
+      sources:
+        description: "Space-separated source keys (default: all of them)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: drift
+  cancel-in-progress: false
+
+jobs:
+  doctor:
+    name: are the registers still the shape we expect?
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - run: uv sync --locked --all-extras
+
+      - name: Probe every register
+        id: doctor
+        run: |
+          # Identify the client. A CI runner hitting a regulator's server
+          # anonymously is exactly what the etiquette rules are about.
+          UA="eufinreg-drift/${{ github.sha }} (+https://github.com/${{ github.repository }}; CI shape check)"
+          SOURCES=""
+          for key in ${{ github.event.inputs.sources }}; do SOURCES="$SOURCES --source $key"; done
+          uv run eufinreg doctor $SOURCES \
+            --user-agent "$UA" \
+            --delay 2 \
+            --sample 25 \
+            --json > doctor.json || echo "failed=true" >> "$GITHUB_OUTPUT"
+          python3 -c "
+          import json
+          report = json.load(open('doctor.json'))
+          print(f\"{report['checked']} checked, {report['failed']} failed\")
+          for check in report['checks']:
+              state = 'ok  ' if check['ok'] else 'FAIL'
+              print(f\"{state} {check['source']:14} rows={check['rows']:<5} {check['note']}\")
+          "
+
+      - name: Keep the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: doctor-report
+          path: doctor.json
+          retention-days: 90
+
+      - name: Fail if a register changed shape
+        if: steps.doctor.outputs.failed == 'true'
+        run: |
+          echo "::error::A register is unreachable or no longer serves an expected field."
+          echo "Re-capture a fixture with --raw, update the source and its test."
+          exit 1

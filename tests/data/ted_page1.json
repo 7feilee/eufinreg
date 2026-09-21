@@ -1,0 +1,150 @@
+{
+ "notices": [
+  {
+   "notice-type": "can-standard",
+   "publication-number": "543732-2026",
+   "classification-cpv": [
+    "45214200",
+    "71240000",
+    "71320000",
+    "45214200",
+    "71240000",
+    "71320000"
+   ],
+   "publication-date": "2026-08-06+02:00",
+   "buyer-name": {
+    "deu": [
+     "Stadt Hildesheim"
+    ]
+   },
+   "winner-name": {
+    "deu": [
+     "KLEUSBERG GmbH & Co. KG"
+    ]
+   },
+   "buyer-country": [
+    "DEU"
+   ],
+   "notice-title": {
+    "hun": "Németország – Iskolaépületek kivitelezése – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "lav": "Vācija – Skolu ēku celtniecības darbi – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "swe": "Tyskland – Bygg- och anläggningsarbeten: skolbyggnader – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "gle": "An Ghearmáin – Construction work for school buildings – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "ell": "Γερμανία – Κατασκευαστικές εργασίες για σχολικά κτίρια – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "spa": "Alemania – Trabajos de construcción de edificios escolares – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "est": "Saksamaa – Koolimajade ehitustööd – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "nld": "Duitsland – Schoolgebouwen – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "fin": "Saksa – Koulurakennusten rakentamistyöt – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "pol": "Niemcy – Roboty budowlane w zakresie budowy obiektów budowlanych związanych ze szkolnictwem – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "hrv": "Njemačka – Građevinski radovi na školskim zgradama – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "ces": "Německo – Stavební úpravy školních budov – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "dan": "Tyskland – Bygge- og anlægsarbejde i forbindelse med skolebygninger – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "ron": "Germania – Lucrări de construcţii de instituţii şcolare – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "por": "Alemanha – Construção de edifícios escolares – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "slk": "Nemecko – Stavebné práce na stavbe budov škôl – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "fra": "Allemagne – Travaux de construction de bâtiments scolaires – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "mlt": "Il-Ġermanja – Xogħol tal-kostruzzjoni għal bini ta’ l-iskejjel – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "deu": "Deutschland – Bauarbeiten für Schulgebäude – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "lit": "Vokietija – Mokyklų statybos darbai – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "ita": "Germania – Lavori di costruzione di edifici scolastici – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "bul": "Гepмaния – Строителни и монтажни работи по общо изграждане на училища – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "slv": "Nemčija – Gradbena dela na šolskih stavbah – ex post: Neubau Grundschule Achtum in modularer Bauweise",
+    "eng": "Germany – Construction work for school buildings – ex post: Neubau Grundschule Achtum in modularer Bauweise"
+   }
+  },
+  {
+   "notice-type": "can-standard",
+   "publication-number": "543739-2026",
+   "classification-cpv": [
+    "42621000",
+    "42621000"
+   ],
+   "publication-date": "2026-08-06+02:00",
+   "buyer-name": {
+    "deu": [
+     "Landratsamt Schwarzwald-Baar-Kreis"
+    ]
+   },
+   "buyer-country": [
+    "DEU"
+   ],
+   "notice-title": {
+    "hun": "Németország – Esztergagép – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "lav": "Vācija – Virpas – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "swe": "Tyskland – Svarvar – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "gle": "An Ghearmáin – Lathes – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "ell": "Γερμανία – Τόρνοι – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "spa": "Alemania – Tornos – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "est": "Saksamaa – Treipingid – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "nld": "Duitsland – Draaibanken – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "fin": "Saksa – Sorvit – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "pol": "Niemcy – Tokarki – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "hrv": "Njemačka – Tokarski strojevi – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "ces": "Německo – Soustruhy – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "dan": "Tyskland – Drejebænke – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "ron": "Germania – Strunguri – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "por": "Alemanha – Tornos – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "slk": "Nemecko – Sústruhy – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "fra": "Allemagne – Tours – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "mlt": "Il-Ġermanja – Tornijiet – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "deu": "Deutschland – Drehmaschinen – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "lit": "Vokietija – Tekinimo staklės – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "ita": "Germania – Torni – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "bul": "Гepмaния – Стругове – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "slv": "Nemčija – Stružnice – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen",
+    "eng": "Germany – Lathes – EU-weite Ausschreibung der Lieferung und Inbetriebnahme von Drehmaschinen für die Gewerbeschule Villingen-Schwenningen"
+   }
+  },
+  {
+   "notice-type": "can-standard",
+   "publication-number": "543776-2026",
+   "classification-cpv": [
+    "71200000",
+    "71200000"
+   ],
+   "publication-date": "2026-08-06+02:00",
+   "buyer-name": {
+    "deu": [
+     "Stadt Lüchow (Wendland)"
+    ]
+   },
+   "winner-name": {
+    "deu": [
+     "Horeis + Blatt"
+    ]
+   },
+   "buyer-country": [
+    "DEU"
+   ],
+   "notice-title": {
+    "hun": "Németország – Építészeti és ezzel kapcsolatos szolgáltatások – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "lav": "Vācija – Arhitektūras un saistītie pakalpojumi – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "swe": "Tyskland – Arkitekttjänster – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "gle": "An Ghearmáin – Architectural and related services – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "ell": "Γερμανία – Αρχιτεκτονικές και συναφείς υπηρεσίες – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "spa": "Alemania – Servicios de arquitectura y servicios conexos – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "est": "Saksamaa – Arhitektuuri- ja sellega seotud teenused – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "nld": "Duitsland – Dienstverlening op het gebied van architectuur en dergelijke – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "fin": "Saksa – Arkkitehtipalvelut – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "pol": "Niemcy – Usługi architektoniczne i podobne – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "hrv": "Njemačka – Arhitektonske i srodne usluge – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "ces": "Německo – Architektonické a související služby – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "dan": "Tyskland – Arkitektvirksomhed samt hermed beslægtet virksomhed – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "ron": "Germania – Servicii de arhitectură şi servicii conexe – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "por": "Alemanha – Serviços de arquitectura e afins – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "slk": "Nemecko – Architektonické a súvisiace služby – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "fra": "Allemagne – Services d'architecture – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "mlt": "Il-Ġermanja – Servizzi ta' l-arkitettura u dawk relatati – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "deu": "Deutschland – Dienstleistungen von Architekturbüros – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "lit": "Vokietija – Architektūros ir susijusios paslaugos – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "ita": "Germania – Servizi architettonici e servizi affini – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "bul": "Гepмaния – Архитектурни и свързани с тях услуги – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "slv": "Nemčija – Arhitekturne storitve in z njimi povezane storitve – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)",
+    "eng": "Germany – Architectural and related services – Stadt Lüchow Wendland - Freiraumplanung Innenstadt gemäß § 39 HOAI (Stufe 1: LP 3-6, Stufe 2: LP 7-9)"
+   }
+  }
+ ],
+ "totalNoticeCount": 6,
+ "iterationNextToken": null,
+ "timedOut": false
+}

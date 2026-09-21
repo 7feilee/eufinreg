@@ -332,3 +332,73 @@ class TestErrors:
         main(["--delay", "0", "--source", "upreg", "--user-agent", "mine/1.0"])
         assert responses.calls[0].request.headers["User-Agent"] == "mine/1.0"
         assert "default User-Agent" not in capsys.readouterr().err
+
+
+class TestSnapshotAndDiff:
+    """--snapshot and --diff, the two modes that make change detection possible."""
+
+    @responses.activate
+    def test_snapshot_writes_rows_and_a_checksum(self, tmp_path):
+        _mock_casps()
+        target = tmp_path / "casps.jsonl"
+        assert main([*FAST, "--source", "mica-casp", "--snapshot", str(target)]) == 0
+        assert target.exists()
+        assert target.with_suffix(".jsonl.sha256").exists()
+        header = json.loads(target.read_text(encoding="utf-8").splitlines()[0])
+        assert header["_meta"]["source"] == "mica-casp"
+
+    @responses.activate
+    def test_snapshot_records_the_selection_it_was_taken_under(self, tmp_path):
+        _mock_casps()
+        target = tmp_path / "casps.jsonl"
+        main([*FAST, "--source", "mica-casp", "--contains", "AT", "--snapshot", str(target)])
+        meta = json.loads(target.read_text(encoding="utf-8").splitlines()[0])["_meta"]
+        assert meta["tool_version"]
+        assert "captured_at" in meta
+
+    @responses.activate
+    def test_snapshot_and_output_can_be_written_in_one_run(self, tmp_path):
+        _mock_casps()
+        rows = tmp_path / "casps.csv"
+        main(
+            [
+                *FAST,
+                "--source",
+                "mica-casp",
+                "--snapshot",
+                str(tmp_path / "casps.jsonl"),
+                "-o",
+                str(rows),
+            ]
+        )
+        assert _read_csv(rows)
+
+    @responses.activate
+    def test_diff_reports_what_changed_without_touching_the_network(self, tmp_path, capsys):
+        _mock_casps()
+        old = tmp_path / "old.jsonl"
+        main([*FAST, "--source", "mica-casp", "--snapshot", str(old)])
+        calls_after_fetch = len(responses.calls)
+
+        # Same register, one row fewer: a licence withdrawn between two runs.
+        lines = old.read_text(encoding="utf-8").splitlines()
+        new = tmp_path / "new.jsonl"
+        new.write_text("\n".join(lines[:-1]) + "\n", encoding="utf-8")
+        # The digest must be recomputed, or read_snapshot refuses the file.
+        import json as _json
+
+        from eufinreg.snapshot import write_snapshot
+
+        rows = [_json.loads(line) for line in lines[1:-1]]
+        write_snapshot(new, rows, source="mica-casp", key_columns=("ae_lei", "ae_lei_name"))
+
+        assert main(["--quiet", "--diff", str(old), str(new), "-o", str(tmp_path / "d.csv")]) == 0
+        assert len(responses.calls) == calls_after_fetch
+        changes = _read_csv(tmp_path / "d.csv")
+        assert [row["_change"] for row in changes] == ["removed"]
+
+    def test_diff_on_a_file_that_is_not_a_snapshot_exits_two(self, tmp_path, capsys):
+        junk = tmp_path / "junk.jsonl"
+        junk.write_text("not a snapshot\n", encoding="utf-8")
+        assert main(["--diff", str(junk), str(junk)]) == 2
+        assert "eufinreg:" in capsys.readouterr().err

@@ -1,0 +1,29 @@
+{
+  "name": "counterparties",
+  "entities": [
+    {
+      "id": "ubs",
+      "label": "UBS AG",
+      "identifiers": ["CHE-101.329.561"],
+      "names": ["UBS AG", "UBS Switzerland AG"],
+      "note": "custody + execution; identifier match, strongest confidence"
+    },
+    {
+      "id": "zkb",
+      "label": "Zürcher Kantonalbank",
+      "identifiers": ["CHE-108.954.607"]
+    },
+    {
+      "id": "six",
+      "label": "SIX Swiss Exchange AG",
+      "note": "no UID on file yet — will match by name only, which the report flags"
+    },
+    {
+      "id": "example-de-psp",
+      "label": "Example Payments GmbH",
+      "identifiers": ["DE_BAFIN!123456"],
+      "sources": ["eba-psd"],
+      "note": "EBA EntityCode; scoped to one register because the name is generic"
+    }
+  ]
+}

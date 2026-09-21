@@ -148,6 +148,19 @@ class MicaCsvSource(Source):
     title: str = ""
     docs_url: str = MICA_LANDING
     enum_fields: tuple[str, ...] = ()
+    key_columns: tuple[str, ...] = ()
+    identifier_columns: tuple[str, ...] = ("ae_lei",)
+    name_columns: tuple[str, ...] = ("ae_lei_name", "ae_commercial_name")
+    expected_fields: tuple[str, ...] = ("ae_lei_name", "ae_homeMemberState")
+    #: ESMA states weekly. Verified: the file is overwritten in place, so
+    #: Last-Modified is the only vintage there is.
+    cadence_hours: float | None = 168.0
+    disclaimer: str = (
+        "The crypto-asset white papers listed in ESMA's register have not been reviewed "
+        "or approved by any competent authority in any Member State of the European Union. "
+        "The offeror and/or issuer of the crypto-asset is solely responsible for the "
+        "content of each crypto-asset white paper."
+    )
     block_structured: bool = False
     multi_value_fields: dict[str, str] = field(default_factory=dict)
     #: ``{new_column: (source_column, callable)}`` — additive, never destructive.
@@ -254,6 +267,7 @@ _COMMON_ENUMS = ("ae_competentAuthority", "ae_homeMemberState")
 CASP = MicaCsvSource(
     key="mica-casp",
     filename="CASPS.csv",
+    key_columns=("ae_lei", "ae_lei_name"),
     title="MiCA authorised crypto-asset service providers (Art. 109)",
     enum_fields=(
         *_COMMON_ENUMS,

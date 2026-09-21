@@ -1,7 +1,7 @@
 [project]
 name = "eufinreg"
-version = "0.4.0"
-description = "Fetch structured lists of licensed and registered companies from the EU public registers across sectors (ESMA, EBA PSD2, MiCA, EUDAMED, CTIS)."
+version = "0.5.0"
+description = "Fetch structured lists of licensed and registered companies from European public registers across sectors and countries (ESMA, EBA PSD2, MiCA, EUDAMED, CTIS, FINMA, Swiss UID register, GISA), and diff them over time."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -10,6 +10,8 @@ authors = [{ name = "eufinreg contributors" }]
 keywords = [
   "esma", "eba", "psd2", "mica", "mifid", "bafin",
   "eudamed", "mdr", "medical-devices", "ctis", "clinical-trials",
+  "finma", "uid-register", "gisa", "gewerbeberechtigung",
+  "switzerland", "austria", "dach",
   "regulatory", "register", "open-data",
 ]
 classifiers = [
@@ -29,13 +31,17 @@ dependencies = ["requests>=2.31"]
 [project.optional-dependencies]
 # Only needed for `--format xlsx`. Everything else works with requests alone.
 xlsx = ["openpyxl>=3.1"]
+# Only needed for `--source gisa`: Austria ships its trade-licence register as a
+# 7-Zip archive, and Python has no 7z support in the standard library. The rest
+# of the Austrian and Swiss sources need nothing extra.
+at = ["py7zr>=0.20"]
 
 [project.scripts]
 eufinreg = "eufinreg.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/CHANGE-ME/eufinreg"
-Issues = "https://github.com/CHANGE-ME/eufinreg/issues"
+Homepage = "https://github.com/7feilee/eufinreg"
+Issues = "https://github.com/7feilee/eufinreg/issues"
 
 [dependency-groups]
 dev = ["pytest>=8.0", "responses>=0.25", "ruff>=0.6"]

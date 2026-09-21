@@ -1,0 +1,397 @@
+{
+ "meta": {
+  "goldenCopy": {
+   "publishDate": "2026-08-16T00:00:00Z"
+  },
+  "pagination": {
+   "currentPage": 1,
+   "perPage": 3,
+   "from": 1,
+   "to": 3,
+   "total": 6,
+   "lastPage": 2
+  }
+ },
+ "links": {
+  "first": "https://api.gleif.org/api/v1/lei-records?filter%5Bentity.legalAddress.country%5D=LI&page%5Bnumber%5D=1&page%5Bsize%5D=3",
+  "next": "https://api.gleif.org/api/v1/lei-records?filter%5Bentity.legalAddress.country%5D=LI&page%5Bnumber%5D=2&page%5Bsize%5D=3",
+  "last": "https://api.gleif.org/api/v1/lei-records?filter%5Bentity.legalAddress.country%5D=LI&page%5Bnumber%5D=5141&page%5Bsize%5D=3"
+ },
+ "data": [
+  {
+   "type": "lei-records",
+   "id": "529900ER3Y59KV0B1V59",
+   "attributes": {
+    "lei": "529900ER3Y59KV0B1V59",
+    "entity": {
+     "legalName": {
+      "name": "Stringfellow long/short Fund",
+      "language": "de"
+     },
+     "otherNames": [],
+     "transliteratedOtherNames": [],
+     "legalAddress": {
+      "language": "de",
+      "addressLines": [
+       "c/o Accuro Fund Solutions AG, Hintergass 19"
+      ],
+      "addressNumber": null,
+      "addressNumberWithinBuilding": null,
+      "mailRouting": null,
+      "city": "Vaduz",
+      "region": "LI-11",
+      "country": "LI",
+      "postalCode": "9490"
+     },
+     "headquartersAddress": {
+      "language": "de",
+      "addressLines": [
+       "c/o Accuro Fund Solutions AG, Hintergass 19"
+      ],
+      "addressNumber": null,
+      "addressNumberWithinBuilding": null,
+      "mailRouting": "c/o Accuro Fund Solutions AG",
+      "city": "Vaduz",
+      "region": "LI-11",
+      "country": "LI",
+      "postalCode": "9490"
+     },
+     "registeredAt": {
+      "id": "RA999999",
+      "other": null
+     },
+     "registeredAs": null,
+     "jurisdiction": "LI",
+     "category": "FUND",
+     "legalForm": {
+      "id": "TV8Y",
+      "other": null
+     },
+     "associatedEntity": {
+      "lei": null,
+      "name": null
+     },
+     "status": "ACTIVE",
+     "expiration": {
+      "date": null,
+      "reason": null
+     },
+     "successorEntity": {
+      "lei": null,
+      "name": null
+     },
+     "successorEntities": [],
+     "creationDate": "2026-08-10T22:00:00Z",
+     "subCategory": null,
+     "otherAddresses": [],
+     "eventGroups": []
+    },
+    "registration": {
+     "initialRegistrationDate": "2026-08-14T13:37:01Z",
+     "lastUpdateDate": "2026-08-14T13:37:01Z",
+     "status": "ISSUED",
+     "nextRenewalDate": "2027-08-14T13:37:01Z",
+     "managingLou": "5299000J2N45DDNE4Y28",
+     "corroborationLevel": "ENTITY_SUPPLIED_ONLY",
+     "validatedAt": {
+      "id": "RA999999",
+      "other": null
+     },
+     "validatedAs": null,
+     "otherValidationAuthorities": []
+    },
+    "bic": null,
+    "mic": null,
+    "ocid": null,
+    "qcc": null,
+    "gem": null,
+    "spglobal": null,
+    "conformityFlag": null
+   },
+   "relationships": {
+    "managing-lou": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/529900ER3Y59KV0B1V59/managing-lou"
+     }
+    },
+    "lei-issuer": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/529900ER3Y59KV0B1V59/lei-issuer"
+     }
+    },
+    "field-modifications": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/529900ER3Y59KV0B1V59/field-modifications"
+     }
+    },
+    "direct-parent": {
+     "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/529900ER3Y59KV0B1V59/direct-parent-reporting-exception"
+     }
+    },
+    "ultimate-parent": {
+     "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/529900ER3Y59KV0B1V59/ultimate-parent-reporting-exception"
+     }
+    },
+    "fund-manager": {
+     "links": {
+      "lei-record": "https://api.gleif.org/api/v1/lei-records/529900ER3Y59KV0B1V59/fund-manager",
+      "relationship-record": "https://api.gleif.org/api/v1/lei-records/529900ER3Y59KV0B1V59/fund-manager-relationship"
+     }
+    }
+   },
+   "links": {
+    "self": "https://api.gleif.org/api/v1/lei-records/529900ER3Y59KV0B1V59"
+   }
+  },
+  {
+   "type": "lei-records",
+   "id": "529900U8ABI1VITSYP59",
+   "attributes": {
+    "lei": "529900U8ABI1VITSYP59",
+    "entity": {
+     "legalName": {
+      "name": "MMGB Fonds",
+      "language": "de"
+     },
+     "otherNames": [],
+     "transliteratedOtherNames": [],
+     "legalAddress": {
+      "language": "de",
+      "addressLines": [
+       "Herrengasse 12"
+      ],
+      "addressNumber": null,
+      "addressNumberWithinBuilding": null,
+      "mailRouting": null,
+      "city": "Vaduz",
+      "region": "LI-11",
+      "country": "LI",
+      "postalCode": "9490"
+     },
+     "headquartersAddress": {
+      "language": "de",
+      "addressLines": [
+       "c/o LGT Fund Management Company Ltd., Herrengasse 12"
+      ],
+      "addressNumber": null,
+      "addressNumberWithinBuilding": null,
+      "mailRouting": "c/o LGT Fund Management Company Ltd.",
+      "city": "Vaduz",
+      "region": "LI-11",
+      "country": "LI",
+      "postalCode": "9490"
+     },
+     "registeredAt": {
+      "id": "RA999999",
+      "other": null
+     },
+     "registeredAs": null,
+     "jurisdiction": "LI",
+     "category": "FUND",
+     "legalForm": {
+      "id": "9999",
+      "other": "Investmentfonds"
+     },
+     "associatedEntity": {
+      "lei": null,
+      "name": null
+     },
+     "status": "ACTIVE",
+     "expiration": {
+      "date": null,
+      "reason": null
+     },
+     "successorEntity": {
+      "lei": null,
+      "name": null
+     },
+     "successorEntities": [],
+     "creationDate": "2026-08-13T22:00:00Z",
+     "subCategory": null,
+     "otherAddresses": [],
+     "eventGroups": []
+    },
+    "registration": {
+     "initialRegistrationDate": "2026-08-14T13:00:05Z",
+     "lastUpdateDate": "2026-08-14T13:00:05Z",
+     "status": "ISSUED",
+     "nextRenewalDate": "2027-08-14T13:00:05Z",
+     "managingLou": "5299000J2N45DDNE4Y28",
+     "corroborationLevel": "ENTITY_SUPPLIED_ONLY",
+     "validatedAt": {
+      "id": "RA999999",
+      "other": null
+     },
+     "validatedAs": null,
+     "otherValidationAuthorities": []
+    },
+    "bic": null,
+    "mic": null,
+    "ocid": null,
+    "qcc": null,
+    "gem": null,
+    "spglobal": null,
+    "conformityFlag": null
+   },
+   "relationships": {
+    "managing-lou": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/529900U8ABI1VITSYP59/managing-lou"
+     }
+    },
+    "lei-issuer": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/529900U8ABI1VITSYP59/lei-issuer"
+     }
+    },
+    "field-modifications": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/529900U8ABI1VITSYP59/field-modifications"
+     }
+    },
+    "direct-parent": {
+     "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/529900U8ABI1VITSYP59/direct-parent-reporting-exception"
+     }
+    },
+    "ultimate-parent": {
+     "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/529900U8ABI1VITSYP59/ultimate-parent-reporting-exception"
+     }
+    },
+    "fund-manager": {
+     "links": {
+      "lei-record": "https://api.gleif.org/api/v1/lei-records/529900U8ABI1VITSYP59/fund-manager",
+      "relationship-record": "https://api.gleif.org/api/v1/lei-records/529900U8ABI1VITSYP59/fund-manager-relationship"
+     }
+    }
+   },
+   "links": {
+    "self": "https://api.gleif.org/api/v1/lei-records/529900U8ABI1VITSYP59"
+   }
+  },
+  {
+   "type": "lei-records",
+   "id": "9845006CT0EB68C37F62",
+   "attributes": {
+    "lei": "9845006CT0EB68C37F62",
+    "entity": {
+     "legalName": {
+      "name": "STG Trust reg.",
+      "language": "de"
+     },
+     "otherNames": [],
+     "transliteratedOtherNames": [],
+     "legalAddress": {
+      "language": "de",
+      "addressLines": [
+       "Buchenweg 6"
+      ],
+      "addressNumber": null,
+      "addressNumberWithinBuilding": null,
+      "mailRouting": null,
+      "city": "Vaduz",
+      "region": "LI-11",
+      "country": "LI",
+      "postalCode": "9490"
+     },
+     "headquartersAddress": {
+      "language": "de",
+      "addressLines": [
+       "Buchenweg 6"
+      ],
+      "addressNumber": null,
+      "addressNumberWithinBuilding": null,
+      "mailRouting": null,
+      "city": "Vaduz",
+      "region": "LI-11",
+      "country": "LI",
+      "postalCode": "9490"
+     },
+     "registeredAt": {
+      "id": "RA000428",
+      "other": null
+     },
+     "registeredAs": "FL-0001.529.164-0",
+     "jurisdiction": "LI",
+     "category": "GENERAL",
+     "legalForm": {
+      "id": "1DGT",
+      "other": null
+     },
+     "associatedEntity": {
+      "lei": null,
+      "name": null
+     },
+     "status": "ACTIVE",
+     "expiration": {
+      "date": null,
+      "reason": null
+     },
+     "successorEntity": {
+      "lei": null,
+      "name": null
+     },
+     "successorEntities": [],
+     "creationDate": "1996-04-19T00:00:00Z",
+     "subCategory": null,
+     "otherAddresses": [],
+     "eventGroups": []
+    },
+    "registration": {
+     "initialRegistrationDate": "2026-08-14T12:43:12Z",
+     "lastUpdateDate": "2026-08-14T12:43:12Z",
+     "status": "ISSUED",
+     "nextRenewalDate": "2027-08-14T12:43:15Z",
+     "managingLou": "529900T8BM49AURSDO55",
+     "corroborationLevel": "FULLY_CORROBORATED",
+     "validatedAt": {
+      "id": "RA000428",
+      "other": null
+     },
+     "validatedAs": "FL-0001.529.164-0",
+     "otherValidationAuthorities": []
+    },
+    "bic": null,
+    "mic": null,
+    "ocid": null,
+    "qcc": null,
+    "gem": null,
+    "spglobal": null,
+    "conformityFlag": null
+   },
+   "relationships": {
+    "managing-lou": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/9845006CT0EB68C37F62/managing-lou"
+     }
+    },
+    "lei-issuer": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/9845006CT0EB68C37F62/lei-issuer"
+     }
+    },
+    "field-modifications": {
+     "links": {
+      "related": "https://api.gleif.org/api/v1/lei-records/9845006CT0EB68C37F62/field-modifications"
+     }
+    },
+    "direct-parent": {
+     "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/9845006CT0EB68C37F62/direct-parent-reporting-exception"
+     }
+    },
+    "ultimate-parent": {
+     "links": {
+      "reporting-exception": "https://api.gleif.org/api/v1/lei-records/9845006CT0EB68C37F62/ultimate-parent-reporting-exception"
+     }
+    }
+   },
+   "links": {
+    "self": "https://api.gleif.org/api/v1/lei-records/9845006CT0EB68C37F62"
+   }
+  }
+ ]
+}

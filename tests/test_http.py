@@ -146,3 +146,77 @@ def test_raw_recorder_writes_bodies_and_a_manifest(tmp_path, fetcher):
     manifest = (tmp_path / "raw" / "manifest.jsonl").read_text(encoding="utf-8")
     assert '"status": 200' in manifest
     assert "Wed, 12 Aug 2026 08:47:01 GMT" in manifest
+
+
+class TestRetryAfterCap:
+    """A server-supplied wait is honoured, but not without limit."""
+
+    @responses.activate
+    def test_a_sane_retry_after_is_honoured_exactly(self, fetcher):
+        responses.add(responses.GET, URL, status=503, headers={"Retry-After": "7"})
+        responses.add(responses.GET, URL, json={"ok": True})
+        fetcher.get(URL)
+        assert 7 in fetcher.slept
+
+    @responses.activate
+    def test_an_absurd_retry_after_is_capped(self, fetcher):
+        # Retry-After: 86400 would park a nightly ingest for a day, and the
+        # operator would find a job that had been "running" since Tuesday.
+        responses.add(responses.GET, URL, status=503, headers={"Retry-After": "86400"})
+        responses.add(responses.GET, URL, json={"ok": True})
+        fetcher.max_retry_after = 300.0
+        fetcher.get(URL)
+        assert max(fetcher.slept) == 300.0
+
+    @responses.activate
+    def test_no_header_still_uses_exponential_backoff(self, fetcher):
+        responses.add(responses.GET, URL, status=503)
+        responses.add(responses.GET, URL, json={"ok": True})
+        fetcher.get(URL)
+        assert fetcher.slept  # the computed backoff, not a server instruction
+
+
+class TestRawLabelSafety:
+    def test_a_label_with_a_path_separator_cannot_escape_the_directory(self, tmp_path):
+        from eufinreg.http import RawRecorder, safe_label
+
+        assert "/" not in safe_label("solr:esma/../../etc/passwd")
+        recorder = RawRecorder(tmp_path / "raw")
+        assert safe_label("../../evil") == "evil"
+        recorder.close()
+
+    def test_a_label_keeps_its_readable_shape(self):
+        from eufinreg.http import safe_label
+
+        assert safe_label("upreg-p0001") == "upreg-p0001"
+        assert safe_label("") == "response"
+
+
+class TestMetrics:
+    @responses.activate
+    def test_a_successful_request_is_counted(self, fetcher):
+        responses.add(responses.GET, URL, json={"ok": True})
+        fetcher.get(URL)
+        assert fetcher.metrics.requests == 1
+        assert fetcher.metrics.by_status["200"] == 1
+        assert fetcher.metrics.by_outcome["ok"] == 1
+
+    @responses.activate
+    def test_retries_and_the_final_failure_are_distinguished(self, fetcher):
+        for _ in range(fetcher.retries + 1):
+            responses.add(responses.GET, URL, status=503)
+        with pytest.raises(FetchError):
+            fetcher.get(URL)
+        # Every attempt counted; only the last one is a failure.
+        assert fetcher.metrics.requests == fetcher.retries + 1
+        assert fetcher.metrics.retries == fetcher.retries
+        assert fetcher.metrics.failures == 1
+
+    @responses.activate
+    def test_waiting_is_counted_separately_from_the_wire(self, fetcher):
+        # High wait with low request time is politeness working; the reverse is
+        # a register in trouble. They must not be one number.
+        responses.add(responses.GET, URL, status=503, headers={"Retry-After": "5"})
+        responses.add(responses.GET, URL, json={"ok": True})
+        fetcher.get(URL)
+        assert fetcher.metrics.seconds_waiting >= 5
