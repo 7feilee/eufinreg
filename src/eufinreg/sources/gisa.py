@@ -55,7 +55,7 @@ from collections.abc import Iterator, Mapping
 from dataclasses import dataclass, field
 from typing import Any
 
-from ..http import Fetcher, FetchError
+from ..http import Fetcher, FetchError, strip_nul
 from ..profile import count_values
 from .base import Query, Source
 
@@ -234,7 +234,7 @@ class GisaOgdSource(Source):
         self.vintage = vintage_from_disposition(response.headers.get("Content-Disposition"))
         if payload.startswith(SEVENZIP_MAGIC):
             _, payload = decompress_7z(payload)
-        return payload.decode("utf-8-sig", errors="replace")
+        return strip_nul(payload.decode("utf-8-sig", errors="replace"))
 
     def _load(self, fetcher: Fetcher, query: Query) -> list[dict[str, Any]]:
         filters = self.build_filters(query)

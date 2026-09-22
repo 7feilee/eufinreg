@@ -220,3 +220,17 @@ class TestMetrics:
         responses.add(responses.GET, URL, json={"ok": True})
         fetcher.get(URL)
         assert fetcher.metrics.seconds_waiting >= 5
+
+
+class TestNulSafety:
+    @responses.activate
+    def test_get_text_strips_nul_so_csv_behaves_the_same_on_3_10(self, fetcher):
+        import csv
+        import io
+
+        responses.add(responses.GET, URL, body="name,id\r\na\x00b,1\r\n", content_type="text/csv")
+        text = fetcher.get_text(URL)
+        assert "\x00" not in text
+        # The point of stripping: this parse must not raise on any supported
+        # Python, and it does raise on 3.10 without it.
+        assert next(iter(csv.DictReader(io.StringIO(text))))["name"] == "ab"

@@ -152,6 +152,19 @@ class RawRecorder:
 _LABEL_SAFE = re.compile(r"[^A-Za-z0-9._-]+")
 
 
+def strip_nul(text: str) -> str:
+    """Remove NUL characters from decoded text.
+
+    Python 3.10's :mod:`csv` raises ``_csv.Error: line contains NUL`` while
+    3.11 and later pass it through, so a single stray byte in one cell of a
+    register's export aborts a source on some installs and not others. Registers
+    do produce them — they are compiled from national submissions. Stripping is
+    the only behaviour that is the same everywhere, and losing a NUL loses
+    nothing a reader wanted.
+    """
+    return text.replace("\x00", "") if "\x00" in text else text
+
+
 def safe_label(label: str) -> str:
     """Reduce a source-supplied label to something safe to put in a filename."""
     cleaned = _LABEL_SAFE.sub("-", str(label or "response")).strip("-.") or "response"
@@ -434,7 +447,7 @@ class Fetcher:
             response.headers.get("Content-Type") or ""
         ):
             response.encoding = "utf-8-sig"
-        return response.text
+        return strip_nul(response.text)
 
     def close(self) -> None:
         if self.session is not None:

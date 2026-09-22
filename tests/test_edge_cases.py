@@ -239,11 +239,21 @@ class TestSourceClientsUnderStrangeInput:
         assert GEWERBE.parse("nuts2,gewerbeart\n") == []
         assert GEWERBE.parse("") == []
 
-    def test_a_nul_byte_in_a_cell_survives_to_the_row(self):
+    def test_a_nul_byte_behaves_the_same_on_every_supported_python(self):
+        # Python 3.10's csv raises `line contains NUL`; 3.11+ passes it through.
+        # A register compiled from national submissions does emit them, and a
+        # source that dies on 3.10 but not 3.11 is the worst kind of bug.
+        from eufinreg.http import strip_nul
         from eufinreg.sources.finma import parse_csv
 
-        rows = parse_csv('"Name";"UID"\n"a\x00b";"1"\n')
+        rows = parse_csv(strip_nul('"Name";"UID"\n"a\x00b";"1"\n'))
         assert len(rows) == 1
+        assert rows[0]["Name"] == "ab"
+
+    def test_text_without_a_nul_is_returned_untouched(self):
+        from eufinreg.http import strip_nul
+
+        assert strip_nul("plain") == "plain"
 
     def test_ted_keeps_an_unexpected_nested_object_as_json(self):
         # Not a Python repr: --inspect has to be able to show it and a reader
