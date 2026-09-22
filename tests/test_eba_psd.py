@@ -333,3 +333,40 @@ class TestSourceBehaviour:
         responses.add(responses.GET, FILE_METADATA_URL, json=["unexpected"], status=200)
         with pytest.raises(FetchError, match="describing the current download"):
             list(PSD.iter_records(fetcher, Query()))
+
+
+class TestDigestSidecarFormats:
+    """A .sha256 sidecar comes in two conventional shapes; both must work."""
+
+    def test_a_bare_digest_is_accepted(self):
+        import hashlib
+
+        from eufinreg.sources.eba_psd import _check_digest
+
+        payload = b"hello"
+        _check_digest(payload, hashlib.sha256(payload).hexdigest(), what="x", url="u")
+
+    def test_a_sha256sum_line_is_accepted(self):
+        # `<digest>  <filename>` is what `sha256sum` writes and what this
+        # project's own snapshots emit. Comparing the whole line against a bare
+        # digest reports an intact file as truncated.
+        import hashlib
+
+        from eufinreg.sources.eba_psd import _check_digest
+
+        payload = b"hello"
+        line = f"{hashlib.sha256(payload).hexdigest()}  download-PSDMD-1.json\n"
+        _check_digest(payload, line, what="x", url="u")
+
+    def test_a_real_mismatch_is_still_caught(self):
+        from eufinreg.http import FetchError
+        from eufinreg.sources.eba_psd import _check_digest
+
+        with pytest.raises(FetchError, match="failed its SHA-256"):
+            _check_digest(b"hello", "0" * 64, what="x", url="u")
+
+    def test_an_absent_digest_is_not_an_error(self):
+        from eufinreg.sources.eba_psd import _check_digest
+
+        _check_digest(b"hello", "", what="x", url="u")
+        _check_digest(b"hello", "   ", what="x", url="u")

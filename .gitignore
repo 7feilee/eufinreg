@@ -23,3 +23,6 @@ snapshots/
 *.jsonl.sha256
 receipt-*.zip
 doctor.json
+
+# Harness session state — never belongs in the repository.
+.claude/

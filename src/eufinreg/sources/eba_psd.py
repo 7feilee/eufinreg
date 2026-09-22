@@ -153,7 +153,16 @@ def _sha256(payload: bytes) -> str:
 
 
 def _check_digest(payload: bytes, expected: str, *, what: str, url: str) -> None:
-    expected = (expected or "").strip().lower()
+    """Compare a payload against a published digest.
+
+    ``expected`` may be a bare hex digest or a whole ``sha256sum`` line —
+    ``<digest>  <filename>`` — because that is the conventional content of a
+    ``.sha256`` sidecar and the register is free to switch between them. Taking
+    the first field rather than the whole string is the difference between a
+    working checksum and a "the download is truncated" error on a file that is
+    perfectly intact.
+    """
+    expected = (expected or "").strip().split()[0].lower() if (expected or "").strip() else ""
     if not expected:
         return
     actual = _sha256(payload)
