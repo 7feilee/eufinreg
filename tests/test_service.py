@@ -268,3 +268,16 @@ class TestPersonalDataGate:
             expires_at=1e12,
         )
         assert service.rows("eba-psd", select="ALL")["returned_rows"] == 1
+
+
+class TestCatalogueForTheUI:
+    def test_it_says_which_columns_are_the_name_and_the_identifier(self, service):
+        # Without these the front end can only dump every column, which is how
+        # a register browser ends up unreadable.
+        entry = next(e for e in service.catalogue() if e["key"] == "finma")
+        assert entry["identifier_columns"] == ["UID", "uid_digits"]
+        assert entry["name_columns"] == ["Name"]
+
+    def test_a_reference_table_declares_neither(self, service):
+        entry = next(e for e in service.catalogue() if e["key"] == "gisa-codes")
+        assert entry["identifier_columns"] == [] and entry["name_columns"] == []

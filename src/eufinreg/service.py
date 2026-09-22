@@ -138,6 +138,10 @@ class RegisterService:
                 "select_help": source.select_help,
                 "enum_fields": list(source.enum_fields),
                 "key_columns": list(source.key_columns),
+                # The UI needs to know which column is the name and which is the
+                # identifier, or it can only dump every column and hope.
+                "identifier_columns": list(source.identifier_columns),
+                "name_columns": list(source.name_columns),
                 "block_structured": bool(source.block_structured),
                 "expensive": EXPENSIVE.get(source.key, ""),
                 "cache_ttl": CACHE_TTL.get(source.key, DEFAULT_TTL),
