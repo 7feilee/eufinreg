@@ -22,7 +22,7 @@ import argparse
 import json
 import sys
 import time
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -502,6 +502,13 @@ def cmd_store(args: argparse.Namespace) -> int:
 # -- doctor ----------------------------------------------------------------
 
 
+def _state(check: Mapping[str, Any]) -> str:
+    """Three outcomes, not two. ``empty`` is a working read of a bare register."""
+    if not check["ok"]:
+        return "FAIL"
+    return "empty" if check.get("empty") else "ok"
+
+
 def cmd_doctor(args: argparse.Namespace) -> int:
     """Ask every register whether it is still the shape this client expects.
 
@@ -539,18 +546,42 @@ def cmd_doctor(args: argparse.Namespace) -> int:
             present: set[str] = set()
             for row in rows:
                 present.update(row.keys())
+
+            # A register can be correctly read and legitimately contain nothing.
+            # Where the source can name its columns independently of its rows,
+            # the header is the shape, and an empty register is a fact about the
+            # market rather than a fault in this client.
+            columns = tuple(source.probe_columns(fetcher, query)) if not rows else ()
+            if columns:
+                present = set(columns)
+
             missing = [name for name in source.expected_fields if name not in present]
             entry.update(
                 rows=len(rows),
                 missing=missing,
-                ok=bool(rows) and not missing,
-                note="" if rows else "the register returned no rows for the probe",
+                ok=bool(rows or columns) and not missing,
+                note="",
             )
-            if missing:
+            if not rows and not columns:
+                # Nothing came back and nothing can be said about the shape.
+                # "Fields are missing" would be the wrong diagnosis: there was
+                # no response to miss them from.
+                entry["note"] = (
+                    "the register returned no rows for the probe and no columns — "
+                    "so there is no evidence the read worked at all"
+                )
+            elif missing:
                 entry["note"] = (
                     f"missing expected field(s): {', '.join(missing)} — the register has "
                     f"changed shape and this client's output cannot be trusted"
                 )
+            elif columns:
+                entry["note"] = (
+                    f"the register is empty — no entries published. The read worked: "
+                    f"all {len(columns)} columns are still served, including every "
+                    f"field this client depends on"
+                )
+                entry["empty"] = True
         except Exception as exc:  # deliberately broad: a drift check that stops at the
             # first surprise is not a drift check. Schema drift usually arrives
             # as a KeyError inside a parser, which is exactly what this is for.
@@ -559,7 +590,7 @@ def cmd_doctor(args: argparse.Namespace) -> int:
             fetcher.close()
             entry["seconds"] = round(time.monotonic() - started, 1)
         checks.append(entry)
-        log(f"{key}: {'ok' if entry['ok'] else 'FAIL'} ({entry['rows']} rows) {entry['note']}")
+        log(f"{key}: {_state(entry)} ({entry['rows']} rows) {entry['note']}")
 
     failed = [c for c in checks if not c["ok"]]
     if args.json:
@@ -577,7 +608,7 @@ def cmd_doctor(args: argparse.Namespace) -> int:
                 [
                     [
                         c["source"],
-                        "ok" if c["ok"] else "FAIL",
+                        _state(c),
                         c["rows"],
                         c.get("seconds", ""),
                         c["note"][:70],

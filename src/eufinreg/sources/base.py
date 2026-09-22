@@ -99,6 +99,23 @@ class Source(ABC):
     #: shape this client expects.
     probe_query: str = ""
 
+    def probe_columns(self, fetcher: Fetcher, query: Query) -> tuple[str, ...]:
+        """The column names the register served, regardless of how many rows.
+
+        A register can be correctly read and still legitimately contain nothing:
+        ESMA's asset-referenced token file has a header and no data rows, because
+        no issuer has been authorised yet. Checking :attr:`expected_fields`
+        against the returned *rows* calls that drift, which is wrong — the client
+        is working and the register is empty.
+
+        Where a source can name its columns independently of its rows (a CSV
+        header, a declared schema), it should override this so ``doctor`` can
+        verify the shape either way. The default returns ``()``, meaning "I
+        cannot tell", and an empty result stays a failure — for a register that
+        should never be empty, silence is exactly the symptom worth catching.
+        """
+        return ()
+
     def flatten_config(self) -> FlattenConfig:
         return FlattenConfig()
 

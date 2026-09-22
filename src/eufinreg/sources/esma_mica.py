@@ -167,6 +167,7 @@ class MicaCsvSource(Source):
     derived: dict[str, tuple[str, Any]] = field(default_factory=dict)
     base_url: str = MICA_BASE
     _cache: dict[str, list[dict[str, Any]]] = field(default_factory=dict, repr=False)
+    _headers: dict[str, tuple[str, ...]] = field(default_factory=dict, repr=False)
 
     @property
     def url(self) -> str:
@@ -180,6 +181,7 @@ class MicaCsvSource(Source):
         :func:`eufinreg.sources.get_source` calls it on every lookup.
         """
         self._cache.clear()
+        self._headers.clear()
 
     # -- reading ----------------------------------------------------------
 
@@ -187,10 +189,11 @@ class MicaCsvSource(Source):
         if self.url in self._cache:
             return self._cache[self.url]
         text = fetcher.get_text(self.url, label=self.key)
-        rows = parse_csv(text)
+        rows, header = parse_csv(text)
         if not query.extra.get("no_derived"):
             rows = [self._augment(row) for row in rows]
         self._cache[self.url] = rows
+        self._headers[self.url] = header
         return rows
 
     def _augment(self, row: dict[str, Any]) -> dict[str, Any]:
@@ -205,6 +208,11 @@ class MicaCsvSource(Source):
             if query.max_docs and index >= query.max_docs:
                 return
             yield row
+
+    def probe_columns(self, fetcher: Fetcher, query: Query) -> tuple[str, ...]:
+        """The CSV header, which exists whether or not the file has any rows."""
+        self._load(fetcher, query)  # cached; no second request
+        return self._headers.get(self.url, ())
 
     def count_values(
         self, fetcher: Fetcher, query: Query, field_name: str
@@ -234,8 +242,13 @@ class MicaCsvSource(Source):
         return pairs, note
 
 
-def parse_csv(text: str) -> list[dict[str, Any]]:
-    """Parse a MiCA CSV into dicts, tolerating its real-world quirks.
+def parse_csv(text: str) -> tuple[list[dict[str, Any]], tuple[str, ...]]:
+    """Parse a MiCA CSV into ``(rows, header)``, tolerating its real-world quirks.
+
+    The header is returned separately because it survives an empty file: ESMA's
+    asset-referenced token register is a header and nothing else, and that is a
+    correct answer, not a broken read. ``doctor`` checks the shape against the
+    header when there are no rows to check it against.
 
     * a UTF-8 BOM (handled by the caller's ``utf-8-sig`` decoding);
     * a trailing comma in the header, producing one nameless column;
@@ -245,6 +258,9 @@ def parse_csv(text: str) -> list[dict[str, Any]]:
     """
     reader = csv.DictReader(io.StringIO(text))
     rows: list[dict[str, Any]] = []
+    header: tuple[str, ...] = tuple(
+        name.strip() for name in (reader.fieldnames or []) if name and name.strip()
+    )
     for raw in reader:
         row: dict[str, Any] = {}
         for name, value in raw.items():
@@ -259,7 +275,7 @@ def parse_csv(text: str) -> list[dict[str, Any]]:
             row[name] = (value or "").strip()
         if any(v for v in row.values()):
             rows.append(row)
-    return rows
+    return rows, header
 
 
 _COMMON_ENUMS = ("ae_competentAuthority", "ae_homeMemberState")

@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
     inputs:
       sources:
-        description: "Space-separated source keys (default: all of them)"
+        description: "Space-separated source keys (blank = every register)"
         required: false
         default: ""
 
@@ -30,7 +30,7 @@ jobs:
   doctor:
     name: are the registers still the shape we expect?
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
 
@@ -44,25 +44,78 @@ jobs:
 
       - name: Probe every register
         id: doctor
-        run: |
+        env:
+          # Through the environment, never interpolated into the shell. A
+          # workflow_dispatch input is attacker-controlled the moment anyone
+          # else gets write access, and `${{ }}` inside a run block is string
+          # substitution before bash ever sees it.
+          SOURCES: ${{ inputs.sources }}
           # Identify the client. A CI runner hitting a regulator's server
           # anonymously is exactly what the etiquette rules are about.
-          UA="eufinreg-drift/${{ github.sha }} (+https://github.com/${{ github.repository }}; CI shape check)"
-          SOURCES=""
-          for key in ${{ github.event.inputs.sources }}; do SOURCES="$SOURCES --source $key"; done
-          uv run eufinreg doctor $SOURCES \
-            --user-agent "$UA" \
+          USER_AGENT: "eufinreg-drift/${{ github.sha }} (+https://github.com/${{ github.repository }}; CI shape check)"
+        run: |
+          set -uo pipefail
+          args=()
+          for key in ${SOURCES:-}; do args+=(--source "$key"); done
+
+          # GitHub runs this under `bash -e`, which would kill the step at the
+          # first non-zero exit — before the status could be recorded. Drift is
+          # the expected outcome here, not a crash, so handle it deliberately.
+          set +e
+          # -4 because GitHub-hosted runners have no IPv6 route while ESMA's CDN
+          # publishes AAAA records, and Python has no Happy Eyeballs: without
+          # this every ESMA request waits out the full connect timeout first.
+          uv run eufinreg doctor "${args[@]}" \
+            --ipv4 \
+            --user-agent "$USER_AGENT" \
             --delay 2 \
             --sample 25 \
-            --json > doctor.json || echo "failed=true" >> "$GITHUB_OUTPUT"
-          python3 -c "
-          import json
-          report = json.load(open('doctor.json'))
-          print(f\"{report['checked']} checked, {report['failed']} failed\")
-          for check in report['checks']:
-              state = 'ok  ' if check['ok'] else 'FAIL'
-              print(f\"{state} {check['source']:14} rows={check['rows']:<5} {check['note']}\")
-          "
+            --json > doctor.json
+          status=$?
+          set -e
+
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+          if [ "$status" -ne 0 ]; then
+            echo "failed=true" >> "$GITHUB_OUTPUT"
+          fi
+          exit 0
+
+      - name: Summarise
+        if: always()
+        run: |
+          set -uo pipefail
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, pathlib, sys
+
+          path = pathlib.Path("doctor.json")
+          if not path.exists() or not path.stat().st_size:
+              print("## Register drift\n\n`doctor` produced no report — it failed before "
+                    "it could write one. See the probe step's log.")
+              sys.exit(0)
+
+          report = json.loads(path.read_text())
+          print(f"## Register drift — {report['checked']} checked, {report['failed']} failed\n")
+          print("| | register | rows | secs | note |")
+          print("|---|---|---:|---:|---|")
+          for check in sorted(report["checks"], key=lambda c: (c["ok"], c["source"])):
+              # Three states. An empty register read correctly is not a failure,
+              # but it is worth seeing at a glance that it is empty.
+              mark = "❌" if not check["ok"] else ("⚪" if check.get("empty") else "✅")
+              note = (check["note"] or "").replace("|", "\\|")[:160]
+              print(f"| {mark} | `{check['source']}` | {check['rows']} | {check.get('seconds','')} | {note} |")
+          PY
+          # Repeat it in the log, so the failure email is readable on its own.
+          python3 - <<'PY'
+          import json, pathlib
+          path = pathlib.Path("doctor.json")
+          if not path.exists() or not path.stat().st_size:
+              raise SystemExit("no report written")
+          report = json.loads(path.read_text())
+          print(f"{report['checked']} checked, {report['failed']} failed")
+          for check in report["checks"]:
+              state = "FAIL " if not check["ok"] else ("empty" if check.get("empty") else "ok   ")
+              print(f"{state} {check['source']:14} rows={check['rows']:<5} {check['note']}")
+          PY
 
       - name: Keep the report
         if: always()
@@ -71,6 +124,7 @@ jobs:
           name: doctor-report
           path: doctor.json
           retention-days: 90
+          if-no-files-found: warn
 
       - name: Fail if a register changed shape
         if: steps.doctor.outputs.failed == 'true'

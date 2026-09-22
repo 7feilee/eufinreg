@@ -361,3 +361,67 @@ class TestNetworkFlags:
         from eufinreg.cli import build_parser as reading_parser
 
         assert reading_parser().parse_args(["-4"]).ipv4 is True
+
+
+class TestDoctorTellsEmptyFromBroken:
+    """A register with nothing in it is a fact about the market, not a bug.
+
+    This is the case that made the check earn its keep: the first full drift run
+    called ESMA's asset-referenced token register "changed shape" because it
+    returned zero rows. It had not changed at all — no issuer has been authorised
+    under that article yet, so the file is a header and nothing else.
+    """
+
+    ART_URL = "https://www.esma.europa.eu/sites/default/files/2024-12/ARTZZ.csv"
+    HEADER = "ae_competentAuthority,ae_homeMemberState,ae_lei_name,ae_lei\n"
+
+    def _doctor(self, capsys, expected_code):
+        code = cli_main(["doctor", "--source", "mica-art", "--delay", "0", "--json", "--quiet"])
+        assert code == expected_code
+        report = json.loads(capsys.readouterr().out)
+        return report["checks"][0]
+
+    @responses.activate
+    def test_a_header_with_no_rows_passes_and_says_why(self, capsys):
+        responses.add(responses.GET, self.ART_URL, body=self.HEADER, content_type="text/csv")
+        check = self._doctor(capsys, EXIT_OK)
+        assert check["ok"] is True
+        assert check["empty"] is True
+        assert check["rows"] == 0
+        assert "no entries published" in check["note"]
+
+    @responses.activate
+    def test_an_empty_register_that_drops_a_field_still_fails(self, capsys):
+        # The whole point of not waving empties through: the header is still
+        # checked, so a rename is caught even with nothing in the file.
+        responses.add(
+            responses.GET,
+            self.ART_URL,
+            body="ae_competentAuthority,ae_homeMemberState,legal_name\n",
+            content_type="text/csv",
+        )
+        check = self._doctor(capsys, EXIT_FAILED)
+        assert check["ok"] is False
+        assert check["missing"] == ["ae_lei_name"]
+        assert "changed shape" in check["note"]
+
+    @responses.activate
+    def test_a_body_with_no_header_at_all_fails(self, capsys):
+        # A CDN serving an empty 200 is the failure mode this must still catch.
+        responses.add(responses.GET, self.ART_URL, body="", content_type="text/csv")
+        check = self._doctor(capsys, EXIT_FAILED)
+        assert check["ok"] is False
+        assert "no evidence the read worked at all" in check["note"]
+
+    @responses.activate
+    def test_rows_are_checked_against_the_rows_not_the_header(self, capsys):
+        responses.add(
+            responses.GET,
+            self.ART_URL,
+            body=self.HEADER + "BaFin,DE,Example AG,529900T8BM49AURSDO55\n",
+            content_type="text/csv",
+        )
+        check = self._doctor(capsys, EXIT_OK)
+        assert check["rows"] == 1
+        assert check.get("empty") is not True
+        assert check["note"] == ""

@@ -33,14 +33,15 @@ class TestCsvQuirks:
     def test_records_survive_values_containing_newlines(self):
         text = load_text("casps_sample.csv")
         # The fixture is a real capture: more physical lines than records.
-        assert text.count("\n") > len(parse_csv(text))
+        rows, _ = parse_csv(text)
+        assert text.count("\n") > len(rows)
 
     def test_trailing_comma_in_the_header_does_not_create_a_column(self):
-        rows = parse_csv(load_text("casps_sample.csv"))
+        rows, _ = parse_csv(load_text("casps_sample.csv"))
         assert "" not in rows[0]
 
     def test_documented_fields_are_present(self):
-        rows = parse_csv(load_text("casps_sample.csv"))
+        rows, _ = parse_csv(load_text("casps_sample.csv"))
         for name in (
             "ae_competentAuthority",
             "ae_lei_name",
@@ -50,15 +51,27 @@ class TestCsvQuirks:
             assert name in rows[0]
 
     def test_rows_with_more_fields_than_the_header_are_kept(self):
-        rows = parse_csv("a,b\n1,2,3,4\n")
+        rows, _ = parse_csv("a,b\n1,2,3,4\n")
         assert rows[0]["a"] == "1"
         assert rows[0]["_extra_columns"] == "3 | 4"
 
     def test_blank_lines_are_skipped(self):
-        assert parse_csv("a,b\n1,2\n,\n") == [{"a": "1", "b": "2"}]
+        assert parse_csv("a,b\n1,2\n,\n") == ([{"a": "1", "b": "2"}], ("a", "b"))
 
     def test_empty_file_is_not_an_error(self):
-        assert parse_csv("") == []
+        assert parse_csv("") == ([], ())
+
+    def test_a_header_with_no_rows_still_reports_its_columns(self):
+        # ESMA's asset-referenced token file is exactly this: a header and
+        # nothing else, because no issuer has been authorised. The columns are
+        # the only evidence that the read worked, so they must survive.
+        rows, header = parse_csv("ae_lei_name,ae_homeMemberState\n")
+        assert rows == []
+        assert header == ("ae_lei_name", "ae_homeMemberState")
+
+    def test_the_header_is_stripped_of_the_trailing_comma_column(self):
+        _, header = parse_csv("a,b,\n1,2,\n")
+        assert header == ("a", "b")
 
 
 class TestServiceSplitting:
