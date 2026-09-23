@@ -266,6 +266,11 @@
   .roster-scroll table.tbl { min-width: 620px; }
   .roster-scroll thead th { position: sticky; top: 0; background: var(--paper); z-index: 1; padding-top: 10px; }
   .tbl .flag { text-align: right; white-space: nowrap; }
+  .dl {
+    margin-top: 18px; padding: 13px 16px; font-size: 14.5px;
+    background: var(--card); border: 1px solid var(--rule); border-radius: 4px;
+  }
+  .dl a { font-family: var(--mono); font-size: 13.5px; }
   .empty-note { padding: 22px 0; color: var(--text-soft); font-size: 14.5px; }
   /* explicit, because a UA's tr { display: table-row } can outrank [hidden] */
   .tbl tr[hidden] { display: none; }
@@ -3425,6 +3430,12 @@ cashify">
       </table>
       <p class="empty-note" id="nohits" hidden>No firm matches that search.</p>
     </div>
+    <p class="dl">
+      Take the whole list: <a href="casps.csv">casps.csv</a> ·
+      <a href="casps.json">casps.json</a> — all 349 firms with LEI, competent authority,
+      authorisation date, the ten permissions written out, the full country list and the
+      cross-reference basis.
+    </p>
     <p style="margin-top:18px; font-size:14.5px; color:var(--text-soft)">
       Services are the ten MiCA permissions lettered <b>a</b>–<b>j</b>; held ones are inked, withheld
       ones are a stop. Countries is the passporting footprint the firm actually notified, not its
