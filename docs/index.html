@@ -100,6 +100,45 @@
   }
   .fact span { display: block; margin-top: 7px; font-size: 13.5px; color: var(--on-ink-dim); line-height: 1.45; }
 
+
+  /* ---- obligation reference ------------------------------------------- */
+  .frameworks {
+    margin-top: clamp(26px, 4vw, 38px); padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,.16);
+    display: flex; flex-wrap: wrap; gap: 7px 8px; align-items: center;
+  }
+  .frameworks .fw {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.07em;
+    padding: 4px 9px 3px; border-radius: 3px; white-space: nowrap;
+    border: 1px solid rgba(255,255,255,.28); color: #DCE4F0;
+  }
+  .frameworks .fw.contract { border-style: dashed; border-color: rgba(224,135,122,.65); color: #E8A99F; }
+  .frameworks .fw-note { flex-basis: 100%; margin-top: 6px; font-size: 12.5px; color: var(--on-ink-dim); }
+  .frameworks .fw-note b { color: #E8A99F; font-weight: 400; }
+
+  .ref { border-top: 1.5px solid var(--rule-hard); margin-top: clamp(26px,3.5vw,36px); }
+  .ref-row {
+    display: grid; gap: 4px 20px; padding: 16px 0;
+    border-bottom: 1px solid var(--rule);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.35fr);
+  }
+  .ref-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; }
+  .ref-name { font-family: var(--serif); font-size: 19px; line-height: 1.2; }
+  .ref-cite { font-family: var(--mono); font-size: 11.5px; color: var(--text-faint); }
+  .ref-when {
+    font-family: var(--mono); font-size: 11.5px; color: var(--text-soft);
+    background: var(--card); border: 1px solid var(--rule); border-radius: 3px; padding: 1px 6px;
+  }
+  .ref-who { grid-column: 1; font-size: 14px; color: var(--text-soft); margin-top: 2px; }
+  .ref-out { grid-column: 2; grid-row: 1 / span 2; font-size: 14.2px; color: var(--text-soft); }
+  .ref-out .yes { color: var(--seal); font-weight: 600; }
+  .ref-out .no  { color: var(--stamp); font-weight: 600; }
+  .ref-out code { font-family: var(--mono); font-size: 12.4px; }
+  @media (max-width: 760px) {
+    .ref-row { grid-template-columns: 1fr; }
+    .ref-out { grid-column: 1; grid-row: auto; margin-top: 6px; }
+  }
+
   /* ---- sections ------------------------------------------------------- */
   section { padding-block: clamp(46px, 7vw, 84px); border-top: 1px solid var(--rule); }
   section:first-of-type { border-top: 0; }
@@ -366,10 +405,180 @@
       <div class="fact"><b>+23</b><span>firms joined the EU crypto-licence register in six weeks — a 7.0% rise</span></div>
       <div class="fact"><b>0</b><span>authorised asset-referenced token issuers, since the rules began to apply</span></div>
     </div>
+      <div class="frameworks">
+        <span class="fw">MiFID II</span>
+        <span class="fw">MiCA</span>
+        <span class="fw">DORA</span>
+        <span class="fw">PSD2</span>
+        <span class="fw">TFR · travel rule</span>
+        <span class="fw">NIS2</span>
+        <span class="fw">GDPR</span>
+        <span class="fw">AMLR</span>
+        <span class="fw">MDR</span>
+        <span class="fw">CTR</span>
+        <span class="fw contract">ISO/IEC 27001</span>
+        <span class="fw contract">PCI DSS</span>
+        <span class="fw contract">SOC 2</span>
+        <span class="fw-note">
+          Solid is law, and law keeps a list. <b>Dashed is contract</b> — real, enforced, audited, and
+          leaving no public record of who holds it. <a href="#obligations-ref" style="color:#DCE4F0">The reference is below</a>.
+        </span>
+      </div>
   </div>
 </header>
 
 <main>
+
+<section id="obligations-ref">
+  <div class="wrap">
+    <p class="kicker">Reference</p>
+    <h2>The obligations behind the rows — and which of them keep a list</h2>
+    <p class="lede">
+      Every firm counted on this page carries a stack of requirements, and they are not the same kind
+      of thing. Some are <strong>law</strong>: they bind whether or not anyone asks, a public authority
+      can refuse you, and refusal power implies a register — which is why this page can count them at
+      all. Others are <strong>contract</strong>: a customer or a card scheme requires them, an auditor
+      checks them, and <em>nothing about the outcome is published</em>. ISO 27001 and PCI DSS are the
+      control group for this entire project. They are seriously enforced and completely invisible.
+      This is a map for orientation, not legal advice.
+    </p>
+
+    <div class="band">
+      <span>Law · an authority can refuse you, so there is a register</span>
+      <span class="band-note">counted on this page where the register is public</span>
+    </div>
+    <div class="ref">
+
+      <div class="ref-row">
+        <div class="ref-head"><span class="ref-name">MiFID II / MiFIR</span>
+          <span class="ref-cite">Dir. 2014/65/EU · Reg. 600/2014</span>
+          <span class="ref-when">3 Jan 2018</span></div>
+        <div class="ref-who">Investment firms, trading venues, systematic internalisers. Authorisation by the national competent authority, passportable across the EEA.</div>
+        <div class="ref-out"><span class="yes">Public register.</span> ESMA's upreg core — <strong>5,319 active investment-firm head offices</strong> counted here, with each firm's authorised services. The caveat proved above still applies: which services appear depends on what the national authority chooses to report.</div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-head"><span class="ref-name">MiCA</span>
+          <span class="ref-cite">Reg. (EU) 2023/1114</span>
+          <span class="ref-when">30 Jun 2024 · 30 Dec 2024</span></div>
+        <div class="ref-who">Crypto-asset service providers, asset-referenced and e-money token issuers, white-paper notifiers. Titles III–IV applied first; the CASP regime from 30 December 2024.</div>
+        <div class="ref-out"><span class="yes">Public register.</span> ESMA's interim MiCA register — <strong>349 authorised CASPs</strong>, <strong>0 ART issuers</strong>, 49 EMT issuers, and under Article 110 a register of <strong>174 firms operating without authorisation</strong>. All listed and downloadable above.</div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-head"><span class="ref-name">DORA</span>
+          <span class="ref-cite">Reg. (EU) 2022/2554</span>
+          <span class="ref-when">17 Jan 2025</span></div>
+        <div class="ref-who">Around twenty categories of financial entity — <strong>including every investment firm and every CASP on this page</strong>. ICT risk management, incident classification and reporting, resilience testing, and third-party contractual requirements.</div>
+        <div class="ref-out"><span class="no">Mostly not public.</span> Each entity maintains a <em>register of information</em> on its ICT third-party arrangements and reports it to its supervisor — supervisory, not published. What <em>is</em> public is the other end: the ESAs designate and publish <strong>critical ICT third-party providers</strong>. So DORA tells you who the systemically important vendors are, never who uses them.</div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-head"><span class="ref-name">Transfer of Funds Regulation</span>
+          <span class="ref-cite">Reg. (EU) 2023/1113 · the travel rule</span>
+          <span class="ref-when">30 Dec 2024</span></div>
+        <div class="ref-who">Originator and beneficiary information on crypto-asset transfers. Binds CASPs and payment service providers, and arrived with MiCA deliberately.</div>
+        <div class="ref-out"><span class="no">No register of its own.</span> Compliance rides on the MiCA authorisation — the CASP list above is the closest public proxy for who is in scope.</div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-head"><span class="ref-name">PSD2</span>
+          <span class="ref-cite">Dir. (EU) 2015/2366 · register under Impl. Reg. (EU) 2019/410</span>
+          <span class="ref-when">13 Jan 2018</span></div>
+        <div class="ref-who">Payment institutions, e-money institutions, account information and payment initiation providers, plus their agents and branches.</div>
+        <div class="ref-out"><span class="yes">Public register, and required to be machine-readable by law.</span> The EBA's nightly golden copy — <strong>6,427 institutions</strong> counted here. PSD3 and the Payment Services Regulation are set to replace it — check where they stand before relying on this line.</div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-head"><span class="ref-name">NIS2</span>
+          <span class="ref-cite">Dir. (EU) 2022/2555</span>
+          <span class="ref-when">transposition due 17 Oct 2024</span></div>
+        <div class="ref-who">Essential and important entities across eighteen sectors. For financial entities DORA is <em>lex specialis</em>, so the firms on this page answer to DORA rather than NIS2 for ICT risk.</div>
+        <div class="ref-out"><span class="no">No single register.</span> Member states register entities nationally, at differing speeds and with differing publication practice. There is no EU-level list to count.</div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-head"><span class="ref-name">GDPR</span>
+          <span class="ref-cite">Reg. (EU) 2016/679</span>
+          <span class="ref-when">25 May 2018</span></div>
+        <div class="ref-who">Anyone processing personal data. No authorisation step, so no approval list — which is precisely why there is nothing to enumerate.</div>
+        <div class="ref-out"><span class="no">No register of controllers.</span> What is published is adversarial: supervisory decisions, fines and the EDPB's records. This project applies the rule to itself — the ~322,000 PSD2 agent records are largely natural persons and are excluded by default.</div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-head"><span class="ref-name">AML package</span>
+          <span class="ref-cite">Reg. (EU) 2024/1624 · AMLA Reg. (EU) 2024/1620</span>
+          <span class="ref-when">from 10 Jul 2027</span></div>
+        <div class="ref-who">Obliged entities, explicitly including crypto-asset service providers. Supervision centralises under the new authority, AMLA.</div>
+        <div class="ref-out"><span class="no">Restricted.</span> Beneficial-ownership registers exist at member-state level, but general public access was struck down in <em>WM and Sovim</em> (C-37/20) in November 2022; access now requires legitimate interest and varies by country.</div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-head"><span class="ref-name">MDR</span>
+          <span class="ref-cite">Reg. (EU) 2017/745</span>
+          <span class="ref-when">26 May 2021</span></div>
+        <div class="ref-who">Medical device manufacturers, importers, authorised representatives, procedure-pack producers — and the notified bodies that certify them.</div>
+        <div class="ref-out"><span class="yes">Public register.</span> EUDAMED — <strong>49,832 economic operators</strong> and 70 notified bodies counted here, with the registered contact details the regulation requires.</div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-head"><span class="ref-name">Clinical Trials Regulation</span>
+          <span class="ref-cite">Reg. (EU) 536/2014</span>
+          <span class="ref-when">31 Jan 2022</span></div>
+        <div class="ref-who">Sponsors of clinical trials conducted in the EU, and the trials themselves.</div>
+        <div class="ref-out"><span class="yes">Public register.</span> CTIS — <strong>12,467 authorised trials</strong>, though its API will page through only the first 10,000 while reporting the true total.</div>
+      </div>
+    </div>
+
+    <div class="band" style="margin-top:clamp(34px,4vw,48px)">
+      <span>Contract · seriously enforced, and no list anywhere</span>
+      <span class="band-note">the control group for this whole method</span>
+    </div>
+    <div class="ref">
+
+      <div class="ref-row">
+        <div class="ref-head"><span class="ref-name">ISO/IEC 27001</span>
+          <span class="ref-cite">:2022 edition</span>
+          <span class="ref-when">2013 transition closed 31 Oct 2025</span></div>
+        <div class="ref-who">An information security management system, certified by an accredited certification body. Almost always driven by a customer's procurement requirement rather than by law.</div>
+        <div class="ref-out"><span class="no">No public register of certified organisations.</span> National accreditation bodies publish the <em>certification bodies</em> they accredit — not those bodies' clients. So the only way to learn that a company holds 27001 is that the company tells you, which is will, not obligation. Treat a trust-page badge accordingly: verify the certificate number and scope with the issuing body.</div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-head"><span class="ref-name">PCI DSS</span>
+          <span class="ref-cite">v4 series · PCI Security Standards Council</span>
+          <span class="ref-when">v3.2.1 retired 31 Mar 2024 · future-dated v4 requirements from 31 Mar 2025</span></div>
+        <div class="ref-who">Anyone storing, processing or transmitting cardholder data. Not law: it binds through the card schemes' contracts and the acquirer relationship, with validation effort set by merchant or service-provider level.</div>
+        <div class="ref-out"><span class="no">No public register of compliant entities.</span> The Council publishes validated <em>assessors</em> (QSA, ASV) and validated payment software and devices; the card schemes maintain their own service-provider registries. A merchant's own compliance status is a matter between it, its acquirer and its assessor.</div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-head"><span class="ref-name">SOC 2</span>
+          <span class="ref-cite">AICPA attestation</span>
+          <span class="ref-when">Type I / Type II reports</span></div>
+        <div class="ref-who">Service organisations, on customer demand. An auditor's attestation over the trust services criteria, covering a stated period.</div>
+        <div class="ref-out"><span class="no">No register at all.</span> The report is delivered under non-disclosure and shared deal by deal. Nothing about it is enumerable from outside.</div>
+      </div>
+
+      <div class="ref-row">
+        <div class="ref-head"><span class="ref-name">TIBER-EU and DORA TLPT</span>
+          <span class="ref-cite">ECB framework · DORA Arts. 26–27</span>
+          <span class="ref-when">TLPT under DORA from 17 Jan 2025</span></div>
+        <div class="ref-who">Threat-led penetration testing for significant financial entities, run with the supervisor's involvement and modelled on TIBER-EU.</div>
+        <div class="ref-out"><span class="no">Deliberately not public.</span> The point of the exercise is that results stay with the entity and its authority. Which firms are even in scope is not published.</div>
+      </div>
+    </div>
+
+    <p style="margin-top:26px">
+      The split is the whole argument of this page. A licence is worth counting because
+      <strong>no licensed firm can choose not to appear</strong> in the register — the authority that
+      could refuse has to keep the list, or it cannot enforce. A certification is not countable at all,
+      because nobody with the power to refuse publishes who they approved. Both are real obligations.
+      Only one of them leaves a public record, and confusing the two is how a plausible market map
+      turns out to be a map of who has a marketing page.
+    </p>
+  </div>
+</section>
 
 <section id="ledger">
   <div class="wrap">
