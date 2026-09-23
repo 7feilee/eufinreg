@@ -1,0 +1,244 @@
+{
+ "title": "Family offices and the licences they need",
+ "counted": "2026-09-23",
+ "note": "There is no pan-European or global register of family offices. A single family office is engineered into an exemption and never files; a licensed multi-family office files under a generic category. Only two registers name the family office directly: Luxembourg's CSSF (as a licence) and the US SEC's EDGAR (by name, for offices that must file).",
+ "licence_map": [
+  {
+   "place": "European Union",
+   "framework": "MiFID II (2014/65/EU) · AIFMD (2011/61/EU)",
+   "single_family_office": "Outside both. AIFMD recital 7 says family-office vehicles investing private wealth without raising external capital are not AIFs; MiFID II bites only on a service provided to third parties, which serving your own family is not.",
+   "multi_family_office": "The activity is licensed, never the label: a MiFID II investment-firm authorisation for advice, order-handling or discretionary management; an AIFM authorisation to manage funds. Passportable across the EEA.",
+   "in_public_register_as_family_office": "Not as a family office",
+   "register_url": ""
+  },
+  {
+   "place": "Luxembourg",
+   "framework": "CSSF · Law of 5 Apr 1993, Art. 28-6 · Law of 21 Dec 2012",
+   "single_family_office": "A family serving only itself is out of scope and needs no authorisation.",
+   "multi_family_office": "The one European regime that licenses the thing by name: a specialised-PFS “Family Office” authorisation (€50k capital). The title itself is reserved by law to regulated professions.",
+   "in_public_register_as_family_office": "In the register",
+   "register_url": "https://edesk.apps.cssf.lu/search-entities/search?st=advanced&entType=SPP"
+  },
+  {
+   "place": "United Kingdom",
+   "framework": "FCA · FSMA 2000 (Regulated Activities Order)",
+   "single_family_office": "No authorisation where it carries on no regulated activity for others; the intra-group and “by way of business” tests keep the pure single family out.",
+   "multi_family_office": "An FCA Part 4A permission for each regulated activity it performs — managing investments, advising, arranging.",
+   "in_public_register_as_family_office": "Not as a family office",
+   "register_url": "https://register.fca.org.uk/"
+  },
+  {
+   "place": "Switzerland",
+   "framework": "FINMA · FinIA (FINIG), in force 2020",
+   "single_family_office": "A firm managing assets for a single family is generally not a financial institution — no licence.",
+   "multi_family_office": "A FinIA portfolio-manager licence (CHF 100k capital) plus ongoing supervision by a Supervisory Organisation — triggered the moment a second, unrelated family joins.",
+   "in_public_register_as_family_office": "Not as a family office",
+   "register_url": "https://www.finma.ch/en/authorisation/portfolio-managers-and-trustees/"
+  },
+  {
+   "place": "United States",
+   "framework": "SEC · Advisers Act Rule 202(a)(11)(G)-1 (2011)",
+   "single_family_office": "Excluded from adviser registration if it advises only “family clients”, is wholly owned and controlled by the family, and does not hold itself out to the public.",
+   "multi_family_office": "Register as an investment adviser (Form ADV) with the SEC or a state.",
+   "in_public_register_as_family_office": "Registered, not licensed",
+   "register_url": "https://efts.sec.gov/LATEST/search-index?q=%22family+office%22&forms=13F-HR"
+  },
+  {
+   "place": "Hong Kong",
+   "framework": "SFC · Securities and Futures Ordinance (Cap. 571)",
+   "single_family_office": "No licence if it serves one family, is not run as a business for the public, and fits the Type 9 intra-group carve-out (SFC guidance, Mar 2023).",
+   "multi_family_office": "An SFC licence for each regulated activity — typically Type 9 (asset management), Type 4 (advising on securities), Type 1 (dealing).",
+   "in_public_register_as_family_office": "Not as a family office",
+   "register_url": "https://apps.sfc.hk/publicregWeb/"
+  },
+  {
+   "place": "Singapore",
+   "framework": "MAS · Securities and Futures Act 2001",
+   "single_family_office": "Exempt from a Capital Markets Services licence (s99(1)(h)); from 15 Jun 2026, a class exemption that must be notified to MAS. The 13O/13U tax schemes are a separate gate.",
+   "multi_family_office": "A Capital Markets Services licence for fund management.",
+   "in_public_register_as_family_office": "Not as a family office",
+   "register_url": "https://eservices.mas.gov.sg/fid"
+  },
+  {
+   "place": "UAE — DIFC",
+   "framework": "DIFC Family Arrangements Regulations (31 Jan 2023) · DFSA",
+   "single_family_office": "One or more connected families (USD 50m net assets per family): no DFSA licence, registered through the DIFC Family Wealth Centre and Registrar of Companies.",
+   "multi_family_office": "Serving other families by way of business needs a DFSA licence.",
+   "in_public_register_as_family_office": "Registered, not licensed",
+   "register_url": "https://www.difc.com/public-register"
+  },
+  {
+   "place": "UAE — ADGM",
+   "framework": "ADGM Commercial Licensing Regulations · FSRA",
+   "single_family_office": "A single family office is a “controlled activity” (family net assets ≥ USD 10m): registered with the ADGM Registration Authority, no FSRA financial-services permission.",
+   "multi_family_office": "Managing unrelated clients’ assets needs an FSRA permission.",
+   "in_public_register_as_family_office": "Registered, not licensed",
+   "register_url": "https://www.adgm.com/public-registers"
+  }
+ ],
+ "rosters": {
+  "luxembourg_cssf_family_office_pfs": {
+   "source": "CSSF search-entities API, specialised PFS with activity code ACT_SPP_FO",
+   "count": 5,
+   "records": [
+    {
+     "legal_name": "ADEPA ASSET SERVICING LUXEMBOURG S.A.",
+     "cssf_code": "P00000652",
+     "authorised_since": "2000-03-10",
+     "lei": "222100XL7K4QJ2HIHX41",
+     "address": "44, avenue J. F. Kennedy L-1855 Luxembourg"
+    },
+    {
+     "legal_name": "ALTUM LUXEMBOURG S.A.",
+     "cssf_code": "P00000504",
+     "authorised_since": "2022-07-11",
+     "lei": null,
+     "address": "16, rue Erasme L-1468 Luxembourg"
+    },
+    {
+     "legal_name": "CORIENT LUXEMBOURG S.A.",
+     "cssf_code": "P00000401",
+     "authorised_since": "2011-11-15",
+     "lei": null,
+     "address": "58, rue Charles Martel L-2134 Luxembourg"
+    },
+    {
+     "legal_name": "TRUSTMOORE LUXEMBOURG S.A.",
+     "cssf_code": "P00000743",
+     "authorised_since": "2015-03-11",
+     "lei": "529900BMRTVLTTWXKJ18",
+     "address": "6, rue Dicks L-1417 Luxembourg"
+    },
+    {
+     "legal_name": "WHITE OAK MANAGEMENT",
+     "cssf_code": "P00000474",
+     "authorised_since": "2018-07-13",
+     "lei": null,
+     "address": "28, avenue Pasteur L-2310 Luxembourg"
+    }
+   ]
+  },
+  "united_states_edgar_13f_named_family_office": {
+   "source": "SEC EDGAR full-text search entity facet, Form 13F-HR filers whose name contains 'family office'",
+   "scope": "Name-based and filer-only: captures offices that manage >$100m in 13(f) securities and carry 'family office' in the registered name. Exempt and neutrally-named offices are absent by design.",
+   "count": 23,
+   "records": [
+    {
+     "name": "BOSTON FAMILY OFFICE LLC",
+     "cik": "0001039807",
+     "filings_13f": 109
+    },
+    {
+     "name": "Duquesne Family Office LLC",
+     "cik": "0001536411",
+     "filings_13f": 62
+    },
+    {
+     "name": "Geller Family Office Services, LLC",
+     "cik": "0001354739",
+     "filings_13f": 51
+    },
+    {
+     "name": "PATHSTONE FAMILY OFFICE, LLC",
+     "cik": "0001511137",
+     "filings_13f": 51
+    },
+    {
+     "name": "Tarbox Family Office, Inc.",
+     "cik": "0001599603",
+     "filings_13f": 37
+    },
+    {
+     "name": "Biltmore Family Office, LLC",
+     "cik": "0001731123",
+     "filings_13f": 35
+    },
+    {
+     "name": "Independent Family Office, LLC",
+     "cik": "0001756485",
+     "filings_13f": 28
+    },
+    {
+     "name": "Kopp Family Office, LLC",
+     "cik": "0001683689",
+     "filings_13f": 28
+    },
+    {
+     "name": "Arrowroot Family Office, LLC",
+     "cik": "0002017744",
+     "filings_13f": 27
+    },
+    {
+     "name": "CVA Family Office, LLC",
+     "cik": "0001802084",
+     "filings_13f": 27
+    },
+    {
+     "name": "Stokes Family Office, LLC",
+     "cik": "0001802278",
+     "filings_13f": 27
+    },
+    {
+     "name": "Standard Family Office LLC",
+     "cik": "0001809494",
+     "filings_13f": 24
+    },
+    {
+     "name": "Allie Family Office LLC",
+     "cik": "0001908612",
+     "filings_13f": 23
+    },
+    {
+     "name": "COLLECTIVE FAMILY OFFICE LLC",
+     "cik": "0001845066",
+     "filings_13f": 23
+    },
+    {
+     "name": "Capitol Family Office, Inc.",
+     "cik": "0001863768",
+     "filings_13f": 20
+    },
+    {
+     "name": "Custos Family Office, LLC",
+     "cik": "0001904423",
+     "filings_13f": 19
+    },
+    {
+     "name": "Virtus Family Office LLC",
+     "cik": "0001913482",
+     "filings_13f": 16
+    },
+    {
+     "name": "Wealthgate Family Office, LLC",
+     "cik": "0001835441",
+     "filings_13f": 16
+    },
+    {
+     "name": "Callan Family Office, LLC",
+     "cik": "0001938970",
+     "filings_13f": 15
+    },
+    {
+     "name": "INTREPID FAMILY OFFICE LLC",
+     "cik": "0001596197",
+     "filings_13f": 15
+    },
+    {
+     "name": "MARCUARD FAMILY OFFICE LTD",
+     "cik": "0001538112",
+     "filings_13f": 15
+    },
+    {
+     "name": "FIDUCIARY FAMILY OFFICE, LLC",
+     "cik": "0002020280",
+     "filings_13f": 11
+    },
+    {
+     "name": "Fortitude Family Office, LLC",
+     "cik": "0001950506",
+     "filings_13f": 11
+    }
+   ]
+  }
+ }
+}

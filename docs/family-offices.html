@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Family-Office Blind Spot</title>
+<meta name="description" content="Which licence a family office needs across nine jurisdictions — and why a public register can list them almost nowhere, with the two registers that can.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='3' fill='%2316233A'/><rect x='6' y='8' width='20' height='2.6' fill='%23EEF1F6'/><rect x='6' y='14.7' width='20' height='2.6' fill='%23EEF1F6'/><rect x='6' y='21.4' width='12' height='2.6' fill='%23B03A2E'/></svg>">
+<style>
+  :root {
+    --ink:        #16233A;
+    --ink-2:      #22334F;
+    --paper:      #F2F1EC;
+    --card:       #FFFFFF;
+    --text:       #17202C;
+    --text-soft:  #5C6675;
+    --text-faint: #8C95A2;
+    --rule:       #DBD9D0;
+    --rule-hard:  #BEBCB1;
+    --stamp:      #B03A2E;
+    --stamp-bg:   #F7E9E6;
+    --seal:       #1F6F5C;
+    --seal-bg:    #E4F0EB;
+    --on-ink:     #EEF1F6;
+    --on-ink-dim: #93A3BC;
+    --focus:      #C2410C;
+    --stat-rule:  #16233A;
+
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    --sans:  ui-sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+    --mono:  ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+    --pad:  clamp(18px, 5vw, 56px);
+    --wide: 1080px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #0C1420; --ink-2: #16233A;
+      --paper: #14181E; --card: #1B2028;
+      --text: #E7E9EC; --text-soft: #9AA3B0; --text-faint: #6B7482;
+      --rule: #2A313B; --rule-hard: #3A424E;
+      --stamp: #E4877A; --stamp-bg: #2C1B18;
+      --seal: #6FC0A8; --seal-bg: #16281F;
+      --on-ink: #EEF1F6; --on-ink-dim: #93A3BC;
+      --focus: #F97316;
+      --stat-rule: #46566E;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration-color: var(--rule-hard); text-underline-offset: 3px; }
+  a:hover { text-decoration-color: currentColor; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+  .wrap { max-width: var(--wide); margin: 0 auto; padding-inline: var(--pad); }
+
+  /* ---- the cover ------------------------------------------------------ */
+  .cover { background: var(--ink); color: var(--on-ink); padding-block: clamp(46px, 9vw, 96px) clamp(38px, 7vw, 74px); }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--on-ink-dim);
+    display: flex; flex-wrap: wrap; gap: 6px 14px; margin-bottom: clamp(24px, 4vw, 40px);
+  }
+  .eyebrow a { color: var(--on-ink-dim); }
+  .eyebrow a:hover { color: var(--on-ink); }
+  h1 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(34px, 6.4vw, 68px); line-height: 1.04;
+    letter-spacing: -0.015em; margin: 0; text-wrap: balance;
+  }
+  h1 em { font-style: italic; color: #C9D6EA; }
+  .standfirst {
+    max-width: 60ch; margin: clamp(20px, 3vw, 30px) 0 0;
+    font-size: clamp(16px, 1.6vw, 18.5px); color: #C5CEDC; line-height: 1.62;
+  }
+  .standfirst strong { color: var(--on-ink); font-weight: 600; }
+
+  .facts {
+    margin-top: clamp(34px, 5vw, 54px);
+    border-top: 1px solid rgba(255,255,255,.16);
+    display: grid; gap: 0;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  }
+  .fact { padding: 22px 0 4px; border-right: 1px solid rgba(255,255,255,.1); padding-right: 22px; }
+  .fact:last-child { border-right: 0; }
+  .fact b {
+    display: block; font-family: var(--mono); font-weight: 500;
+    font-size: clamp(25px, 3.4vw, 34px); letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums; color: var(--on-ink);
+  }
+  .fact span { display: block; margin-top: 7px; font-size: 13.5px; color: var(--on-ink-dim); line-height: 1.45; }
+
+
+  /* ---- obligation reference ------------------------------------------- */
+  .frameworks {
+    margin-top: clamp(26px, 4vw, 38px); padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,.16);
+    display: flex; flex-wrap: wrap; gap: 7px 8px; align-items: center;
+  }
+  .frameworks .fw {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.07em;
+    padding: 4px 9px 3px; border-radius: 3px; white-space: nowrap;
+    border: 1px solid rgba(255,255,255,.28); color: #DCE4F0;
+  }
+  .frameworks .fw.contract { border-style: dashed; border-color: rgba(224,135,122,.65); color: #E8A99F; }
+  .frameworks .fw-note { flex-basis: 100%; margin-top: 6px; font-size: 12.5px; color: var(--on-ink-dim); }
+  .frameworks .fw-note b { color: #E8A99F; font-weight: 400; }
+
+  .ref { border-top: 1.5px solid var(--rule-hard); margin-top: clamp(26px,3.5vw,36px); }
+  .ref-row {
+    display: grid; gap: 4px 20px; padding: 16px 0;
+    border-bottom: 1px solid var(--rule);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.35fr);
+  }
+  .ref-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; }
+  .ref-name { font-family: var(--serif); font-size: 19px; line-height: 1.2; }
+  .ref-cite { font-family: var(--mono); font-size: 11.5px; color: var(--text-faint); }
+  .ref-when {
+    font-family: var(--mono); font-size: 11.5px; color: var(--text-soft);
+    background: var(--card); border: 1px solid var(--rule); border-radius: 3px; padding: 1px 6px;
+  }
+  .ref-who { grid-column: 1; font-size: 14px; color: var(--text-soft); margin-top: 2px; }
+  .ref-out { grid-column: 2; grid-row: 1 / span 2; font-size: 14.2px; color: var(--text-soft); }
+  .ref-out .yes { color: var(--seal); font-weight: 600; }
+  .ref-out .no  { color: var(--stamp); font-weight: 600; }
+  .ref-out code { font-family: var(--mono); font-size: 12.4px; }
+  @media (max-width: 760px) {
+    .ref-row { grid-template-columns: 1fr; }
+    .ref-out { grid-column: 1; grid-row: auto; margin-top: 6px; }
+  }
+
+  /* ---- sections ------------------------------------------------------- */
+  section { padding-block: clamp(46px, 7vw, 84px); border-top: 1px solid var(--rule); }
+  section:first-of-type { border-top: 0; }
+  .kicker {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--text-faint); margin: 0 0 12px;
+  }
+  h2 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(25px, 3.4vw, 38px); line-height: 1.16;
+    letter-spacing: -0.01em; margin: 0 0 14px; text-wrap: balance;
+  }
+  .lede { max-width: 66ch; margin: 0 0 clamp(26px, 3.5vw, 40px); color: var(--text-soft); font-size: 16.5px; }
+  .lede strong { color: var(--text); font-weight: 600; }
+  p { max-width: 66ch; }
+
+  /* ---- the ledger ----------------------------------------------------- */
+  .band {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-faint);
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px;
+    margin: clamp(30px, 4vw, 44px) 0 2px; padding-bottom: 8px;
+    border-bottom: 1.5px solid var(--rule-hard);
+  }
+  .band:first-of-type { margin-top: 0; }
+  .band .band-note { margin-left: auto; letter-spacing: 0.04em; text-transform: none; font-size: 11.5px; }
+
+  .row {
+    display: grid;
+    /* Fixed, not auto: each row is its own grid, so only explicit widths make
+       the figures line up down the page the way a ledger column should. */
+    grid-template-columns: minmax(0, 1fr) 7.2rem 5.2rem;
+    align-items: baseline;
+    gap: 4px 18px;
+    padding: 13px 0 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .row-name { font-family: var(--serif); font-size: 19px; line-height: 1.25; }
+  .row-what { grid-column: 1 / -1; font-size: 13.8px; color: var(--text-soft); max-width: 68ch; margin-top: -2px; }
+  .row-what code { font-family: var(--mono); font-size: 12.4px; background: var(--card); padding: 1px 5px; border: 1px solid var(--rule); border-radius: 3px; }
+  .count {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: 18px; letter-spacing: -0.01em; white-space: nowrap; text-align: right;
+  }
+  .delta {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: 12.5px; white-space: nowrap; padding: 2px 7px; border-radius: 3px;
+    text-align: right; justify-self: end;
+  }
+  .delta.up   { color: var(--seal);  background: var(--seal-bg); }
+  .delta.down { color: var(--stamp); background: var(--stamp-bg); }
+  .delta.flat { color: var(--text-faint); }
+  .delta.none { color: var(--text-faint); background: none; }
+  .count.na { font-size: 13px; color: var(--text-faint); }
+
+  .tag {
+    display: inline-block; vertical-align: 2px; margin-left: 8px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--stamp);
+    border: 1px solid currentColor; border-radius: 2px; padding: 1px 6px 0;
+  }
+
+  /* the empty register gets its own treatment — it is the finding */
+  .row.empty { background: linear-gradient(90deg, var(--stamp-bg), transparent 62%); }
+  .row.empty .count { color: var(--stamp); }
+
+
+  /* ---- ranked tables --------------------------------------------------- */
+  .tbl-scroll { overflow-x: auto; margin-top: clamp(22px, 3vw, 30px); }
+  table.tbl { border-collapse: collapse; width: 100%; min-width: 560px; }
+  .tbl th {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.11em;
+    text-transform: uppercase; color: var(--text-faint); font-weight: 400;
+    text-align: left; padding: 0 12px 9px 0; border-bottom: 1.5px solid var(--rule-hard);
+    white-space: nowrap;
+  }
+  .tbl th.num, .tbl th.msk { text-align: right; }
+  .tbl th.msk { text-align: left; }
+  .tbl td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--rule); vertical-align: baseline; }
+  .tbl tr:hover td { background: var(--card); }
+  .tbl .rk {
+    font-family: var(--mono); font-size: 12.5px; color: var(--text-faint);
+    font-variant-numeric: tabular-nums; width: 2.6rem;
+  }
+  .tbl .nm { font-family: var(--serif); font-size: 17px; line-height: 1.3; }
+  .tbl .nm .alt { display: block; font-family: var(--sans); font-size: 12.5px; color: var(--text-soft); }
+  .tbl .ms { font-family: var(--mono); font-size: 12.5px; color: var(--text-soft); white-space: nowrap; }
+  .tbl .num {
+    font-family: var(--mono); font-size: 14px; font-variant-numeric: tabular-nums;
+    text-align: right; white-space: nowrap;
+  }
+  .tbl .num.artefact { color: var(--stamp); }
+  /* one character per MiCA service: held is ink, withheld is a faint stop */
+  .tbl .msk { font-family: var(--mono); font-size: 14.5px; letter-spacing: 0.16em; white-space: nowrap; }
+  .tbl .msk b { font-weight: 500; }
+  .tbl .msk i { font-style: normal; color: var(--text-faint); opacity: .55; }
+
+  .legend {
+    display: grid; gap: 2px 20px; margin-top: 18px; padding-top: 16px;
+    border-top: 1px solid var(--rule);
+    grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+    font-size: 13.4px; color: var(--text-soft);
+  }
+  .legend span b { font-family: var(--mono); font-weight: 500; color: var(--text); margin-right: 7px; }
+  .legend span.rare b { color: var(--stamp); }
+
+  .finding {
+    background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--stamp);
+    border-radius: 4px; padding: 20px 24px; margin: clamp(24px, 3vw, 32px) 0;
+  }
+  .finding h3 { margin: 0 0 8px; font-family: var(--serif); font-weight: 400; font-size: 21px; }
+  .finding p { margin: 0; color: var(--text-soft); font-size: 15.2px; max-width: 72ch; }
+  .finding p + p { margin-top: 11px; }
+  .finding strong { color: var(--text); font-weight: 600; }
+
+  .caps { margin-top: 18px; display: grid; gap: 1px 0; }
+  .caps-row {
+    display: grid; grid-template-columns: minmax(0,1fr) 4.4rem 4.4rem 4.4rem;
+    gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--rule);
+    font-size: 14px; align-items: baseline;
+  }
+  .caps-row span:not(:first-child) {
+    font-family: var(--mono); font-size: 13px; text-align: right; font-variant-numeric: tabular-nums;
+  }
+  .caps-row.head span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.11em;
+    text-transform: uppercase; color: var(--text-faint); border: 0; }
+  .caps-row.head { border-bottom: 1.5px solid var(--rule-hard); }
+  .caps-row .zero { color: var(--stamp); }
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+  }
+  .caps-row .max { color: var(--seal); }
+
+
+  /* ---- roster: chips, filter, long table ------------------------------ */
+  .chip {
+    display: inline-block; font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 7px 1px;
+    border-radius: 3px; white-space: nowrap; border: 1px solid transparent;
+  }
+  .chip.dual { color: var(--seal); background: var(--seal-bg); border-color: var(--seal); }
+  .chip.namematch { color: var(--stamp); background: var(--stamp-bg); border-color: var(--stamp); }
+  .chip.alt-type { color: var(--text-soft); border-color: var(--rule-hard); }
+  .chip.none { color: var(--text-faint); border: 0; letter-spacing: 0; }
+
+  .filter {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px;
+    margin-top: clamp(22px, 3vw, 30px); padding: 14px 16px;
+    background: var(--card); border: 1px solid var(--rule); border-radius: 4px;
+  }
+  .filter input[type="search"] {
+    flex: 1 1 220px; min-width: 0; font-family: var(--sans); font-size: 14.5px;
+    padding: 8px 11px; color: var(--text); background: var(--paper);
+    border: 1px solid var(--rule-hard); border-radius: 3px;
+  }
+  .filter label.tick { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+  .filter input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--ink); }
+  .filter .tally {
+    font-family: var(--mono); font-size: 12px; color: var(--text-soft);
+    font-variant-numeric: tabular-nums; margin-left: auto;
+  }
+  .roster-scroll { max-height: 70vh; overflow: auto; margin-top: 14px; border-bottom: 1px solid var(--rule); }
+  .roster-scroll table.tbl { min-width: 620px; }
+  .roster-scroll thead th { position: sticky; top: 0; background: var(--paper); z-index: 1; padding-top: 10px; }
+  .tbl .flag { text-align: right; white-space: nowrap; }
+  .dl {
+    margin-top: 18px; padding: 13px 16px; font-size: 14.5px;
+    background: var(--card); border: 1px solid var(--rule); border-radius: 4px;
+  }
+  .dl a { font-family: var(--mono); font-size: 13.5px; }
+  .empty-note { padding: 22px 0; color: var(--text-soft); font-size: 14.5px; }
+  /* explicit, because a UA's tr { display: table-row } can outrank [hidden] */
+  .tbl tr[hidden] { display: none; }
+
+  .split { display: grid; gap: clamp(16px, 2vw, 22px); grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-top: clamp(24px,3vw,32px); }
+  .stat { border-top: 2px solid var(--stat-rule); padding-top: 14px; }
+  .stat b {
+    display: block; font-family: var(--mono); font-size: clamp(24px,3vw,31px);
+    font-variant-numeric: tabular-nums; letter-spacing: -0.02em; line-height: 1.1;
+  }
+  .stat span { display: block; margin-top: 8px; font-size: 14px; color: var(--text-soft); line-height: 1.5; }
+
+  /* ---- generic blocks ------------------------------------------------- */
+  .grid { display: grid; gap: clamp(16px, 2vw, 22px); grid-template-columns: repeat(auto-fit, minmax(275px, 1fr)); }
+  .card {
+    background: var(--card); border: 1px solid var(--rule); border-radius: 4px;
+    padding: 20px 22px 22px;
+  }
+  .card h3 {
+    margin: 0 0 9px; font-family: var(--serif); font-weight: 400; font-size: 19.5px; line-height: 1.25;
+  }
+  .card p { margin: 0; font-size: 14.6px; color: var(--text-soft); max-width: none; }
+  .card p + p { margin-top: 10px; }
+  .card code, .inline-code {
+    font-family: var(--mono); font-size: 12.6px;
+    background: var(--paper); padding: 1px 5px; border-radius: 3px; border: 1px solid var(--rule);
+  }
+  .src {
+    display: block; margin-top: 12px; font-family: var(--mono);
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint);
+  }
+
+  /* obligation table */
+  .obl { border-top: 1.5px solid var(--rule-hard); }
+  .obl-row { display: grid; grid-template-columns: 2.4rem minmax(0,1fr); gap: 0 18px; padding: 14px 0; border-bottom: 1px solid var(--rule); align-items: start; }
+  .obl-key { font-family: var(--mono); font-size: 15px; color: var(--text-faint); padding-top: 2px; }
+  .obl-row.done .obl-key { color: var(--seal); }
+  .obl-title { font-family: var(--serif); font-size: 18px; }
+  .obl-note { font-size: 14px; color: var(--text-soft); margin-top: 3px; }
+  .obl-note code { font-family: var(--mono); font-size: 12.4px; }
+
+  .caveat { border-left: 3px solid var(--stamp); padding: 4px 0 4px 20px; margin: 0 0 24px; }
+  .caveat h3 { margin: 0 0 6px; font-family: var(--serif); font-weight: 400; font-size: 20px; }
+  .caveat p { margin: 0; color: var(--text-soft); font-size: 15.4px; }
+
+  pre {
+    background: var(--ink); color: var(--on-ink); border-radius: 4px;
+    padding: 18px 20px; overflow-x: auto; font-family: var(--mono);
+    font-size: 13px; line-height: 1.75; margin: 0;
+  }
+  pre .c { color: var(--on-ink-dim); }
+
+  footer { background: var(--ink); color: var(--on-ink-dim); padding-block: clamp(40px, 6vw, 62px); font-size: 14px; }
+  footer a { color: var(--on-ink); }
+  footer p { max-width: 70ch; }
+  footer .foot-rule { border: 0; border-top: 1px solid rgba(255,255,255,.14); margin: 26px 0; }
+
+  @media (max-width: 620px) {
+    .row { grid-template-columns: minmax(0,1fr) 6.4rem 4.6rem; gap: 4px 10px; }
+    .caps-row { grid-template-columns: minmax(0,1fr) 3.4rem 3rem 3.2rem; gap: 8px; }
+    .legend { grid-template-columns: 1fr; }
+    .row-name { font-size: 17.5px; }
+    .count { font-size: 16px; }
+    .fact { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.1); padding-bottom: 18px; }
+    .fact:last-child { border-bottom: 0; }
+  }
+</style>
+
+<style>
+  .lm { border-top: 1.5px solid var(--rule-hard); margin-top: clamp(24px,3vw,32px); }
+  .lm-row { display: grid; gap: 4px 22px; padding: 18px 0; border-bottom: 1px solid var(--rule);
+    grid-template-columns: minmax(0,0.9fr) minmax(0,1.15fr) minmax(0,1.15fr) 8.4rem; align-items: start; }
+  .lm-head { font-family: var(--serif); font-size: 19px; line-height: 1.2; }
+  .lm-sub { font-family: var(--mono); font-size: 11px; color: var(--text-faint); margin-top: 4px; letter-spacing:.02em; }
+  .lm-cell { font-size: 14px; color: var(--text-soft); }
+  .lm-cell b { color: var(--text); font-weight: 600; }
+  .lm-cell code { font-family: var(--mono); font-size: 12.2px; background: var(--card); padding: 1px 5px; border: 1px solid var(--rule); border-radius: 3px; }
+  .lm-k { font-family: var(--mono); font-size: 10px; letter-spacing:.1em; text-transform: uppercase; color: var(--text-faint); display:none; margin-bottom:3px; }
+  .badge { display:inline-block; font-family: var(--mono); font-size: 10px; letter-spacing:.08em; text-transform: uppercase;
+    padding: 2px 8px 1px; border-radius: 3px; border: 1px solid currentColor; white-space: nowrap; }
+  .badge.yes { color: var(--seal); background: var(--seal-bg); }
+  .badge.no  { color: var(--stamp); background: var(--stamp-bg); }
+  .badge.part{ color: var(--focus); }
+  .lm-reg { font-size: 12.8px; color: var(--text-soft); margin-top: 7px; }
+  .lm-reg code { font-family: var(--mono); font-size: 12px; }
+  @media (max-width: 860px) {
+    .lm-row { grid-template-columns: 1fr; gap: 2px; padding: 20px 0; }
+    .lm-k { display:block; }
+    .lm-cell { margin-top: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="wrap">
+    <div class="eyebrow">
+      <span>eufinreg</span><span>·</span>
+      <a href="index.html">a companion to The Register Ledger</a><span>·</span>
+      <span>counted 23 September 2026</span><span>·</span>
+      <a href="https://github.com/7feilee/eufinreg">source and method on GitHub</a>
+    </div>
+    <h1>The family office is the one firm<br>the register was built to <em>miss.</em></h1>
+    <p class="standfirst">
+      You asked for a list of family offices — in Europe, the United States, Hong Kong and beyond.
+      Here is the licence map for <strong>nine jurisdictions</strong>, and the reason a public register
+      can hand you that list almost nowhere: a family office earns its exemption precisely by serving
+      only its own family, and <strong>what is exempt never files</strong>. The licensed ones that do file
+      hide inside generic categories. Two registers are the exception — and their rosters are below.
+    </p>
+    <div class="facts">
+      <div class="fact"><b>9</b><span>jurisdictions mapped, single- vs multi-family</span></div>
+      <div class="fact"><b>0</b><span>pan-European or global registers <em>of</em> family offices</span></div>
+      <div class="fact"><b>5</b><span>licensed in Luxembourg — the only EU state that licenses the title</span></div>
+      <div class="fact"><b>23</b><span>US offices the SEC still surfaces by name, because they must file</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="map">
+  <div class="wrap">
+    <p class="kicker">Who needs what</p>
+    <h2>Nobody licenses “a family office.” They license what it does.</h2>
+    <p class="lede">
+      Every regime turns on one hinge: <strong>are you serving only your own family, or someone else’s?</strong>
+      A <strong>single</strong> family office is, almost everywhere, exempt. The instant it takes on a second,
+      unrelated family — or holds itself out to the public — the licence attaches to the <em>activity</em>
+      (managing investments, advising, dealing), not to the words “family office”.
+    </p>
+    <div class="lm">
+    <div class="lm-row">
+      <div><div class="lm-head">European Union</div><div class="lm-sub">MiFID II (2014/65/EU) · AIFMD (2011/61/EU)</div></div>
+      <div class="lm-cell"><span class="lm-k">Single family office</span>Outside both. AIFMD recital 7 says family-office vehicles investing private wealth <em>without raising external capital</em> are not AIFs; MiFID II bites only on a service provided to third parties, which serving your own family is not.</div>
+      <div class="lm-cell"><span class="lm-k">Multi-family / serving others</span>The activity is licensed, never the label: a <b>MiFID II investment-firm</b> authorisation for advice, order-handling or discretionary management; an <b>AIFM</b> authorisation to manage funds. Passportable across the EEA.</div>
+      <div><span class="lm-k">In a register as a family office?</span><span class="badge no">Not as a family office</span><div class="lm-reg">Shows up only under generic ESMA categories (investment firm, AIFM). There is no “family office” field to filter on.</div></div>
+    </div>
+    <div class="lm-row">
+      <div><div class="lm-head">Luxembourg</div><div class="lm-sub">CSSF · Law of 5 Apr 1993, Art. 28-6 · Law of 21 Dec 2012</div></div>
+      <div class="lm-cell"><span class="lm-k">Single family office</span>A family serving only itself is out of scope and needs no authorisation.</div>
+      <div class="lm-cell"><span class="lm-k">Multi-family / serving others</span>The one European regime that licenses the thing by name: a specialised-PFS <b>“Family Office”</b> authorisation (€50k capital). The title itself is reserved by law to regulated professions.</div>
+      <div><span class="lm-k">In a register as a family office?</span><span class="badge yes">In the register</span><div class="lm-reg">CSSF search-entities, activity code <code>ACT_SPP_FO</code> — <b>5 firms</b>, listed below. <a href="https://edesk.apps.cssf.lu/search-entities/search?st=advanced&amp;entType=SPP">register ↗</a></div></div>
+    </div>
+    <div class="lm-row">
+      <div><div class="lm-head">United Kingdom</div><div class="lm-sub">FCA · FSMA 2000 (Regulated Activities Order)</div></div>
+      <div class="lm-cell"><span class="lm-k">Single family office</span>No authorisation where it carries on no regulated activity for others; the intra-group and “by way of business” tests keep the pure single family out.</div>
+      <div class="lm-cell"><span class="lm-k">Multi-family / serving others</span>An FCA <b>Part 4A permission</b> for each regulated activity it performs — managing investments, advising, arranging.</div>
+      <div><span class="lm-k">In a register as a family office?</span><span class="badge no">Not as a family office</span><div class="lm-reg">The FS Register lists authorised firms; none is flagged as a family office. <a href="https://register.fca.org.uk/">register ↗</a></div></div>
+    </div>
+    <div class="lm-row">
+      <div><div class="lm-head">Switzerland</div><div class="lm-sub">FINMA · FinIA (FINIG), in force 2020</div></div>
+      <div class="lm-cell"><span class="lm-k">Single family office</span>A firm managing assets for a single family is generally not a financial institution — no licence.</div>
+      <div class="lm-cell"><span class="lm-k">Multi-family / serving others</span>A FinIA <b>portfolio-manager licence</b> (CHF 100k capital) plus ongoing supervision by a Supervisory Organisation — triggered the moment a second, unrelated family joins.</div>
+      <div><span class="lm-k">In a register as a family office?</span><span class="badge no">Not as a family office</span><div class="lm-reg">FINMA publishes a list of licensed portfolio managers and trustees, not tagged family office. <a href="https://www.finma.ch/en/authorisation/portfolio-managers-and-trustees/">register ↗</a></div></div>
+    </div>
+    <div class="lm-row">
+      <div><div class="lm-head">United States</div><div class="lm-sub">SEC · Advisers Act Rule 202(a)(11)(G)-1 (2011)</div></div>
+      <div class="lm-cell"><span class="lm-k">Single family office</span>Excluded from adviser registration if it advises only “family clients”, is wholly owned and controlled by the family, and does not hold itself out to the public.</div>
+      <div class="lm-cell"><span class="lm-k">Multi-family / serving others</span>Register as an investment adviser (<b>Form ADV</b>) with the SEC or a state.</div>
+      <div><span class="lm-k">In a register as a family office?</span><span class="badge part">Registered, not licensed</span><div class="lm-reg">Not a category — but EDGAR captures every office that must file (Form 13F above $100m; Form ADV). A name search still returns them: <b>23 firms</b>, below. <a href="https://efts.sec.gov/LATEST/search-index?q=%22family+office%22&amp;forms=13F-HR">register ↗</a></div></div>
+    </div>
+    <div class="lm-row">
+      <div><div class="lm-head">Hong Kong</div><div class="lm-sub">SFC · Securities and Futures Ordinance (Cap. 571)</div></div>
+      <div class="lm-cell"><span class="lm-k">Single family office</span>No licence if it serves one family, is not run as a business for the public, and fits the Type 9 intra-group carve-out (SFC guidance, Mar 2023).</div>
+      <div class="lm-cell"><span class="lm-k">Multi-family / serving others</span>An SFC licence for each regulated activity — typically <b>Type 9</b> (asset management), <b>Type 4</b> (advising on securities), <b>Type 1</b> (dealing).</div>
+      <div><span class="lm-k">In a register as a family office?</span><span class="badge no">Not as a family office</span><div class="lm-reg">The SFC public register lists licensed corporations by activity type, not as family offices. <a href="https://apps.sfc.hk/publicregWeb/">register ↗</a></div></div>
+    </div>
+    <div class="lm-row">
+      <div><div class="lm-head">Singapore</div><div class="lm-sub">MAS · Securities and Futures Act 2001</div></div>
+      <div class="lm-cell"><span class="lm-k">Single family office</span>Exempt from a Capital Markets Services licence (s99(1)(h)); from 15 Jun 2026, a class exemption that must be <em>notified</em> to MAS. The 13O/13U tax schemes are a separate gate.</div>
+      <div class="lm-cell"><span class="lm-k">Multi-family / serving others</span>A <b>Capital Markets Services</b> licence for fund management.</div>
+      <div><span class="lm-k">In a register as a family office?</span><span class="badge no">Not as a family office</span><div class="lm-reg">The MAS Financial Institutions Directory lists CMS holders; notified single family offices are not published as a list. <a href="https://eservices.mas.gov.sg/fid">register ↗</a></div></div>
+    </div>
+    <div class="lm-row">
+      <div><div class="lm-head">UAE — DIFC</div><div class="lm-sub">DIFC Family Arrangements Regulations (31 Jan 2023) · DFSA</div></div>
+      <div class="lm-cell"><span class="lm-k">Single family office</span>One or more <em>connected</em> families (USD 50m net assets per family): <b>no DFSA licence</b>, registered through the DIFC Family Wealth Centre and Registrar of Companies.</div>
+      <div class="lm-cell"><span class="lm-k">Multi-family / serving others</span>Serving other families by way of business needs a DFSA licence.</div>
+      <div><span class="lm-k">In a register as a family office?</span><span class="badge part">Registered, not licensed</span><div class="lm-reg">On the DIFC public register as a registered entity, though not DFSA-licensed. (The portal rate-limits automated pulls, so no roster is reproduced here.) <a href="https://www.difc.com/public-register">register ↗</a></div></div>
+    </div>
+    <div class="lm-row">
+      <div><div class="lm-head">UAE — ADGM</div><div class="lm-sub">ADGM Commercial Licensing Regulations · FSRA</div></div>
+      <div class="lm-cell"><span class="lm-k">Single family office</span>A single family office is a “controlled activity” (family net assets ≥ USD 10m): registered with the ADGM Registration Authority, <b>no FSRA financial-services permission</b>.</div>
+      <div class="lm-cell"><span class="lm-k">Multi-family / serving others</span>Managing unrelated clients’ assets needs an FSRA permission.</div>
+      <div><span class="lm-k">In a register as a family office?</span><span class="badge part">Registered, not licensed</span><div class="lm-reg">On the ADGM public register as a registered entity. <a href="https://www.adgm.com/public-registers">register ↗</a></div></div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap">
+    <p class="kicker">The blind spot</p>
+    <h2>Why “a list of family offices” is a question the register cannot answer.</h2>
+    <p class="lede">This is <a href="index.html">the Ledger’s thesis</a> run in reverse. A register is trustworthy because
+      no licensed firm can choose not to appear in it — filing is a condition of trading. The family office is the
+      counter-example, designed into the gap:</p>
+    <div class="finding">
+      <h3>The exempt do not file, and the licensed are not labelled.</h3>
+      <p>A <strong>single family office</strong> qualifies for its exemption by <em>not</em> serving third parties — so it has
+      no obligation to file, and appears in no register at all. A <strong>multi-family office</strong> that does need a licence
+      files under a generic heading — MiFID investment firm, AIFM, SFC Type 9, an SEC-registered adviser — with
+      <strong>no field that says “family office.”</strong> Either way the register cannot single them out.</p>
+      <p>So the honest count of “family offices in a public register” is: the handful of jurisdictions that made
+      the label itself a registrable thing. That is Luxembourg (as a licence) and, indirectly, the United States
+      and the UAE. Everywhere else, the list you want is <strong>the population the register was built not to hold.</strong></p>
+    </div>
+  </div>
+</section>
+
+<section id="luxembourg">
+  <div class="wrap">
+    <p class="kicker">Roster · the licence</p>
+    <h2>Luxembourg: the entire register of licensed family offices is five names.</h2>
+    <p class="lede">The CSSF is the one European authority where “Family Office” is a specialised-PFS
+      authorisation in its own right (activity code <code class="inline-code">ACT_SPP_FO</code>). Pulled live from the CSSF
+      search-entities API on 23 September 2026, exactly five firms hold it. All five are corporate-services houses
+      authorised to <em>offer</em> family-office services and use the protected title — not the families themselves.</p>
+    <div class="band">Firm <span class="band-note">authorised since · CSSF code</span></div>
+      <div class="row">
+        <div class="row-name">ADEPA ASSET SERVICING LUXEMBOURG S.A.</div>
+        <div class="count">2000-03-10</div>
+        <div class="count na">P00000652</div>
+        <div class="row-what">44, avenue J. F. Kennedy L-1855 Luxembourg · LEI <code>222100XL7K4QJ2HIHX41</code></div>
+      </div>
+      <div class="row">
+        <div class="row-name">ALTUM LUXEMBOURG S.A.</div>
+        <div class="count">2022-07-11</div>
+        <div class="count na">P00000504</div>
+        <div class="row-what">16, rue Erasme L-1468 Luxembourg · LEI <code>—</code></div>
+      </div>
+      <div class="row">
+        <div class="row-name">CORIENT LUXEMBOURG S.A.</div>
+        <div class="count">2011-11-15</div>
+        <div class="count na">P00000401</div>
+        <div class="row-what">58, rue Charles Martel L-2134 Luxembourg · LEI <code>—</code></div>
+      </div>
+      <div class="row">
+        <div class="row-name">TRUSTMOORE LUXEMBOURG S.A.</div>
+        <div class="count">2015-03-11</div>
+        <div class="count na">P00000743</div>
+        <div class="row-what">6, rue Dicks L-1417 Luxembourg · LEI <code>529900BMRTVLTTWXKJ18</code></div>
+      </div>
+      <div class="row">
+        <div class="row-name">WHITE OAK MANAGEMENT</div>
+        <div class="count">2018-07-13</div>
+        <div class="count na">P00000474</div>
+        <div class="row-what">28, avenue Pasteur L-2310 Luxembourg · LEI <code>—</code></div>
+      </div>
+    <div class="dl">Data: <a href="family-offices.json">family-offices.json</a> · <a href="family-offices.csv">family-offices.csv</a></div>
+  </div>
+</section>
+
+<section id="united-states">
+  <div class="wrap">
+    <p class="kicker">Roster · by name</p>
+    <h2>United States: the ones that grew large enough to have to file.</h2>
+    <p class="lede">The SEC does not register family offices — its 2011 rule <em>excludes</em> them. But an office managing
+      more than $100m in US-listed securities must file a <strong>Form 13F</strong>, and EDGAR’s full-text search will
+      return every filer whose registered name contains “family office”. That is the list below: 23 firms,
+      ranked by how many 13F reports they have filed. It is deliberately partial — it misses every office below the
+      threshold, every one that stays exempt, and every one with a neutral name.</p>
+    <div class="filter">
+      <input type="search" id="q" placeholder="Search a firm — Duquesne, Pathstone, Geller…" autocomplete="off">
+      <span class="tally" id="tally" aria-live="polite">23 of 23</span>
+    </div>
+    <div class="roster-scroll">
+      <table class="tbl" id="roster">
+        <thead><tr><th>Firm (as registered)</th><th>Identifier</th><th class="num">13F filings</th><th class="flag">Filings</th></tr></thead>
+        <tbody>
+        <tr><td class="nm">BOSTON FAMILY OFFICE LLC</td><td class="ms">CIK 0001039807</td><td class="num">109</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001039807&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Duquesne Family Office LLC</td><td class="ms">CIK 0001536411</td><td class="num">62</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001536411&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Geller Family Office Services, LLC</td><td class="ms">CIK 0001354739</td><td class="num">51</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001354739&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">PATHSTONE FAMILY OFFICE, LLC</td><td class="ms">CIK 0001511137</td><td class="num">51</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001511137&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Tarbox Family Office, Inc.</td><td class="ms">CIK 0001599603</td><td class="num">37</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001599603&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Biltmore Family Office, LLC</td><td class="ms">CIK 0001731123</td><td class="num">35</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001731123&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Independent Family Office, LLC</td><td class="ms">CIK 0001756485</td><td class="num">28</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001756485&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Kopp Family Office, LLC</td><td class="ms">CIK 0001683689</td><td class="num">28</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001683689&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Arrowroot Family Office, LLC</td><td class="ms">CIK 0002017744</td><td class="num">27</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0002017744&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">CVA Family Office, LLC</td><td class="ms">CIK 0001802084</td><td class="num">27</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001802084&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Stokes Family Office, LLC</td><td class="ms">CIK 0001802278</td><td class="num">27</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001802278&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Standard Family Office LLC</td><td class="ms">CIK 0001809494</td><td class="num">24</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001809494&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Allie Family Office LLC</td><td class="ms">CIK 0001908612</td><td class="num">23</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001908612&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">COLLECTIVE FAMILY OFFICE LLC</td><td class="ms">CIK 0001845066</td><td class="num">23</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001845066&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Capitol Family Office, Inc.</td><td class="ms">CIK 0001863768</td><td class="num">20</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001863768&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Custos Family Office, LLC</td><td class="ms">CIK 0001904423</td><td class="num">19</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001904423&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Virtus Family Office LLC</td><td class="ms">CIK 0001913482</td><td class="num">16</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001913482&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Wealthgate Family Office, LLC</td><td class="ms">CIK 0001835441</td><td class="num">16</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001835441&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Callan Family Office, LLC</td><td class="ms">CIK 0001938970</td><td class="num">15</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001938970&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">INTREPID FAMILY OFFICE LLC</td><td class="ms">CIK 0001596197</td><td class="num">15</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001596197&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">MARCUARD FAMILY OFFICE LTD</td><td class="ms">CIK 0001538112</td><td class="num">15</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001538112&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">FIDUCIARY FAMILY OFFICE, LLC</td><td class="ms">CIK 0002020280</td><td class="num">11</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0002020280&amp;type=13F">EDGAR ↗</a></td></tr>
+        <tr><td class="nm">Fortitude Family Office, LLC</td><td class="ms">CIK 0001950506</td><td class="num">11</td><td class="flag"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=0001950506&amp;type=13F">EDGAR ↗</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="empty-note" id="nohits" hidden>No firm matches that search.</p>
+    <p class="src">Source: SEC EDGAR full-text search, entity facet for Form 13F-HR · 923 filings mention a family office; 23 filers are named one.</p>
+  </div>
+</section>
+
+<section id="uae">
+  <div class="wrap">
+    <p class="kicker">Roster · registered, not licensed</p>
+    <h2>The UAE registers the family office — even when it needs no licence.</h2>
+    <p class="lede">Dubai’s DIFC and Abu Dhabi’s ADGM are unusual: a pure single family office needs
+      <strong>no financial-services licence</strong>, yet it is still an <em>entity on a public register</em> — the DIFC
+      Registrar of Companies (via the Family Wealth Centre) or the ADGM Registration Authority. So a roster does
+      in principle exist; both portals, however, rate-limit automated collection, so they are linked rather than
+      reproduced here.</p>
+    <div class="grid">
+      <div class="card"><h3>DIFC (Dubai)</h3>
+        <p>Family Arrangements Regulations, in force 31 Jan 2023. One or more connected families,
+        USD 50m net assets per family; registered, no DFSA licence.</p>
+        <p><a href="https://www.difc.com/public-register">DIFC public register ↗</a></p></div>
+      <div class="card"><h3>ADGM (Abu Dhabi)</h3>
+        <p>Single family office is a “controlled activity”, family net assets ≥ USD 10m; registered with the
+        Registration Authority, no FSRA permission.</p>
+        <p><a href="https://www.adgm.com/public-registers">ADGM public register ↗</a></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="reproduce">
+  <div class="wrap">
+    <p class="kicker">Reproduce</p>
+    <h2>Every name here came from the register itself.</h2>
+    <p class="lede">No commercial “top family offices” list was used — those are voluntary, motivated and edited,
+      the very sources the Ledger sets aside. Both rosters are one request each.</p>
+    <pre><span class="c"># Luxembourg — the 5 licensed family offices (CSSF specialised PFS)</span>
+curl -s 'https://edesk.apps.cssf.lu/search-entities-api/api/v1/entite?size=500&amp;entType=SPP' \
+  <span class="c"># then keep entities whose detail has ACTIVITY_CODE = ACT_SPP_FO</span>
+
+<span class="c"># United States — 13F filers named "family office" (SEC EDGAR full-text search)</span>
+curl -s 'https://efts.sec.gov/LATEST/search-index?q=%22family+office%22&amp;forms=13F-HR' \
+  <span class="c"># read aggregations.entity_filter; keep names containing "family office"</span></pre>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><strong>The Family-Office Blind Spot</strong> — a companion to
+      <a href="index.html">The Register Ledger</a>. Counted 23 September 2026.
+      The licence map is a plain-language summary of public regulator guidance, not legal advice: the perimeter
+      of every single-family-office exemption is fact-specific.</p>
+    <hr class="foot-rule">
+    <p>Rosters pulled from the CSSF and SEC EDGAR public registers. Method and code:
+      <a href="https://github.com/7feilee/eufinreg">github.com/7feilee/eufinreg</a>.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var q=document.getElementById('q'), rows=[].slice.call(document.querySelectorAll('#roster tbody tr'));
+  var tally=document.getElementById('tally'), none=document.getElementById('nohits');
+  q.addEventListener('input', function(){
+    var t=q.value.trim().toLowerCase(), n=0;
+    rows.forEach(function(r){
+      var hit = !t || r.textContent.toLowerCase().indexOf(t)>-1;
+      r.hidden = !hit; if(hit) n++;
+    });
+    tally.textContent = n+' of '+rows.length;
+    none.hidden = n>0;
+  });
+})();
+</script>
+</body>
+</html>
