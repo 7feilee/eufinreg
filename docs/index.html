@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Register Ledger</title>
+<meta name="description" content="Five million records of mandatory European disclosure, counted on one day — and what moved since the last count.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='3' fill='%2316233A'/><rect x='6' y='8' width='20' height='2.6' fill='%23EEF1F6'/><rect x='6' y='14.7' width='20' height='2.6' fill='%23EEF1F6'/><rect x='6' y='21.4' width='12' height='2.6' fill='%23B03A2E'/></svg>">
+<style>
+  :root {
+    --ink:        #16233A;
+    --ink-2:      #22334F;
+    --paper:      #F2F1EC;
+    --card:       #FFFFFF;
+    --text:       #17202C;
+    --text-soft:  #5C6675;
+    --text-faint: #8C95A2;
+    --rule:       #DBD9D0;
+    --rule-hard:  #BEBCB1;
+    --stamp:      #B03A2E;
+    --stamp-bg:   #F7E9E6;
+    --seal:       #1F6F5C;
+    --seal-bg:    #E4F0EB;
+    --on-ink:     #EEF1F6;
+    --on-ink-dim: #93A3BC;
+    --focus:      #C2410C;
+
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    --sans:  ui-sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+    --mono:  ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+    --pad:  clamp(18px, 5vw, 56px);
+    --wide: 1080px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #0C1420; --ink-2: #16233A;
+      --paper: #14181E; --card: #1B2028;
+      --text: #E7E9EC; --text-soft: #9AA3B0; --text-faint: #6B7482;
+      --rule: #2A313B; --rule-hard: #3A424E;
+      --stamp: #E4877A; --stamp-bg: #2C1B18;
+      --seal: #6FC0A8; --seal-bg: #16281F;
+      --on-ink: #EEF1F6; --on-ink-dim: #93A3BC;
+      --focus: #F97316;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration-color: var(--rule-hard); text-underline-offset: 3px; }
+  a:hover { text-decoration-color: currentColor; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+  .wrap { max-width: var(--wide); margin: 0 auto; padding-inline: var(--pad); }
+
+  /* ---- the cover ------------------------------------------------------ */
+  .cover { background: var(--ink); color: var(--on-ink); padding-block: clamp(46px, 9vw, 96px) clamp(38px, 7vw, 74px); }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--on-ink-dim);
+    display: flex; flex-wrap: wrap; gap: 6px 14px; margin-bottom: clamp(24px, 4vw, 40px);
+  }
+  .eyebrow a { color: var(--on-ink-dim); }
+  .eyebrow a:hover { color: var(--on-ink); }
+  h1 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(34px, 6.4vw, 68px); line-height: 1.04;
+    letter-spacing: -0.015em; margin: 0; text-wrap: balance;
+  }
+  h1 em { font-style: italic; color: #C9D6EA; }
+  .standfirst {
+    max-width: 60ch; margin: clamp(20px, 3vw, 30px) 0 0;
+    font-size: clamp(16px, 1.6vw, 18.5px); color: #C5CEDC; line-height: 1.62;
+  }
+  .standfirst strong { color: var(--on-ink); font-weight: 600; }
+
+  .facts {
+    margin-top: clamp(34px, 5vw, 54px);
+    border-top: 1px solid rgba(255,255,255,.16);
+    display: grid; gap: 0;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  }
+  .fact { padding: 22px 0 4px; border-right: 1px solid rgba(255,255,255,.1); padding-right: 22px; }
+  .fact:last-child { border-right: 0; }
+  .fact b {
+    display: block; font-family: var(--mono); font-weight: 500;
+    font-size: clamp(25px, 3.4vw, 34px); letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums; color: var(--on-ink);
+  }
+  .fact span { display: block; margin-top: 7px; font-size: 13.5px; color: var(--on-ink-dim); line-height: 1.45; }
+
+  /* ---- sections ------------------------------------------------------- */
+  section { padding-block: clamp(46px, 7vw, 84px); border-top: 1px solid var(--rule); }
+  section:first-of-type { border-top: 0; }
+  .kicker {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--text-faint); margin: 0 0 12px;
+  }
+  h2 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(25px, 3.4vw, 38px); line-height: 1.16;
+    letter-spacing: -0.01em; margin: 0 0 14px; text-wrap: balance;
+  }
+  .lede { max-width: 66ch; margin: 0 0 clamp(26px, 3.5vw, 40px); color: var(--text-soft); font-size: 16.5px; }
+  .lede strong { color: var(--text); font-weight: 600; }
+  p { max-width: 66ch; }
+
+  /* ---- the ledger ----------------------------------------------------- */
+  .band {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-faint);
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px;
+    margin: clamp(30px, 4vw, 44px) 0 2px; padding-bottom: 8px;
+    border-bottom: 1.5px solid var(--rule-hard);
+  }
+  .band:first-of-type { margin-top: 0; }
+  .band .band-note { margin-left: auto; letter-spacing: 0.04em; text-transform: none; font-size: 11.5px; }
+
+  .row {
+    display: grid;
+    /* Fixed, not auto: each row is its own grid, so only explicit widths make
+       the figures line up down the page the way a ledger column should. */
+    grid-template-columns: minmax(0, 1fr) 7.2rem 5.2rem;
+    align-items: baseline;
+    gap: 4px 18px;
+    padding: 13px 0 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .row-name { font-family: var(--serif); font-size: 19px; line-height: 1.25; }
+  .row-what { grid-column: 1 / -1; font-size: 13.8px; color: var(--text-soft); max-width: 68ch; margin-top: -2px; }
+  .row-what code { font-family: var(--mono); font-size: 12.4px; background: var(--card); padding: 1px 5px; border: 1px solid var(--rule); border-radius: 3px; }
+  .count {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: 18px; letter-spacing: -0.01em; white-space: nowrap; text-align: right;
+  }
+  .delta {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: 12.5px; white-space: nowrap; padding: 2px 7px; border-radius: 3px;
+    text-align: right; justify-self: end;
+  }
+  .delta.up   { color: var(--seal);  background: var(--seal-bg); }
+  .delta.down { color: var(--stamp); background: var(--stamp-bg); }
+  .delta.flat { color: var(--text-faint); }
+  .delta.none { color: var(--text-faint); background: none; }
+  .count.na { font-size: 13px; color: var(--text-faint); }
+
+  .tag {
+    display: inline-block; vertical-align: 2px; margin-left: 8px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--stamp);
+    border: 1px solid currentColor; border-radius: 2px; padding: 1px 6px 0;
+  }
+
+  /* the empty register gets its own treatment — it is the finding */
+  .row.empty { background: linear-gradient(90deg, var(--stamp-bg), transparent 62%); }
+  .row.empty .count { color: var(--stamp); }
+
+  /* ---- generic blocks ------------------------------------------------- */
+  .grid { display: grid; gap: clamp(16px, 2vw, 22px); grid-template-columns: repeat(auto-fit, minmax(275px, 1fr)); }
+  .card {
+    background: var(--card); border: 1px solid var(--rule); border-radius: 4px;
+    padding: 20px 22px 22px;
+  }
+  .card h3 {
+    margin: 0 0 9px; font-family: var(--serif); font-weight: 400; font-size: 19.5px; line-height: 1.25;
+  }
+  .card p { margin: 0; font-size: 14.6px; color: var(--text-soft); max-width: none; }
+  .card p + p { margin-top: 10px; }
+  .card code, .inline-code {
+    font-family: var(--mono); font-size: 12.6px;
+    background: var(--paper); padding: 1px 5px; border-radius: 3px; border: 1px solid var(--rule);
+  }
+  .src {
+    display: block; margin-top: 12px; font-family: var(--mono);
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint);
+  }
+
+  /* obligation table */
+  .obl { border-top: 1.5px solid var(--rule-hard); }
+  .obl-row { display: grid; grid-template-columns: 2.4rem minmax(0,1fr); gap: 0 18px; padding: 14px 0; border-bottom: 1px solid var(--rule); align-items: start; }
+  .obl-key { font-family: var(--mono); font-size: 15px; color: var(--text-faint); padding-top: 2px; }
+  .obl-row.done .obl-key { color: var(--seal); }
+  .obl-title { font-family: var(--serif); font-size: 18px; }
+  .obl-note { font-size: 14px; color: var(--text-soft); margin-top: 3px; }
+  .obl-note code { font-family: var(--mono); font-size: 12.4px; }
+
+  .caveat { border-left: 3px solid var(--stamp); padding: 4px 0 4px 20px; margin: 0 0 24px; }
+  .caveat h3 { margin: 0 0 6px; font-family: var(--serif); font-weight: 400; font-size: 20px; }
+  .caveat p { margin: 0; color: var(--text-soft); font-size: 15.4px; }
+
+  pre {
+    background: var(--ink); color: var(--on-ink); border-radius: 4px;
+    padding: 18px 20px; overflow-x: auto; font-family: var(--mono);
+    font-size: 13px; line-height: 1.75; margin: 0;
+  }
+  pre .c { color: var(--on-ink-dim); }
+
+  footer { background: var(--ink); color: var(--on-ink-dim); padding-block: clamp(40px, 6vw, 62px); font-size: 14px; }
+  footer a { color: var(--on-ink); }
+  footer p { max-width: 70ch; }
+  footer .foot-rule { border: 0; border-top: 1px solid rgba(255,255,255,.14); margin: 26px 0; }
+
+  @media (max-width: 620px) {
+    .row { grid-template-columns: minmax(0,1fr) 6.4rem 4.6rem; gap: 4px 10px; }
+    .row-name { font-size: 17.5px; }
+    .count { font-size: 16px; }
+    .fact { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.1); padding-bottom: 18px; }
+    .fact:last-child { border-bottom: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="wrap">
+    <div class="eyebrow">
+      <span>eufinreg</span>
+      <span>·</span>
+      <span>counted 23 September 2026</span>
+      <span>·</span>
+      <a href="https://github.com/7feilee/eufinreg">source and method on GitHub</a>
+    </div>
+    <h1>These registers publish<br>the present tense. <em>Only.</em></h1>
+    <p class="standfirst">
+      Twenty-one European public registers list who is licensed to run a bank, issue a stablecoin,
+      sell a medical device or run a clinical trial. Not one of them offers a changelog, a
+      <span class="inline-code" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);color:#D7E0EE">?since=</span>
+      parameter or a feed. The EBA overwrites its file nightly, FINMA every morning, ESMA weekly,
+      Austria monthly. <strong>Yesterday's version is not archived anywhere. It is simply gone.</strong>
+      Everything below was counted on one day. The column saying what moved exists only because
+      something kept the earlier copy.
+    </p>
+    <div class="facts">
+      <div class="fact"><b>5,107,518</b><span>records counted, across 21 registers, on 23 September 2026</span></div>
+      <div class="fact"><b>0</b><span>API keys, accounts or authentication anywhere in that list</span></div>
+      <div class="fact"><b>+23</b><span>firms joined the EU crypto-licence register in six weeks — a 7.0% rise</span></div>
+      <div class="fact"><b>0</b><span>authorised asset-referenced token issuers, since the rules began to apply</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="ledger">
+  <div class="wrap">
+    <p class="kicker">The ledger</p>
+    <h2>What each register held, and what six weeks did to it</h2>
+    <p class="lede">
+      Counted on <strong>23 September 2026</strong> against a baseline taken on <strong>12–16 August 2026</strong>.
+      Every figure comes from the register's own count — a Solr <code class="inline-code">numFound</code>, a
+      JSON:API total, a row count of the published file — not from a sample. Where there is no earlier
+      count to compare against, the change column is left blank rather than guessed.
+    </p>
+
+    <div class="band">
+      <span>B · Operating licences</span>
+      <span class="band-note">a body with the power to refuse must keep a list of who it approved</span>
+    </div>
+
+    <div class="row">
+      <div class="row-name">ESMA — authorised entities</div>
+      <div class="count">101,771</div>
+      <div class="delta down">−193</div>
+      <div class="row-what">MiFID investment firms, AIFMs, UCITS management companies, crowdfunding providers, trading venues, systematic internalisers. <code>esma_registers_upreg</code></div>
+    </div>
+    <div class="row">
+      <div class="row-name">ESMA — funds</div>
+      <div class="count">215,037</div>
+      <div class="delta up">+2,696</div>
+      <div class="row-what">AIF, EuSEF and EuVECA funds. The firms shrank while the funds grew: authorisations lapse, and a register is the only public record that says so. <code>esma_registers_funds</code></div>
+    </div>
+    <div class="row">
+      <div class="row-name">ESMA — suspensions and removals</div>
+      <div class="count">217,932</div>
+      <div class="delta up">+113</div>
+      <div class="row-what">Instruments suspended or removed from trading. <code>esma_registers_saris_new</code></div>
+    </div>
+    <div class="row">
+      <div class="row-name">ESMA — benchmark administrators</div>
+      <div class="count">28,044</div>
+      <div class="delta down">−90</div>
+      <div class="row-what">Administrators and benchmarks under the Benchmarks Regulation. <code>esma_registers_bench_entities</code></div>
+    </div>
+    <div class="row">
+      <div class="row-name">ESMA — money market funds</div>
+      <div class="count">671</div>
+      <div class="delta flat">0</div>
+      <div class="row-what">The smallest core, and the only one that did not move at all. <code>esma_registers_mmf04</code></div>
+    </div>
+    <div class="row">
+      <div class="row-name">MiCA — crypto-asset service providers</div>
+      <div class="count">352</div>
+      <div class="delta up">+23</div>
+      <div class="row-what">Authorised under Article 109. The fastest-moving licence class here: <strong>+7.0% in six weeks</strong>. An authorisation is granted before the business operates, which is why this list leads every voluntary signal.</div>
+    </div>
+    <div class="row empty">
+      <div class="row-name">MiCA — asset-referenced token issuers <span class="tag">nobody authorised</span></div>
+      <div class="count">0</div>
+      <div class="delta none">—</div>
+      <div class="row-what">A header row and nothing under it. The titles of MiCA covering asset-referenced tokens have applied since 30 June 2024, and the register of authorised issuers is still empty. That is not a broken download — it is the finding, and it took a deliberate fix to stop this project's own drift check from calling it a fault.</div>
+    </div>
+    <div class="row">
+      <div class="row-name">MiCA — e-money token issuers</div>
+      <div class="count">49</div>
+      <div class="delta none">—</div>
+      <div class="row-what">Euro and foreign-currency stablecoin issuers authorised in the EU. <code>EMTWP.csv</code></div>
+    </div>
+    <div class="row">
+      <div class="row-name">MiCA — other white papers</div>
+      <div class="count">998</div>
+      <div class="delta none">—</div>
+      <div class="row-what">Notified white papers for crypto-assets that are neither ART nor EMT. <code>OTHER.csv</code></div>
+    </div>
+    <div class="row">
+      <div class="row-name">MiCA — non-compliant entities</div>
+      <div class="count">174</div>
+      <div class="delta none">—</div>
+      <div class="row-what">Article 110: the register of firms operating <em>without</em> authorisation. The opposite of a licence list, and published under the same obligation. <code>NCASP.csv</code></div>
+    </div>
+    <div class="row">
+      <div class="row-name">EBA — PSD2 payment institutions</div>
+      <div class="count">6,427</div>
+      <div class="delta up">+20</div>
+      <div class="row-what">Payment institutions, e-money institutions, account information service providers and exempted firms across the EEA. The same nightly file carries a further ~322,000 agent records that are largely natural persons; this client will not fetch them unless you ask for them by name.</div>
+    </div>
+    <div class="row">
+      <div class="row-name">EUDAMED — economic operators</div>
+      <div class="count">49,832</div>
+      <div class="delta up">+939</div>
+      <div class="row-what">Medical device manufacturers, importers, authorised representatives and procedure-pack producers — with registered email and phone, because the Medical Device Regulation requires a reachable contact.</div>
+    </div>
+    <div class="row">
+      <div class="row-name">EUDAMED — notified bodies</div>
+      <div class="count">70</div>
+      <div class="delta flat">0</div>
+      <div class="row-what">The organisations that certify everyone in the row above. Seventy of them for the whole European market.</div>
+    </div>
+    <div class="row">
+      <div class="row-name">CTIS — authorised clinical trials</div>
+      <div class="count">12,467</div>
+      <div class="delta up">+238</div>
+      <div class="row-what">Every trial authorised under the Clinical Trials Regulation, with its sponsor and sponsor type. The API will page through only the first 10,000 of them while continuing to report the true total.</div>
+    </div>
+    <div class="row">
+      <div class="row-name">FINMA — Swiss authorisation holders</div>
+      <div class="count">2,941</div>
+      <div class="delta up">+3</div>
+      <div class="row-what">Switzerland sits outside the EEA, so none of the rows above contain a Swiss licence. A CSV regenerated every morning at a URL that does not move — a better interface than most APIs.</div>
+    </div>
+    <div class="row">
+      <div class="row-name">GISA — Austrian trade licences</div>
+      <div class="count">1,032,282</div>
+      <div class="delta up">+2,171</div>
+      <div class="row-what">Every active trade licence in Austria, published as open data under CC BY 4.0 by the ministry whose own search page cannot be automated. Wien 217,314 · Niederösterreich 210,186 · Oberösterreich 158,646.</div>
+    </div>
+    <div class="row">
+      <div class="row-name">GISA — trade code catalogue</div>
+      <div class="count">907</div>
+      <div class="delta flat">0</div>
+      <div class="row-what">The official list of trade types an Austrian licence can be granted for — the controlled vocabulary behind the million rows above.</div>
+    </div>
+
+    <div class="band">
+      <span>A · Existence and identity</span>
+      <span class="band-note">who the licensed entity actually is</span>
+    </div>
+
+    <div class="row">
+      <div class="row-name">GLEIF — legal entity identifiers</div>
+      <div class="count">3,437,564</div>
+      <div class="delta up">+33,804</div>
+      <div class="row-what">Worldwide, each with a 20-character LEI, a legal name, an address and — for 256,231 German entities — the firm's own <em>Handelsregister</em> number. CC0, and the only register here that publishes daily <em>delta</em> files. DE 256,231 · AT 49,086 · CH 28,210 · LI 15,494.</div>
+    </div>
+    <div class="row">
+      <div class="row-name">Swiss UID register (BFS)</div>
+      <div class="count na">lookup only</div>
+      <div class="delta none">—</div>
+      <div class="row-what">A public SOAP service with legal form, seat, commercial-register status and VAT status. It answers questions; it does not publish a population, and a search silently stops at 30 results.</div>
+    </div>
+
+    <div class="band">
+      <span>D · Public money &nbsp;&nbsp;·&nbsp;&nbsp; F · Tax</span>
+      <span class="band-note">earlier than a licence, and harder to fake</span>
+    </div>
+
+    <div class="row">
+      <div class="row-name">TED — EU public procurement</div>
+      <div class="count na">query only</div>
+      <div class="delta none">—</div>
+      <div class="row-what">Award notices naming the winning company. Public money carries a publication duty, which makes this the earliest reliable signal of expansion. EU and EEA only — so no Switzerland.</div>
+    </div>
+    <div class="row">
+      <div class="row-name">VIES — EU VAT validation</div>
+      <div class="count na">validator</div>
+      <div class="delta none">—</div>
+      <div class="row-what">One number at a time, straight from each member state's own system. Nobody lies to the tax authority about a VAT number, which is exactly what makes it worth checking.</div>
+    </div>
+  </div>
+</section>
+
+<section id="overwrite">
+  <div class="wrap">
+    <p class="kicker">Why the change column is the hard part</p>
+    <h2>Every one of these publishers destroys its own history</h2>
+    <p class="lede">
+      The registers are obliged to publish <em>who is licensed</em>. Nothing obliges them to publish
+      <em>who stopped being licensed</em>, and none of them do. A licence that lapses does not appear
+      in a "removals" feed — the row simply is not in tomorrow's file.
+    </p>
+    <div class="grid">
+      <div class="card">
+        <h3>Nightly</h3>
+        <p>The EBA's PSD2 golden copy is regenerated every night and published with its own SHA-256. The checksum proves the file is intact; it says nothing about what the file used to contain.</p>
+        <span class="src">EBA · 6,427 institutions</span>
+      </div>
+      <div class="card">
+        <h3>Every morning</h3>
+        <p>FINMA regenerates its authorisation CSV daily at a fixed URL. Fetch it at noon and you have today's list. Fetch it tomorrow and yesterday's is unrecoverable.</p>
+        <span class="src">FINMA · 2,941 authorisations</span>
+      </div>
+      <div class="card">
+        <h3>Weekly, in place</h3>
+        <p>ESMA's five MiCA CSVs are overwritten at the same five URLs. There are no dated versions and no archive, so <code>Last-Modified</code> is the only vintage information that exists.</p>
+        <span class="src">MiCA · 1,573 records across five files</span>
+      </div>
+      <div class="card">
+        <h3>Monthly, as a new file</h3>
+        <p>Austria publishes a fresh GISA extract each month. The previous month's file is replaced rather than kept, so a year of Austrian trade-licence history exists only where someone saved it.</p>
+        <span class="src">GISA · 1,032,282 licences</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="traps">
+  <div class="wrap">
+    <p class="kicker">Read the interface, not the documentation</p>
+    <h2>Six ways a public register returns a confident wrong answer</h2>
+    <p class="lede">
+      None of these produce an error. Every one returns HTTP 200 with a well-formed body, and every
+      one was found by probing the live service rather than by reading its help page.
+    </p>
+    <div class="grid">
+      <div class="card">
+        <h3>The silent ceiling</h3>
+        <p>The Swiss UID register's SOAP search returns at most 30 results and does not say so. Ask for every firm in Zürich and you get thirty of them, formatted exactly like a complete answer.</p>
+        <span class="src">BFS · Switzerland</span>
+      </div>
+      <div class="card">
+        <h3>The honest total, the truncated list</h3>
+        <p>CTIS reports <code>totalRecords: 12,467</code> and then refuses to page past record 10,000. The count is right; the data behind it stops early. This client warns when the window truncates the answer.</p>
+        <span class="src">CTIS · clinical trials</span>
+      </div>
+      <div class="card">
+        <h3>The empty search that is really a missing key</h3>
+        <p>Omit <code>searchCriteria</code> from a CTIS request and the API answers 200 with <code>totalRecords: 0</code> — a perfectly well-formed way of saying "your query was wrong". Verified again today.</p>
+        <span class="src">CTIS · re-checked 23 Sep 2026</span>
+      </div>
+      <div class="card">
+        <h3>The <code>/csv</code> that is not a CSV</h3>
+        <p>Austria's open-data <code>/csv</code> path serves a 7-Zip archive. A standard CSV reader sees binary and either crashes or, worse, parses the first few bytes into a row.</p>
+        <span class="src">GISA · data.gv.at</span>
+      </div>
+      <div class="card">
+        <h3>The language flag that is a filter</h3>
+        <p>EUDAMED's mandatory <code>languageIso2Code</code> looks like a display preference. Leave it out and the result set changes shape, so it silently decides which records you can see.</p>
+        <span class="src">EUDAMED · medical devices</span>
+      </div>
+      <div class="card">
+        <h3>Parents and children in one flat array</h3>
+        <p>ESMA's <code>upreg</code> core returns entity records and their child records in the same <code>docs</code> array, told apart only by a marker field. Count the array and you overstate the number of firms by a factor of seven.</p>
+        <span class="src">ESMA · 101,771 documents → 13,913 entities</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="dach">
+  <div class="wrap">
+    <p class="kicker">DACH</p>
+    <h2>Austria and Switzerland publish files. Germany publishes a portal.</h2>
+    <p class="lede">
+      This is the opposite of what most people expect, and it decides how a German question has to be
+      answered.
+    </p>
+    <div class="grid">
+      <div class="card">
+        <h3>Austria — open data, no negotiation</h3>
+        <p>The entire trade-licence register, 1,032,282 rows, published under CC BY 4.0 by the ministry — even though its own search page is an ASP.NET form that cannot be automated at all.</p>
+        <p>The financial regulator, by contrast, offers no interface whatsoever.</p>
+      </div>
+      <div class="card">
+        <h3>Switzerland — an unauthenticated web service</h3>
+        <p>The federal business register is exposed over public SOAP with a published WSDL, and FINMA's authorisation list is a daily CSV. Switzerland is outside the EEA, so no EU register covers it.</p>
+        <p>The commercial register's REST API needs a key, and its host bans crawlers outright. It is documented here and deliberately not used.</p>
+      </div>
+      <div class="card">
+        <h3>Germany — an export button behind a robots ban</h3>
+        <p>BaFin's databases do offer CSV, XML and Excel exports, and the whole portal host is <code>robots.txt: Disallow: /</code>. So this project does not touch it, and shows you the export URLs to click yourself.</p>
+        <p>Automated German coverage is routed through the EU-level registers instead — ESMA and the EBA both carry BaFin-supervised entities.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="obligations">
+  <div class="wrap">
+    <p class="kicker">Where the next source comes from</p>
+    <h2>Nine kinds of obligation</h2>
+    <p class="lede">
+      The list above is not a collection of favourites; it is one pass over a structure. Any economic
+      activity leaves a trail of compulsory filings before it leaves a voluntary one, and they sort
+      into nine kinds. The question to ask is not <em>where is there information</em> but
+      <strong>who is compelled by law to tell the truth</strong>.
+    </p>
+    <div class="obl">
+      <div class="obl-row done">
+        <div class="obl-key">A</div>
+        <div><div class="obl-title">Existence and ownership</div>
+          <div class="obl-note">Commercial registers, LEI, beneficial ownership. <code>gleif</code>, and through it the German <em>Handelsregister</em> number.</div></div>
+      </div>
+      <div class="obl-row done">
+        <div class="obl-key">B</div>
+        <div><div class="obl-title">Operating licences</div>
+          <div class="obl-note">The industry directories. <code>upreg</code> <code>eba-psd</code> <code>mica-*</code> <code>finma</code> <code>gisa</code> <code>eudamed</code> <code>ctis</code></div></div>
+      </div>
+      <div class="obl-row">
+        <div class="obl-key">C</div>
+        <div><div class="obl-title">Technology and intellectual property</div>
+          <div class="obl-note">Patents, trademarks, standards bodies. Not implemented — the EPO and EUIPO interfaces both need a free key.</div></div>
+      </div>
+      <div class="obl-row done">
+        <div class="obl-key">D</div>
+        <div><div class="obl-title">Public money</div>
+          <div class="obl-note">Procurement, grants, subsidies, state aid. <code>ted</code>. CORDIS and the German <em>Förderkatalog</em> are not implemented.</div></div>
+      </div>
+      <div class="obl-row">
+        <div class="obl-key">E</div>
+        <div><div class="obl-title">Physical facilities</div>
+          <div class="obl-note">Emission permits, planning consent, environmental approval. Not implemented; German BImSchG notices sit at <em>Länder</em> level.</div></div>
+      </div>
+      <div class="obl-row done">
+        <div class="obl-key">F</div>
+        <div><div class="obl-title">Money and tax</div>
+          <div class="obl-note">Filings, prospectuses, VAT. <code>vies</code>. The Bundesanzeiger's annual accounts are not machine-readable.</div></div>
+      </div>
+      <div class="obl-row">
+        <div class="obl-key">G</div>
+        <div><div class="obl-title">Adversarial procedures</div>
+          <div class="obl-note">Courts, merger review, insolvency, recalls. Not implemented — and EU merger decisions are the richest free market analysis there is.</div></div>
+      </div>
+      <div class="obl-row">
+        <div class="obl-key">H</div>
+        <div><div class="obl-title">People</div>
+          <div class="obl-note">Visa sponsor lists, professional registers, association members. Not implemented; the Dutch recognised-sponsor list is the cleanest example.</div></div>
+      </div>
+      <div class="obl-row">
+        <div class="obl-key">I</div>
+        <div><div class="obl-title">Cross-border</div>
+          <div class="obl-note">FDI screening, export control, trade data. Not implemented.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="caveats">
+  <div class="wrap">
+    <p class="kicker">Two honest limits</p>
+    <h2>What five million mandatory records cannot tell you</h2>
+    <div class="caveat">
+      <h3>Mandatory is not complete</h3>
+      <p>
+        These sources are blind to the informal economy, to what happens inside a company, to intent —
+        and, most usefully to remember, to <em>approved but abandoned</em>. An authorisation says
+        somebody meant to do something. It does not say they did it. A licence is not a business
+        signal: nothing here reports headcount, revenue or whether anyone works there, and the licensed
+        entity is frequently not the operating one. Of the 13,913 entities in the ESMA register today,
+        <strong>2,220 are marked inactive</strong> and 1,279 records are branches of a firm licensed
+        somewhere else. Cross-check against a second layer — accounts,
+        contract awards, imports — before believing a plan happened.
+      </p>
+    </div>
+    <div class="caveat">
+      <h3>A list is not an outcome</h3>
+      <p>
+        Building one of these has visible progress, verifiable results and no social cost, which makes
+        it the finest form of procrastination available. The only value of a list is the order it puts
+        things in. After it is sorted, you still have to go and talk to people.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="reproduce">
+  <div class="wrap">
+    <p class="kicker">Check it yourself</p>
+    <h2>Every number here is one command away</h2>
+    <p class="lede">
+      Nothing on this page came from a scrape. Each figure is the register's own count, and the tool
+      that produced it is open source, has one runtime dependency, and asks no register for a key.
+    </p>
+    <pre><code><span class="c"># the ledger above, live — 21 registers, shape-checked</span>
+uvx --from git+https://github.com/7feilee/eufinreg eufinreg doctor
+
+<span class="c"># every EU crypto-asset service provider, with the services they are licensed for</span>
+uv run eufinreg --source mica-casp -o casps.csv
+
+<span class="c"># every active Austrian trade licence in Vienna</span>
+uv run eufinreg --source gisa --query 'nuts2=AT13' -o wien.csv
+
+<span class="c"># keep the present tense, so next month there is a past tense to compare against</span>
+uv run eufinreg ingest --config eufinreg.config.json
+uv run eufinreg watch --coverage</code></pre>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>
+      <strong style="color:var(--on-ink)">eufinreg</strong> reads public registers machine-to-machine.
+      No HTML scraping happens anywhere in the project. Personal-data selections are gated in code
+      rather than in a warning, and three perfectly usable endpoints are documented and deliberately
+      not wrapped.
+    </p>
+    <hr class="foot-rule">
+    <p>
+      Counts taken 23 September 2026 against a baseline of 12–16 August 2026, and they will drift —
+      that is the point. The interface shapes should not.
+      Each register's own disclaimer travels with its rows: ESMA states that the crypto-asset white
+      papers in its register have not been reviewed or approved by any competent authority, and the
+      offeror is solely responsible for their content.
+    </p>
+    <p style="margin-top:18px">
+      <a href="https://github.com/7feilee/eufinreg">github.com/7feilee/eufinreg</a> ·
+      <a href="https://github.com/7feilee/eufinreg/blob/main/README.md">interface documentation</a> ·
+      <a href="https://github.com/7feilee/eufinreg/blob/main/docs/OPERATIONS.md">operations runbook</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -42,6 +42,7 @@ because **no licensed institution can choose not to appear in it.**
 | **Runtime dependencies** | one (`requests`); `py7zr` only for the Austrian archive, `openpyxl` only for `--format xlsx` |
 | **Tests** | 633, fully offline; plus a weekly live [drift check](.github/workflows/drift.yml) against every register |
 | **Docs** | [Operations runbook](docs/OPERATIONS.md) · [Architecture](docs/ARCHITECTURE.md) · [The niche](docs/BUSINESS.md) · [Changelog](CHANGELOG.md) |
+| **The numbers** | [**The Register Ledger**](https://7feilee.github.io/eufinreg/) — what all 21 registers held on 23 September 2026, and what six weeks changed |
 
 > **Name note:** the package started as a financial-registers client and still
 > carries the name. It now covers medical devices and pharma too, and reaches
