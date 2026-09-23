@@ -164,6 +164,70 @@
   .row.empty { background: linear-gradient(90deg, var(--stamp-bg), transparent 62%); }
   .row.empty .count { color: var(--stamp); }
 
+
+  /* ---- ranked tables --------------------------------------------------- */
+  .tbl-scroll { overflow-x: auto; margin-top: clamp(22px, 3vw, 30px); }
+  table.tbl { border-collapse: collapse; width: 100%; min-width: 560px; }
+  .tbl th {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.11em;
+    text-transform: uppercase; color: var(--text-faint); font-weight: 400;
+    text-align: left; padding: 0 12px 9px 0; border-bottom: 1.5px solid var(--rule-hard);
+    white-space: nowrap;
+  }
+  .tbl th.num, .tbl th.msk { text-align: right; }
+  .tbl th.msk { text-align: left; }
+  .tbl td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--rule); vertical-align: baseline; }
+  .tbl tr:hover td { background: var(--card); }
+  .tbl .rk {
+    font-family: var(--mono); font-size: 12.5px; color: var(--text-faint);
+    font-variant-numeric: tabular-nums; width: 2.6rem;
+  }
+  .tbl .nm { font-family: var(--serif); font-size: 17px; line-height: 1.3; }
+  .tbl .nm .alt { display: block; font-family: var(--sans); font-size: 12.5px; color: var(--text-soft); }
+  .tbl .ms { font-family: var(--mono); font-size: 12.5px; color: var(--text-soft); white-space: nowrap; }
+  .tbl .num {
+    font-family: var(--mono); font-size: 14px; font-variant-numeric: tabular-nums;
+    text-align: right; white-space: nowrap;
+  }
+  .tbl .num.artefact { color: var(--stamp); }
+  /* one character per MiCA service: held is ink, withheld is a faint stop */
+  .tbl .msk { font-family: var(--mono); font-size: 14.5px; letter-spacing: 0.16em; white-space: nowrap; }
+  .tbl .msk b { font-weight: 500; }
+  .tbl .msk i { font-style: normal; color: var(--text-faint); opacity: .55; }
+
+  .legend {
+    display: grid; gap: 2px 20px; margin-top: 18px; padding-top: 16px;
+    border-top: 1px solid var(--rule);
+    grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+    font-size: 13.4px; color: var(--text-soft);
+  }
+  .legend span b { font-family: var(--mono); font-weight: 500; color: var(--text); margin-right: 7px; }
+  .legend span.rare b { color: var(--stamp); }
+
+  .finding {
+    background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--stamp);
+    border-radius: 4px; padding: 20px 24px; margin: clamp(24px, 3vw, 32px) 0;
+  }
+  .finding h3 { margin: 0 0 8px; font-family: var(--serif); font-weight: 400; font-size: 21px; }
+  .finding p { margin: 0; color: var(--text-soft); font-size: 15.2px; max-width: 72ch; }
+  .finding p + p { margin-top: 11px; }
+  .finding strong { color: var(--text); font-weight: 600; }
+
+  .caps { margin-top: 18px; display: grid; gap: 1px 0; }
+  .caps-row {
+    display: grid; grid-template-columns: minmax(0,1fr) 4.4rem 4.4rem 4.4rem;
+    gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--rule);
+    font-size: 14px; align-items: baseline;
+  }
+  .caps-row span:not(:first-child) {
+    font-family: var(--mono); font-size: 13px; text-align: right; font-variant-numeric: tabular-nums;
+  }
+  .caps-row.head span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.11em;
+    text-transform: uppercase; color: var(--text-faint); border: 0; }
+  .caps-row.head { border-bottom: 1.5px solid var(--rule-hard); }
+  .caps-row .zero { color: var(--stamp); }
+  .caps-row .max { color: var(--seal); }
+
   /* ---- generic blocks ------------------------------------------------- */
   .grid { display: grid; gap: clamp(16px, 2vw, 22px); grid-template-columns: repeat(auto-fit, minmax(275px, 1fr)); }
   .card {
@@ -211,6 +275,8 @@
 
   @media (max-width: 620px) {
     .row { grid-template-columns: minmax(0,1fr) 6.4rem 4.6rem; gap: 4px 10px; }
+    .caps-row { grid-template-columns: minmax(0,1fr) 3.4rem 3rem 3.2rem; gap: 8px; }
+    .legend { grid-template-columns: 1fr; }
     .row-name { font-size: 17.5px; }
     .count { font-size: 16px; }
     .fact { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.1); padding-bottom: 18px; }
@@ -404,6 +470,404 @@
       <div class="delta none">—</div>
       <div class="row-what">One number at a time, straight from each member state's own system. Nobody lies to the tax authority about a VAT number, which is exactly what makes it worth checking.</div>
     </div>
+  </div>
+</section>
+
+<section id="top20">
+  <div class="wrap">
+    <p class="kicker">The twenty biggest licences</p>
+    <h2>What a register can rank, and what it only appears to rank</h2>
+    <p class="lede">
+      These registers publish no revenue, no headcount and no size. The one dimension of
+      <em>bigness</em> they do publish is <strong>the breadth of the authorisation itself</strong> —
+      how many distinct services a firm is allowed to perform, and in how many countries. For the
+      crypto register that produces a genuine ranking. For MiFID II it produces something that looks
+      like one and is not, which is worth more than the league table would have been.
+    </p>
+
+    <div class="band">
+      <span>MiCA · crypto-asset service providers</span>
+      <span class="band-note">352 rows for 349 distinct firms · ranked by services held, then countries</span>
+    </div>
+    <p>
+      MiCA defines exactly ten crypto-asset services, lettered <b>a</b> to <b>j</b> in Article 3.
+      A firm is authorised for a named subset, so the count is real and the spread is wide: 85 firms
+      hold a single service, <strong>nobody holds all ten</strong>, and three hold nine. The register
+      publishes 352 rows for 349 distinct legal entities; the counts below are aggregated by LEI, so a
+      firm listed twice is still one firm. The country column is <code class="inline-code">ac_serviceCode_cou</code>,
+      which is the honest passporting footprint — not the home member state.
+    </p>
+    <div class="tbl-scroll">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>#</th><th>Authorised firm</th><th>Home</th>
+            <th class="msk">Services a–j</th><th class="num">Svc</th><th class="num">Countries</th>
+          </tr>
+        </thead>
+        <tbody>
+      <tr>
+        <td class="rk">1</td>
+        <td class="nm">NOEMON TECH LTD</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">9</td>
+        <td class="num">31</td>
+      </tr>
+      <tr>
+        <td class="rk">2</td>
+        <td class="nm">OKX Europe Limited</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">9</td>
+        <td class="num">29</td>
+      </tr>
+      <tr>
+        <td class="rk">3</td>
+        <td class="nm">Alaric Securities OOD</td>
+        <td class="ms">BG</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">9</td>
+        <td class="num">1</td>
+      </tr>
+      <tr>
+        <td class="rk">4</td>
+        <td class="nm">J2TX Ltd</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">8</td>
+        <td class="num">31</td>
+      </tr>
+      <tr>
+        <td class="rk">5</td>
+        <td class="nm">TEROXX DIGITAL ASSET LTD</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><i>·</i><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">8</td>
+        <td class="num">31</td>
+      </tr>
+      <tr>
+        <td class="rk">6</td>
+        <td class="nm">TRIA BRIDGE LIMITED (ex Tokenomica Bridge Ltd)</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">8</td>
+        <td class="num">31</td>
+      </tr>
+      <tr>
+        <td class="rk">7</td>
+        <td class="nm">Payward Europe Solutions Limited<span class="alt">Kraken Digital Asset Exchange</span></td>
+        <td class="ms">IE</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">8</td>
+        <td class="num">30</td>
+      </tr>
+      <tr>
+        <td class="rk">8</td>
+        <td class="nm">Zillion Bits Limited<span class="alt">ZBX</span></td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">8</td>
+        <td class="num">29</td>
+      </tr>
+      <tr>
+        <td class="rk">9</td>
+        <td class="nm">Bison Bank, S.A.</td>
+        <td class="ms">PT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><b>h</b><i>·</i><b>j</b></td>
+        <td class="num">8</td>
+        <td class="num">6</td>
+      </tr>
+      <tr>
+        <td class="rk">10</td>
+        <td class="nm">YOUNG PLATFORM S.P.A.</td>
+        <td class="ms">IT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><i>·</i><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">8</td>
+        <td class="num">2</td>
+      </tr>
+      <tr>
+        <td class="rk">11</td>
+        <td class="nm">FF Digital EOOD</td>
+        <td class="ms">BG</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">8</td>
+        <td class="num">1</td>
+      </tr>
+      <tr>
+        <td class="rk">12</td>
+        <td class="nm">NAGA X</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">8</td>
+        <td class="num">1</td>
+      </tr>
+      <tr>
+        <td class="rk">13</td>
+        <td class="nm">Brilliantscope Trading Limited<span class="alt">tothemoon</span></td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">7</td>
+        <td class="num">31</td>
+      </tr>
+      <tr>
+        <td class="rk">14</td>
+        <td class="nm">Bitcoinforme S.L.<span class="alt">Bit2Me</span></td>
+        <td class="ms">ES</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">7</td>
+        <td class="num">30</td>
+      </tr>
+      <tr>
+        <td class="rk">15</td>
+        <td class="nm">Bitpanda GmbH</td>
+        <td class="ms">AT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">7</td>
+        <td class="num">30</td>
+      </tr>
+      <tr>
+        <td class="rk">16</td>
+        <td class="nm">Bitstamp Europe S.A.</td>
+        <td class="ms">LU</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">7</td>
+        <td class="num">30</td>
+      </tr>
+      <tr>
+        <td class="rk">17</td>
+        <td class="nm">Coinbase Luxembourg S.A.</td>
+        <td class="ms">LU</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">7</td>
+        <td class="num">30</td>
+      </tr>
+      <tr>
+        <td class="rk">18</td>
+        <td class="nm">NORWEGIAN BLOCK EXCHANGE AS<span class="alt">NBX</span></td>
+        <td class="ms">NO</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">7</td>
+        <td class="num">30</td>
+      </tr>
+      <tr>
+        <td class="rk">19</td>
+        <td class="nm">Noemon Finance Ltd</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><b>h</b><b>i</b><i>·</i></td>
+        <td class="num">7</td>
+        <td class="num">30</td>
+      </tr>
+      <tr>
+        <td class="rk">20</td>
+        <td class="nm">Penning Financial Services ApS</td>
+        <td class="ms">DK</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">7</td>
+        <td class="num">30</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="legend">
+      <span><b>a</b>custody and administration — 222 firms</span>
+      <span class="rare"><b>b</b>operating a trading platform — 22 firms</span>
+      <span><b>c</b>exchange for funds — 183</span>
+      <span><b>d</b>exchange for other crypto-assets — 150</span>
+      <span><b>e</b>execution of orders — 191</span>
+      <span><b>f</b>placing of crypto-assets — 36</span>
+      <span><b>g</b>reception and transmission of orders — 95</span>
+      <span><b>h</b>advice on crypto-assets — 44</span>
+      <span><b>i</b>portfolio management — 56</span>
+      <span><b>j</b>transfer services — 209</span>
+    </div>
+    <p style="margin-top:20px">
+      The rarest licence is the one that matters most: <strong>22 firms of 349 may operate a trading
+      platform</strong>. Running an exchange is the hardest permission to get and the easiest to
+      assume everyone has. Note also that breadth and footprint come apart — Alaric Securities holds
+      nine services and passports into one country, while Bitpanda holds seven and reaches thirty.
+    </p>
+
+    <div class="band">
+      <span>MiFID II · investment firms</span>
+      <span class="band-note">5,319 active head offices · the ranking that dissolves on inspection</span>
+    </div>
+
+    <div class="finding">
+      <h3>197 firms tie for first place, holding an identical licence</h3>
+      <p>
+        Counting distinct authorised services across every active MiFID II head office gives a
+        maximum of sixteen, reached by 197 firms. All 197 hold <strong>the same sixteen</strong> —
+        there is exactly one distinct service set among them, so the register offers no basis
+        whatsoever for ordering them. A top-20 table here is a slice of a tie.
+      </p>
+      <p>
+        And the tie has a geography: <strong>106 of the 197 are Spanish and 68 are Luxembourgish</strong>,
+        with 16 Irish, 5 Dutch and 2 Romanian. Not one is German — out of 1,872 German investment firms.
+      </p>
+    </div>
+
+    <p>
+      That is not because German investment firms do less. It is because each national authority
+      decides what to report to ESMA, and they do not report the same thing. Every German firm caps
+      at exactly seven services because BaFin reports only the MiFID Annex I <strong>Section A</strong>
+      investment services. Spain, Luxembourg, Ireland and the Netherlands also report the
+      <strong>Section B</strong> ancillary services — advice on capital structure, foreign exchange,
+      safekeeping, research, granting credits — which is the entire difference between seven and sixteen.
+    </p>
+
+    <div class="caps">
+      <div class="caps-row head"><span>Home member state</span><span>Firms</span><span>Max</span><span>At 16</span></div>
+      <div class="caps-row"><span>Germany</span><span>1,872</span><span>7</span><span class="zero">0</span></div>
+      <div class="caps-row"><span>Italy</span><span>463</span><span>7</span><span class="zero">0</span></div>
+      <div class="caps-row"><span>Austria</span><span>458</span><span>10</span><span class="zero">0</span></div>
+      <div class="caps-row"><span>France</span><span>268</span><span>8</span><span class="zero">0</span></div>
+      <div class="caps-row"><span>Spain</span><span>308</span><span class="max">16</span><span class="max">106</span></div>
+      <div class="caps-row"><span>Luxembourg</span><span>138</span><span class="max">16</span><span class="max">68</span></div>
+      <div class="caps-row"><span>Ireland</span><span>116</span><span class="max">16</span><span class="max">16</span></div>
+      <div class="caps-row"><span>Netherlands</span><span>221</span><span class="max">16</span><span class="max">5</span></div>
+    </div>
+
+    <p style="margin-top:24px">
+      So a league table of MiFID firms by authorised services ranks <em>supervisory reporting
+      conventions</em>, not firms. Here are the twenty longest-standing members of the full-scope
+      tier anyway — with the second caveat visible in the last column, where eight of the twenty
+      share 17 March 1947. That is the date Spain's register begins, not the date each of those
+      banks was authorised.
+    </p>
+    <div class="tbl-scroll">
+      <table class="tbl">
+        <thead>
+          <tr><th>#</th><th>Full-scope investment firm</th><th>Home</th><th class="num">Authorised since</th></tr>
+        </thead>
+        <tbody>
+<tr>
+        <td class="rk">1</td>
+        <td class="nm">BANQUE ET CAISSE D&#x27;EPARGNE DE L&#x27;ETAT, LUXEMBOURG</td>
+        <td class="ms">Luxembourg</td>
+        <td class="num">21/02/1856</td>
+      </tr>
+      <tr>
+        <td class="rk">2</td>
+        <td class="nm">BANQUE INTERNATIONALE À LUXEMBOURG</td>
+        <td class="ms">Luxembourg</td>
+        <td class="num">08/03/1856</td>
+      </tr>
+      <tr>
+        <td class="rk">3</td>
+        <td class="nm">BGL BNP PARIBAS</td>
+        <td class="ms">Luxembourg</td>
+        <td class="num">26/09/1919</td>
+      </tr>
+      <tr>
+        <td class="rk">4</td>
+        <td class="nm">BANQUE RAIFFEISEN</td>
+        <td class="ms">Luxembourg</td>
+        <td class="num">09/02/1926</td>
+      </tr>
+      <tr>
+        <td class="rk">5</td>
+        <td class="nm">CAJA DE AHORROS Y MONTE DE PIEDAD DE ONTINYENT</td>
+        <td class="ms">Spain</td>
+        <td class="num">15/01/1931</td>
+      </tr>
+      <tr>
+        <td class="rk">6</td>
+        <td class="nm">ALLFUNDS BANK, S.A.</td>
+        <td class="ms">Spain</td>
+        <td class="num" class="artefact">17/03/1947</td>
+      </tr>
+      <tr>
+        <td class="rk">7</td>
+        <td class="nm">BANCA MARCH, S.A.</td>
+        <td class="ms">Spain</td>
+        <td class="num" class="artefact">17/03/1947</td>
+      </tr>
+      <tr>
+        <td class="rk">8</td>
+        <td class="nm">BANCA PUEYO, S.A.</td>
+        <td class="ms">Spain</td>
+        <td class="num" class="artefact">17/03/1947</td>
+      </tr>
+      <tr>
+        <td class="rk">9</td>
+        <td class="nm">BANCO DE SABADELL, S.A.</td>
+        <td class="ms">Spain</td>
+        <td class="num" class="artefact">17/03/1947</td>
+      </tr>
+      <tr>
+        <td class="rk">10</td>
+        <td class="nm">BANCO SANTANDER, S.A.</td>
+        <td class="ms">Spain</td>
+        <td class="num" class="artefact">17/03/1947</td>
+      </tr>
+      <tr>
+        <td class="rk">11</td>
+        <td class="nm">OPEN BANK, S.A.</td>
+        <td class="ms">Spain</td>
+        <td class="num" class="artefact">17/03/1947</td>
+      </tr>
+      <tr>
+        <td class="rk">12</td>
+        <td class="nm">SANTANDER INVESTMENT, S.A.</td>
+        <td class="ms">Spain</td>
+        <td class="num" class="artefact">17/03/1947</td>
+      </tr>
+      <tr>
+        <td class="rk">13</td>
+        <td class="nm">SANTANDER SECURITIES SERVICES, S.A.</td>
+        <td class="ms">Spain</td>
+        <td class="num" class="artefact">17/03/1947</td>
+      </tr>
+      <tr>
+        <td class="rk">14</td>
+        <td class="nm">BANCO DE ALBACETE, S.A.</td>
+        <td class="ms">Spain</td>
+        <td class="num">09/05/1947</td>
+      </tr>
+      <tr>
+        <td class="rk">15</td>
+        <td class="nm">DEUTSCHE BANK, SOCIEDAD ANONIMA ESPAÑOLA</td>
+        <td class="ms">Spain</td>
+        <td class="num">11/05/1949</td>
+      </tr>
+      <tr>
+        <td class="rk">16</td>
+        <td class="nm">QUINTET PRIVATE BANK (EUROPE) S.A.</td>
+        <td class="ms">Luxembourg</td>
+        <td class="num">23/05/1949</td>
+      </tr>
+      <tr>
+        <td class="rk">17</td>
+        <td class="nm">BANCO DE DEPOSITOS, S.A.</td>
+        <td class="ms">Spain</td>
+        <td class="num">14/06/1950</td>
+      </tr>
+      <tr>
+        <td class="rk">18</td>
+        <td class="nm">ING Bank N.V.</td>
+        <td class="ms">Netherlands</td>
+        <td class="num">18/09/1952</td>
+      </tr>
+      <tr>
+        <td class="rk">19</td>
+        <td class="nm">BANQUE DE LUXEMBOURG S.A.</td>
+        <td class="ms">Luxembourg</td>
+        <td class="num">04/04/1953</td>
+      </tr>
+      <tr>
+        <td class="rk">20</td>
+        <td class="nm">SOCIÉTÉ GÉNÉRALE LUXEMBOURG</td>
+        <td class="ms">Luxembourg</td>
+        <td class="num">11/04/1956</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:20px">
+      Both tables were built from the registers' own records on 23 September 2026 — the MiCA CSV and
+      the ESMA Solr core — and both are reproducible with the commands at the foot of this page.
+    </p>
   </div>
 </section>
 
