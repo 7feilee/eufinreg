@@ -24,6 +24,7 @@
     --on-ink:     #EEF1F6;
     --on-ink-dim: #93A3BC;
     --focus:      #C2410C;
+    --stat-rule:  #16233A;
 
     --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
     --sans:  ui-sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -42,6 +43,7 @@
       --seal: #6FC0A8; --seal-bg: #16281F;
       --on-ink: #EEF1F6; --on-ink-dim: #93A3BC;
       --focus: #F97316;
+      --stat-rule: #46566E;
     }
   }
 
@@ -226,7 +228,55 @@
     text-transform: uppercase; color: var(--text-faint); border: 0; }
   .caps-row.head { border-bottom: 1.5px solid var(--rule-hard); }
   .caps-row .zero { color: var(--stamp); }
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+  }
   .caps-row .max { color: var(--seal); }
+
+
+  /* ---- roster: chips, filter, long table ------------------------------ */
+  .chip {
+    display: inline-block; font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 7px 1px;
+    border-radius: 3px; white-space: nowrap; border: 1px solid transparent;
+  }
+  .chip.dual { color: var(--seal); background: var(--seal-bg); border-color: var(--seal); }
+  .chip.namematch { color: var(--stamp); background: var(--stamp-bg); border-color: var(--stamp); }
+  .chip.alt-type { color: var(--text-soft); border-color: var(--rule-hard); }
+  .chip.none { color: var(--text-faint); border: 0; letter-spacing: 0; }
+
+  .filter {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px;
+    margin-top: clamp(22px, 3vw, 30px); padding: 14px 16px;
+    background: var(--card); border: 1px solid var(--rule); border-radius: 4px;
+  }
+  .filter input[type="search"] {
+    flex: 1 1 220px; min-width: 0; font-family: var(--sans); font-size: 14.5px;
+    padding: 8px 11px; color: var(--text); background: var(--paper);
+    border: 1px solid var(--rule-hard); border-radius: 3px;
+  }
+  .filter label.tick { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+  .filter input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--ink); }
+  .filter .tally {
+    font-family: var(--mono); font-size: 12px; color: var(--text-soft);
+    font-variant-numeric: tabular-nums; margin-left: auto;
+  }
+  .roster-scroll { max-height: 70vh; overflow: auto; margin-top: 14px; border-bottom: 1px solid var(--rule); }
+  .roster-scroll table.tbl { min-width: 620px; }
+  .roster-scroll thead th { position: sticky; top: 0; background: var(--paper); z-index: 1; padding-top: 10px; }
+  .tbl .flag { text-align: right; white-space: nowrap; }
+  .empty-note { padding: 22px 0; color: var(--text-soft); font-size: 14.5px; }
+  /* explicit, because a UA's tr { display: table-row } can outrank [hidden] */
+  .tbl tr[hidden] { display: none; }
+
+  .split { display: grid; gap: clamp(16px, 2vw, 22px); grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-top: clamp(24px,3vw,32px); }
+  .stat { border-top: 2px solid var(--stat-rule); padding-top: 14px; }
+  .stat b {
+    display: block; font-family: var(--mono); font-size: clamp(24px,3vw,31px);
+    font-variant-numeric: tabular-nums; letter-spacing: -0.02em; line-height: 1.1;
+  }
+  .stat span { display: block; margin-top: 8px; font-size: 14px; color: var(--text-soft); line-height: 1.5; }
 
   /* ---- generic blocks ------------------------------------------------- */
   .grid { display: grid; gap: clamp(16px, 2vw, 22px); grid-template-columns: repeat(auto-fit, minmax(275px, 1fr)); }
@@ -871,6 +921,2519 @@
   </div>
 </section>
 
+<section id="crypto-roster">
+  <div class="wrap">
+    <p class="kicker">Who actually holds the crypto licence</p>
+    <h2>A third of Europe's authorised crypto firms were already regulated</h2>
+    <p class="lede">
+      The MiCA register and the ESMA investment-firm register share a join key: the LEI. Matching
+      all 349 authorised crypto-asset service providers against every MiFID II investment firm gives
+      a direct answer to who is actually taking these licences — incumbents extending into crypto,
+      or crypto businesses entering regulation. <strong>It is both, and the split is geographic.</strong>
+    </p>
+
+    <div class="split">
+      <div class="stat"><b>128</b><span>of 349 crypto firms also hold a MiFID II investment-firm authorisation, matched on LEI. All 128 are active.</span></div>
+      <div class="stat"><b>81 of 91</b><span>German crypto licences are held by an existing investment firm — 89%. In Malta it is 1 of 22, in Czechia 0 of 12.</span></div>
+      <div class="stat"><b>19.1 vs 8.3</b><span>countries passported into, on average, by crypto-native firms versus dual-licensed ones. The newcomers are the pan-European ones.</span></div>
+      <div class="stat"><b>4 of 128</b><span>dual-licensed firms may operate a trading platform. Exchanges are overwhelmingly crypto-native, not incumbent.</span></div>
+    </div>
+
+    <p style="margin-top:28px">
+      The two groups are not doing the same thing. Dual-licensed firms take the permissions that
+      extend what they already do: <strong>execution of orders</strong> (83 of 128) and
+      <strong>reception and transmission</strong> (45 of 128) — brokerage, with crypto as one more
+      instrument. Crypto-native firms take the permissions a wallet and an exchange need:
+      <strong>transfer services</strong> (177 of 221), <strong>custody</strong> (174 of 221) and
+      <strong>exchange for funds</strong> (161 of 221). Custody is held by 79% of the crypto natives
+      and 38% of the incumbents.
+    </p>
+    <p>
+      Four further firms match a MiFID II investment firm <em>by normalised name only</em>, because
+      the LEI in the crypto register does not appear in the investment-firm register. Those are
+      marked separately below and should not be treated as the same fact: a matching name is
+      evidence, an identifier is proof. Four more appear in the ESMA register as fund managers
+      rather than investment firms. The remaining 213 hold no ESMA authorisation at all.
+    </p>
+
+    <div class="band">
+      <span>Every authorised crypto-asset service provider in Europe</span>
+      <span class="band-note">349 firms · ESMA register, 23 September 2026</span>
+    </div>
+
+    <div class="filter">
+      <label class="visually-hidden" for="q">Search by firm name</label>
+      <input type="search" id="q" placeholder="Search a firm — Bitpanda, Coinbase, Deutsche…" autocomplete="off">
+      <label class="tick"><input type="checkbox" id="only"> Only firms with a MiFID II match — 128 by LEI, 4 by name</label>
+      <span class="tally" id="tally" aria-live="polite">349 of 349</span>
+    </div>
+
+    <div class="roster-scroll">
+      <table class="tbl" id="roster">
+        <thead>
+          <tr>
+            <th>Authorised firm</th><th>Home</th><th class="msk">Services a–j</th>
+            <th class="num">Countries</th><th class="flag">Also authorised as</th>
+          </tr>
+        </thead>
+        <tbody>
+      <tr data-n="&quot;trek technologies&quot; sia backpack eu">
+        <td class="nm">&quot;Trek Technologies&quot; SIA<span class="alt">Backpack EU</span></td>
+        <td class="ms">LV</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="360 treasury systems ag ">
+        <td class="nm">360 Treasury Systems AG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><b>b</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="acheron europe b.v. acheron | acheron trading">
+        <td class="nm">Acheron Europe B.V.<span class="alt">Acheron | Acheron Trading</span></td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">27</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="ak jensen norway as ">
+        <td class="nm">AK JENSEN NORWAY AS</td>
+        <td class="ms">NO</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><b>i</b><i>·</i></td>
+        <td class="num">3</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="alaric securities ood ">
+        <td class="nm">Alaric Securities OOD</td>
+        <td class="ms">BG</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="alphacap digital assets sas ">
+        <td class="nm">ALPHACAP DIGITAL ASSETS SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="altarius asset management limited ">
+        <td class="nm">Altarius Asset Management Limited</td>
+        <td class="ms">MT</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><b>i</b><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip alt-type">AIFM</span></td>
+      </tr>
+      <tr data-n="altcoins bg eооd ">
+        <td class="nm">Altcoins BG EООD</td>
+        <td class="ms">BG</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="altlift s.r.o. ">
+        <td class="nm">Altlift s.r.o.</td>
+        <td class="ms">CZ</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><b>h</b><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="amdax b.v. amdax b.v.|amdax group|novelist">
+        <td class="nm">Amdax B.V.<span class="alt">Amdax B.V.|Amdax Group|Novelist</span></td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="amina (austria) ag amina eu">
+        <td class="nm">AMINA (Austria) AG<span class="alt">AMINA EU</span></td>
+        <td class="ms">AT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="anceka vermögensbetreuungs aktiengesellschaft ">
+        <td class="nm">AnCeKa Vermögensbetreuungs Aktiengesellschaft</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><b>h</b><b>i</b><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="aplo sas ">
+        <td class="nm">APLO SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">7</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="aquilla nummus ltd ">
+        <td class="nm">Aquilla Nummus Ltd</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><b>i</b><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="as lhv pank ">
+        <td class="nm">AS LHV Pank</td>
+        <td class="ms">EE</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="as twino investments ">
+        <td class="nm">AS TWINO Investments</td>
+        <td class="ms">LV</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">11</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="avianlabs netherlands b.v. ">
+        <td class="nm">AvianLabs Netherlands B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="b2c2 europe sarl ">
+        <td class="nm">B2C2 Europe Sarl</td>
+        <td class="ms">LU</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="baader bank aktiengesellschaft baader bank ag">
+        <td class="nm">Baader Bank Aktiengesellschaft<span class="alt">Baader Bank AG</span></td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="baden-württembergische wertpapierbörse gmbh ">
+        <td class="nm">Baden-Württembergische Wertpapierbörse GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><b>b</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="banca sella ">
+        <td class="nm">BANCA SELLA</td>
+        <td class="ms">IT</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="banco bilbao vizcaya argentaria s.a. bbva">
+        <td class="nm">Banco Bilbao Vizcaya Argentaria S.A.<span class="alt">BBVA</span></td>
+        <td class="ms">ES</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="bank frick ag ">
+        <td class="nm">Bank Frick AG</td>
+        <td class="ms">LI</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">28</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="bankhaus scheich wertpapierspezialist ag ">
+        <td class="nm">Bankhaus Scheich Wertpapierspezialist AG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><b>e</b><b>f</b><b>g</b><b>h</b><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="banking circle s.a. ">
+        <td class="nm">Banking Circle S.A.</td>
+        <td class="ms">LU</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="banque delubac et cie ">
+        <td class="nm">BANQUE DELUBAC ET CIE</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="bare bitcoin as ">
+        <td class="nm">BARE BITCOIN AS</td>
+        <td class="ms">NO</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="basque pay s.l. fazil crypto">
+        <td class="nm">BASQUE PAY S.L.<span class="alt">FAZIL CRYPTO</span></td>
+        <td class="ms">ES</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="belayer ооd ">
+        <td class="nm">Belayer ООD</td>
+        <td class="ms">BG</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><b>i</b><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bequant pro limited ">
+        <td class="nm">Bequant Pro Limited</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="bison bank, s.a. ">
+        <td class="nm">Bison Bank, S.A.</td>
+        <td class="ms">PT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><b>h</b><i>·</i><b>j</b></td>
+        <td class="num">6</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="bitblock ltd. for services kriptomat">
+        <td class="nm">Bitblock Ltd. for Services<span class="alt">KRIPTOMAT</span></td>
+        <td class="ms">HR</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bitcoin suisse (europe) ag ">
+        <td class="nm">Bitcoin Suisse (Europe) AG</td>
+        <td class="ms">LI</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">23</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bitcoinforme s.l. bit2me">
+        <td class="nm">Bitcoinforme S.L.<span class="alt">Bit2Me</span></td>
+        <td class="ms">ES</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bitflyer europe s.a. ">
+        <td class="nm">bitFlyer EUROPE S.A.</td>
+        <td class="ms">LU</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bitgo europe gmbh ">
+        <td class="nm">BitGo Europe GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bitmymoney b.v. ">
+        <td class="nm">Bitmymoney B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">2</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bitonic b.v. ">
+        <td class="nm">Bitonic B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bitpanda asset management gmbh ">
+        <td class="nm">Bitpanda Asset Management GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bitpanda gmbh ">
+        <td class="nm">Bitpanda GmbH</td>
+        <td class="ms">AT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bitpay b.v. bitpay b.v. | cashify | rgltd">
+        <td class="nm">BitPay B.V.<span class="alt">BitPay B.V. | Cashify | RGLTD</span></td>
+        <td class="ms">NL</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bitstack digital assets sas ">
+        <td class="nm">BITSTACK DIGITAL ASSETS SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">26</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bitstaete b.v. ">
+        <td class="nm">BitStaete B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>i</b><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bitstamp europe s.a. ">
+        <td class="nm">Bitstamp Europe S.A.</td>
+        <td class="ms">LU</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bittimaatti oy ">
+        <td class="nm">Bittimaatti Oy</td>
+        <td class="ms">FI</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bitvavo b.v. ">
+        <td class="nm">Bitvavo B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><b>b</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bleap sia ">
+        <td class="nm">Bleap SIA</td>
+        <td class="ms">LV</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="blockben sia ">
+        <td class="nm">BlockBen SIA</td>
+        <td class="ms">LV</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><b>f</b><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="blockchain process security (b.p.s.) sas feel mining / wigl et othila">
+        <td class="nm">BLOCKCHAIN PROCESS SECURITY (B.P.S.) SAS<span class="alt">FEEL MINING / WIGL ET OTHILA</span></td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="blockchain.com operations (malta) limited ">
+        <td class="nm">Blockchain.com Operations (Malta) Limited</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="blocknodes sas swissborg">
+        <td class="nm">BLOCKNODES SAS<span class="alt">SWISSBORG</span></td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><b>f</b><i>·</i><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="blockrise capital b.v. ">
+        <td class="nm">Blockrise Capital B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="blox b.v. ">
+        <td class="nm">BLOX B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">4</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="bny sa/nv ">
+        <td class="nm">BNY SA/NV</td>
+        <td class="ms">BE</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="boerse stuttgart digital custody gmbh ">
+        <td class="nm">Boerse Stuttgart Digital Custody GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bp23 ca limited bitpanda">
+        <td class="nm">BP23 CA Limited<span class="alt">Bitpanda</span></td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bpifrance investissement ">
+        <td class="nm">Bpifrance Investissement</td>
+        <td class="ms">FR</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>h</b><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip alt-type">AIFM</span></td>
+      </tr>
+      <tr data-n="bridge building s.a. ">
+        <td class="nm">Bridge Building S.A.</td>
+        <td class="ms">LU</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="brilliantscope trading limited tothemoon">
+        <td class="nm">Brilliantscope Trading Limited<span class="alt">tothemoon</span></td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">31</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="btc direct europe b.v. ">
+        <td class="nm">BTC Direct Europe B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">7</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="bullish europe gmbh ">
+        <td class="nm">Bullish Europe GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="bv &amp; p vermögen ag ">
+        <td class="nm">BV &amp; P Vermögen AG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><b>i</b><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="bybit eu gmbh ">
+        <td class="nm">Bybit EU GmbH</td>
+        <td class="ms">AT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><b>f</b><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="caceis bank ">
+        <td class="nm">CACEIS BANK</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">7</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="caixabank s.a. ">
+        <td class="nm">CAIXABANK S.A.</td>
+        <td class="ms">ES</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="calamatta cuschieri investment services limited ">
+        <td class="nm">Calamatta Cuschieri Investment Services Limited</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="capital vault ltd capital.com">
+        <td class="nm">CAPITAL VAULT LTD<span class="alt">capital.com</span></td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">31</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="cecabank s.a. ">
+        <td class="nm">CECABANK S.A.</td>
+        <td class="ms">ES</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="celsion bank ag ">
+        <td class="nm">Celsion Bank AG</td>
+        <td class="ms">LI</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="cf technologies ltd xcoins">
+        <td class="nm">CF Technologies Ltd<span class="alt">Xcoins</span></td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="change securities b.v. change, change invest, getchange.com, changepro, changeinvest.com, agenatrader, agenatrader.com, tradersyard, tradersyard.com">
+        <td class="nm">Change Securities B.V.<span class="alt">Change, Change Invest, getchange.com, ChangePr</span></td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="checksig s.r.l. società benefit ">
+        <td class="nm">CHECKSIG S.R.L. SOCIETÀ BENEFIT</td>
+        <td class="ms">IT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="circle internet financial europe sas ">
+        <td class="nm">CIRCLE INTERNET FINANCIAL EUROPE SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="clearbank europe n.v. clearbank europe b.v.">
+        <td class="nm">ClearBank Europe N.V.<span class="alt">ClearBank Europe B.V.</span></td>
+        <td class="ms">NL</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">22</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="clearstream banking s.a. ">
+        <td class="nm">Clearstream Banking S.A.</td>
+        <td class="ms">LU</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="cloverum finance (cy) limited ">
+        <td class="nm">Cloverum Finance (CY) Limited</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">31</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="coinbase luxembourg s.a. ">
+        <td class="nm">Coinbase Luxembourg S.A.</td>
+        <td class="ms">LU</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="coinfinity gmbh ">
+        <td class="nm">Coinfinity GmbH</td>
+        <td class="ms">AT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><b>h</b><i>·</i><b>j</b></td>
+        <td class="num">4</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="coinhouse sas ">
+        <td class="nm">COINHOUSE SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">3</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="coinify aps ">
+        <td class="nm">Coinify ApS</td>
+        <td class="ms">DK</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="coinjar europe limited ">
+        <td class="nm">CoinJar Europe Limited</td>
+        <td class="ms">IE</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="coinmate a.s. ">
+        <td class="nm">COINMATE a.s.</td>
+        <td class="ms">CZ</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="coinmerce b.v. coinmerce b.v..">
+        <td class="nm">Coinmerce B.V.<span class="alt">Coinmerce B.V..</span></td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">6</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="coinmotion oy ">
+        <td class="nm">Coinmotion Oy</td>
+        <td class="ms">FI</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">2</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="coinshares asset management ">
+        <td class="nm">COINSHARES ASSET MANAGEMENT</td>
+        <td class="ms">FR</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>h</b><b>i</b><i>·</i></td>
+        <td class="num">7</td>
+        <td class="flag"><span class="chip alt-type">AIFM</span></td>
+      </tr>
+      <tr data-n="collect &amp; exchange cy ltd ">
+        <td class="nm">COLLECT &amp; EXCHANGE CY LTD</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="cometh sas ">
+        <td class="nm">COMETH SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">20</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="commerzbank aktiengesellschaft ">
+        <td class="nm">Commerzbank Aktiengesellschaft</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">2</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="complycrypto depository eu limited ">
+        <td class="nm">COMPLYCRYPTO DEPOSITORY EU LIMITED</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="concedus gmbh ">
+        <td class="nm">CONCEDUS GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><b>h</b><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="confirmo limited ">
+        <td class="nm">Confirmo Limited</td>
+        <td class="ms">IE</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="conio s.r.l. ">
+        <td class="nm">CONIO S.R.L.</td>
+        <td class="ms">IT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="cps europe s.a. ">
+        <td class="nm">CPS Europe S.A.</td>
+        <td class="ms">LU</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="criptan trade s.l. ">
+        <td class="nm">CRIPTAN TRADE S.L.</td>
+        <td class="ms">ES</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">27</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="crossmint europe s.l. ">
+        <td class="nm">CROSSMINT EUROPE S.L.</td>
+        <td class="ms">ES</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">27</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="crypto finance (deutschland) gmbh ">
+        <td class="nm">Crypto Finance (Deutschland) GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">15</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="cryptonow gmbh ">
+        <td class="nm">Cryptonow GmbH</td>
+        <td class="ms">AT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="cryptosmart s.p.a. ">
+        <td class="nm">CRYPTOSMART S.P.A.</td>
+        <td class="ms">IT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="d2x group n.v. ">
+        <td class="nm">D2X Group N.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="dadat krypto gmbh ">
+        <td class="nm">DADAT Krypto GmbH</td>
+        <td class="ms">AT</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="damex digital ltd ">
+        <td class="nm">Damex Digital LTD</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="deblock sas ">
+        <td class="nm">DEBLOCK SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="decubate b.v. ">
+        <td class="nm">Decubate B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><b>f</b><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="dekabank deutsche girozentrale ">
+        <td class="nm">DekaBank Deutsche Girozentrale</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="deskoin sas ">
+        <td class="nm">DESKOIN SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><b>h</b><i>·</i><b>j</b></td>
+        <td class="num">7</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="deutsche bank aktiengesellschaft ">
+        <td class="nm">Deutsche Bank Aktiengesellschaft</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="deutsche wertpapierservice bank ag deutsche wertpapierservice bank ag (dwpbank)">
+        <td class="nm">Deutsche WertpapierService Bank AG<span class="alt">Deutsche WertpapierService Bank AG (dwpbank)</span></td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="dietrich &amp; richter private asset management ag ">
+        <td class="nm">Dietrich &amp; Richter Private Asset Management AG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>h</b><b>i</b><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="digital assets limited liability company for intermediation and services bitcoin store">
+        <td class="nm">DIGITAL ASSETS Limited liability company for intermediation and services<span class="alt">BITCOIN STORE</span></td>
+        <td class="ms">HR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="digital assist ood ">
+        <td class="nm">Digital Assist OOD</td>
+        <td class="ms">BG</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="digital currency services b.v. dcs | happycoins">
+        <td class="nm">Digital Currency Services B.V.<span class="alt">DCS | HappyCoins</span></td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="dlt securities gmbh ">
+        <td class="nm">DLT Securities GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><b>h</b><b>i</b><i>·</i></td>
+        <td class="num">28</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="donau-iller-bank eg ">
+        <td class="nm">Donau-Iller-Bank eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="donaucapital wertpapier gmbh ">
+        <td class="nm">DonauCapital Wertpapier GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="due network s.l. ">
+        <td class="nm">DUE NETWORK S.L.</td>
+        <td class="ms">ES</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="dz bank ag deutsche zentral-genossenschaftsbank ">
+        <td class="nm">DZ BANK AG Deutsche Zentral-Genossenschaftsbank</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="electrocoin ltd for services ">
+        <td class="nm">ELECTROCOIN Ltd for services</td>
+        <td class="ms">HR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="etoro (europe) ltd e toro">
+        <td class="nm">eToro (Europe) Ltd<span class="alt">e Toro</span></td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><b>e</b><i>·</i><b>g</b><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="eu internet ventures b.v. eu internet ventures |euiv|bnxa">
+        <td class="nm">EU Internet Ventures B.V.<span class="alt">EU Internet Ventures |EUIV|BNXA</span></td>
+        <td class="ms">NL</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="euwax ag ">
+        <td class="nm">EUWAX AG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="everest network limited ">
+        <td class="nm">Everest Network Limited</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="falconx limited ">
+        <td class="nm">FalconX Limited</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="fels wealth gmbh ">
+        <td class="nm">Fels wealth GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><b>h</b><b>i</b><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="ff digital eood ">
+        <td class="nm">FF Digital EOOD</td>
+        <td class="ms">BG</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="fiat republic netherlands b.v. ">
+        <td class="nm">Fiat Republic Netherlands B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="fidus finanz ag ">
+        <td class="nm">FIDUS Finanz AG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><b>h</b><b>i</b><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="finary sas ">
+        <td class="nm">FINARY SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">26</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="finctek ue sas ">
+        <td class="nm">FINCTEK UE SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">7</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="finst b.v. ">
+        <td class="nm">Finst B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="fintech payments psc s.l. cryptopocket">
+        <td class="nm">FINTECH PAYMENTS PSC S.L.<span class="alt">CRYPTOPOCKET</span></td>
+        <td class="ms">ES</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">27</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="fintech sk s. r. o. bitcoinmat">
+        <td class="nm">FINTECH SK s. r. o.<span class="alt">BITCOINMAT</span></td>
+        <td class="ms">SK</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">27</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="fintegence, s.r.o. cryptovoucher">
+        <td class="nm">Fintegence, s.r.o.<span class="alt">Cryptovoucher</span></td>
+        <td class="ms">SK</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="fior digital gmbh 21bitcoin">
+        <td class="nm">FIOR Digital GmbH<span class="alt">21bitcoin</span></td>
+        <td class="ms">AT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="fipto pi sas ">
+        <td class="nm">FIPTO PI SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="firefish europe s.r.o ">
+        <td class="nm">Firefish Europe s.r.o</td>
+        <td class="ms">SK</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="firi as ">
+        <td class="nm">FIRI AS</td>
+        <td class="ms">NO</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="flatexdegiro bank ag ">
+        <td class="nm">flatexDEGIRO Bank AG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">15</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="floin ag ">
+        <td class="nm">Floin AG</td>
+        <td class="ms">LI</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><b>f</b><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="flowdesk europe sas ">
+        <td class="nm">FLOWDESK EUROPE SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">10</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="foris dax mt limited crypto.com">
+        <td class="nm">Foris DAX MT Limited<span class="alt">Crypto.com</span></td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="frankfurter volksbank rhein/main eg ">
+        <td class="nm">Frankfurter Volksbank Rhein/Main eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="fumbi, s.r.o. ">
+        <td class="nm">FUMBI, s.r.o.</td>
+        <td class="ms">SK</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">27</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="gate technology limited ">
+        <td class="nm">Gate Technology Limited</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="gatehub exchange družba za izvajanje storitev v zvezi s kriptosredstvi d.o.o. ">
+        <td class="nm">GateHub Exchange družba za izvajanje storitev v zvezi s kriptosredstvi d.o.o.</td>
+        <td class="ms">SI</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="gc exchange a/s gcex|gc exchange">
+        <td class="nm">GC Exchange A/S<span class="alt">GCEX|GC Exchange</span></td>
+        <td class="ms">DK</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">2</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="gemini intergalactic eu ltd ">
+        <td class="nm">Gemini Intergalactic EU Ltd</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="gg digital, a.s. ">
+        <td class="nm">GG Digital, a.s.</td>
+        <td class="ms">CZ</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><b>h</b><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="goin sas ">
+        <td class="nm">GOin SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">26</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="hannoversche volksbank eg ">
+        <td class="nm">Hannoversche Volksbank eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="hauck aufhäuser digital custody gmbh ">
+        <td class="nm">Hauck Aufhäuser Digital Custody GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="hercle s.r.l. ">
+        <td class="nm">HERCLE S.R.L.</td>
+        <td class="ms">IT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">27</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="hexarq sas ">
+        <td class="nm">HEXARQ SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">2</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="hidden road partners civ nl b.v. ">
+        <td class="nm">Hidden Road Partners CIV NL B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="hodleris sia ">
+        <td class="nm">Hodleris SIA</td>
+        <td class="ms">LV</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="hodlie s.r.l. ">
+        <td class="nm">HODLIE S.R.L.</td>
+        <td class="ms">IT</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>i</b><i>·</i></td>
+        <td class="num">17</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="hrvatska poštanska banka d.d. hpb d.d.">
+        <td class="nm">Hrvatska poštanska banka d.d.<span class="alt">HPB d.d.</span></td>
+        <td class="ms">HR</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="huddlestock gmbh ">
+        <td class="nm">Huddlestock GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="hyphe markets gmbh ">
+        <td class="nm">Hyphe Markets GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">11</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="iceblock sas ">
+        <td class="nm">ICEBLOCK SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="ig europe gmbh ">
+        <td class="nm">IG Europe GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">27</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="ihre volksbank eg neckar odenwald main tauber ">
+        <td class="nm">Ihre Volksbank eG Neckar Odenwald Main Tauber</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="ilavo group a.s. ">
+        <td class="nm">ILAVO GROUP a.s.</td>
+        <td class="ms">CZ</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">3</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="ilirika borzno posredniška hiša d.d. ">
+        <td class="nm">ILIRIKA borzno posredniška hiša d.d.</td>
+        <td class="ms">SI</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><b>i</b><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="in kapital limited liability company for trade and services ">
+        <td class="nm">IN KAPITAL limited liability company for trade and services</td>
+        <td class="ms">HR</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="incrementum poslovne storitve d.o.o. ">
+        <td class="nm">INCREMENTUM poslovne storitve d.o.o.</td>
+        <td class="ms">SI</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>h</b><b>i</b><i>·</i></td>
+        <td class="num">3</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="interactive brokers ireland limited ">
+        <td class="nm">Interactive Brokers Ireland Limited</td>
+        <td class="ms">IE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="invity finance s.r.o. ">
+        <td class="nm">Invity Finance s.r.o.</td>
+        <td class="ms">CZ</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">7</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="ip wbtcb solutions, s.r.o. ">
+        <td class="nm">IP wBTCb solutions, s.r.o.</td>
+        <td class="ms">CZ</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="iqana technologies s.l. ">
+        <td class="nm">IQANA TECHNOLOGIES S.L.</td>
+        <td class="ms">ES</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>i</b><i>·</i></td>
+        <td class="num">3</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="isf institut deutsch-schweizer finanzdienstleistungen gmbh ">
+        <td class="nm">ISF Institut Deutsch-Schweizer Finanzdienstleistungen GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="j2tx ltd ">
+        <td class="nm">J2TX Ltd</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">31</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="januar aps ">
+        <td class="nm">Januar ApS</td>
+        <td class="ms">DK</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="joh. berenberg, gossler &amp; co. kg ">
+        <td class="nm">Joh. Berenberg, Gossler &amp; Co. KG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="jt technologies gmbh justtrade">
+        <td class="nm">JT Technologies GmbH<span class="alt">justTRADE</span></td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="k33 markets as ">
+        <td class="nm">K33 MARKETS as</td>
+        <td class="ms">NO</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">5</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="kaiser partner privatbank ag ">
+        <td class="nm">Kaiser Partner Privatbank AG</td>
+        <td class="ms">LI</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="kbc bank nv ">
+        <td class="nm">KBC Bank NV</td>
+        <td class="ms">BE</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="keyrock fr sas ">
+        <td class="nm">KEYROCK FR SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="krypto knight ltd ">
+        <td class="nm">Krypto Knight Ltd</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">31</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="kucoin eu exchange gmbh ">
+        <td class="nm">KuCoin EU Exchange GmbH</td>
+        <td class="ms">AT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><b>f</b><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="kutxabank s.a. ">
+        <td class="nm">KUTXABANK S.A.</td>
+        <td class="ms">ES</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="kvarn capital oy kvarn x">
+        <td class="nm">Kvarn Capital Oy<span class="alt">Kvarn X</span></td>
+        <td class="ms">FI</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="lang &amp; schwarz tradecenter ag &amp; co. kg ">
+        <td class="nm">Lang &amp; Schwarz TradeCenter AG &amp; Co. KG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="legend financial ireland limited legend trading">
+        <td class="nm">Legend Financial Ireland Limited<span class="alt">Legend Trading</span></td>
+        <td class="ms">IE</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="legion malta limited ">
+        <td class="nm">Legion Malta Limited</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="leonod sarl ">
+        <td class="nm">LEONOD SARL</td>
+        <td class="ms">FR</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">28</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="lgt bank ag ">
+        <td class="nm">LGT Bank AG</td>
+        <td class="ms">LI</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">14</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="lightspark payments europe as ">
+        <td class="nm">Lightspark Payments Europe AS</td>
+        <td class="ms">EE</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="lightyear europe as ">
+        <td class="nm">Lightyear Europe AS</td>
+        <td class="ms">EE</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="lunar block a/s ">
+        <td class="nm">Lunar Block A/S</td>
+        <td class="ms">DK</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">3</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="madison six j. s. a. madison six|crypto4me">
+        <td class="nm">Madison Six j. s. a.<span class="alt">Madison Six|crypto4me</span></td>
+        <td class="ms">SK</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="mereau finance sas crypto-am">
+        <td class="nm">MEREAU FINANCE SAS<span class="alt">CRYPTO-AM</span></td>
+        <td class="ms">FR</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>h</b><b>i</b><i>·</i></td>
+        <td class="num">6</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="meria sas ">
+        <td class="nm">MERIA SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><b>e</b><i>·</i><i>·</i><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">8</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="metal gear sas meatal gear">
+        <td class="nm">METAL GEAR SAS<span class="alt">MEATAL GEAR</span></td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">26</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="minos global s.l. ">
+        <td class="nm">MINOS GLOBAL S.L.</td>
+        <td class="ms">ES</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="mipsoftware s.r.o. ">
+        <td class="nm">MipSoftware s.r.o.</td>
+        <td class="ms">CZ</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="mlp banking ag ">
+        <td class="nm">MLP Banking AG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="monflo b.v. ">
+        <td class="nm">Monflo B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">4</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="moonpay europe b.v. ">
+        <td class="nm">MoonPay Europe B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="mp developers s.r.o. ">
+        <td class="nm">MP Developers s.r.o.</td>
+        <td class="ms">CZ</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">26</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="myntkaup ehf. ">
+        <td class="nm">Myntkaup ehf.</td>
+        <td class="ms">IS</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="n26 bank se ">
+        <td class="nm">N26 Bank SE</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">7</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="naga x ">
+        <td class="nm">NAGA X</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="neverless sia ">
+        <td class="nm">Neverless SIA</td>
+        <td class="ms">LV</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="newrails, uab ">
+        <td class="nm">Newrails, UAB</td>
+        <td class="ms">LT</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="nexdesk sia ">
+        <td class="nm">Nexdesk SIA</td>
+        <td class="ms">LV</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="nodu digital, sia ">
+        <td class="nm">Nodu Digital, SIA</td>
+        <td class="ms">LV</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="noemon finance ltd ">
+        <td class="nm">Noemon Finance Ltd</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><b>h</b><b>i</b><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip namematch">MiFID II · name match</span></td>
+      </tr>
+      <tr data-n="noemon tech ltd ">
+        <td class="nm">NOEMON TECH LTD</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">31</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="northcrypto oy ">
+        <td class="nm">NorthCrypto Oy</td>
+        <td class="ms">FI</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">3</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="northstake aps ">
+        <td class="nm">Northstake ApS</td>
+        <td class="ms">DK</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="norwegian block exchange as nbx">
+        <td class="nm">NORWEGIAN BLOCK EXCHANGE AS<span class="alt">NBX</span></td>
+        <td class="ms">NO</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="nuvei liquidity uab simplex">
+        <td class="nm">Nuvei Liquidity UAB<span class="alt">Simplex</span></td>
+        <td class="ms">LT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="okazio s.r.o. ">
+        <td class="nm">Okazio s.r.o.</td>
+        <td class="ms">SK</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="okx europe limited ">
+        <td class="nm">OKX Europe Limited</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="olliv italia s.r.l. coinflip">
+        <td class="nm">OLLIV ITALIA S.R.L.<span class="alt">CoinFlip</span></td>
+        <td class="ms">IT</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="olmipay limited ">
+        <td class="nm">Olmipay Limited</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="one trading exchange b.v. ">
+        <td class="nm">One Trading Exchange B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><b>b</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="op digital services limited ">
+        <td class="nm">OP Digital Services Limited</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="open bank s.a. openbank">
+        <td class="nm">OPEN BANK S.A.<span class="alt">OPENBANK</span></td>
+        <td class="ms">ES</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">2</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="orcabay finančne storitve d.o.o. ">
+        <td class="nm">Orcabay finančne storitve d.o.o.</td>
+        <td class="ms">SI</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><b>h</b><i>·</i><i>·</i></td>
+        <td class="num">0</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="osl eu gmbh ">
+        <td class="nm">OSL EU GmbH</td>
+        <td class="ms">AT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="partners banka, a.s. ">
+        <td class="nm">Partners Banka, a.s.</td>
+        <td class="ms">CZ</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="payhound limited ">
+        <td class="nm">Payhound Limited</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="paymium sas ">
+        <td class="nm">PAYMIUM SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="paymonade ag ">
+        <td class="nm">Paymonade AG</td>
+        <td class="ms">LI</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="paysafe payment solutions limited. skrill, neteller">
+        <td class="nm">Paysafe Payment Solutions Limited.<span class="alt">Skrill, NETELLER</span></td>
+        <td class="ms">IE</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="paytop sas ">
+        <td class="nm">PAYTOP SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="payward europe solutions limited kraken">
+        <td class="nm">Payward Europe Solutions Limited<span class="alt">Kraken</span></td>
+        <td class="ms">IE</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="payward global solutions limited kraken">
+        <td class="nm">Payward Global Solutions Limited<span class="alt">Kraken</span></td>
+        <td class="ms">IE</td>
+        <td class="msk"><i>·</i><b>b</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">2</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="pelican exchange europe (cy) ltd ">
+        <td class="nm">PELICAN EXCHANGE EUROPE (CY) LTD</td>
+        <td class="ms">CY</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><b>h</b><b>i</b><i>·</i></td>
+        <td class="num">31</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="penning financial services aps ">
+        <td class="nm">Penning Financial Services ApS</td>
+        <td class="ms">DK</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="pionew ireland limited webot">
+        <td class="nm">Pionew Ireland Limited<span class="alt">Webot</span></td>
+        <td class="ms">IE</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">4</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="pluso a.s. ">
+        <td class="nm">Pluso a.s.</td>
+        <td class="ms">CZ</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="plutos vermögensverwaltung ag ">
+        <td class="nm">Plutos Vermögensverwaltung AG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>i</b><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="pm mtf ltd ">
+        <td class="nm">PM MTF LTD</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><b>b</b><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="prosegur custodia de activos digitales s.l.u. prosegur crypto">
+        <td class="nm">PROSEGUR CUSTODIA DE ACTIVOS DIGITALES S.L.U.<span class="alt">PROSEGUR CRYPTO</span></td>
+        <td class="ms">ES</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="push virtual assets ireland limited push  / aave push">
+        <td class="nm">Push Virtual Assets Ireland Limited<span class="alt">Push  / Aave Push</span></td>
+        <td class="ms">IE</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="qwarks sas ">
+        <td class="nm">QWARKS SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><b>i</b><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="raiffeisebank auerbach-freihung eg ">
+        <td class="nm">Raiffeisebank Auerbach-Freihung eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="raiffeisenbank aidlingen eg ">
+        <td class="nm">Raiffeisenbank Aidlingen eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="raiffeisenbank falkenstein-wörth ">
+        <td class="nm">Raiffeisenbank Falkenstein-Wörth</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip namematch">MiFID II · name match</span></td>
+      </tr>
+      <tr class="isdual" data-n="raiffeisenbank goldener steig-dreisessel eg ">
+        <td class="nm">Raiffeisenbank Goldener Steig-Dreisessel eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="raiffeisenbank isar-loisachtal eg ">
+        <td class="nm">Raiffeisenbank Isar-Loisachtal eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="raiffeisenbank kreis kelheim eg ">
+        <td class="nm">Raiffeisenbank Kreis Kelheim eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="raiffeisenbank schwaben mitte eg ">
+        <td class="nm">Raiffeisenbank Schwaben Mitte eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="ramp swaps (ireland) limited ramp network">
+        <td class="nm">Ramp Swaps (Ireland) Limited<span class="alt">Ramp Network</span></td>
+        <td class="ms">IE</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="rcube asset management ">
+        <td class="nm">RCUBE ASSET MANAGEMENT</td>
+        <td class="ms">FR</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>h</b><b>i</b><i>·</i></td>
+        <td class="num">6</td>
+        <td class="flag"><span class="chip alt-type">AIFM · UCITS mgr</span></td>
+      </tr>
+      <tr data-n="relai eu sasu ">
+        <td class="nm">RELAI EU SASU</td>
+        <td class="ms">FR</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">26</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="renta 4 banco s.a. ">
+        <td class="nm">RENTA 4 BANCO S.A.</td>
+        <td class="ms">ES</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="revolut digital assets (europe) ltd ">
+        <td class="nm">Revolut Digital Assets (Europe) Ltd</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><i>·</i><b>f</b><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="ripple payments europe s.a. ">
+        <td class="nm">Ripple Payments Europe S.A.</td>
+        <td class="ms">LU</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="riv-digital s.r.l. ">
+        <td class="nm">RIV-DIGITAL S.R.L.</td>
+        <td class="ms">IT</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><i>·</i><b>f</b><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="robinhood europe uab ">
+        <td class="nm">Robinhood Europe UAB</td>
+        <td class="ms">LT</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="ronin em ltd ">
+        <td class="nm">Ronin EM Ltd</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">31</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="rufiji capital sas ">
+        <td class="nm">RUFIJI CAPITAL SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">9</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="rulematch europe ag ">
+        <td class="nm">RULEMATCH Europe AG</td>
+        <td class="ms">LI</td>
+        <td class="msk"><b>a</b><b>b</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">10</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="s.k. dask krypto ltd ">
+        <td class="nm">S.K. DASK KRYPTO LTD</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">31</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="safello ab ">
+        <td class="nm">Safello AB</td>
+        <td class="ms">SE</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">0</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="safelynx technologies aps ">
+        <td class="nm">SafeLynx Technologies ApS</td>
+        <td class="ms">DK</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="scalable capital bank gmbh ">
+        <td class="nm">Scalable Capital Bank GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>h</b><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="sg digital assets limited solidgate , sg digital assets">
+        <td class="nm">SG Digital Assets Limited<span class="alt">Solidgate , SG Digital Assets</span></td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">31</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="shares financial assets sas ">
+        <td class="nm">SHARES FINANCIAL ASSETS SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">14</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="sia &quot;paybis europe&quot; ">
+        <td class="nm">SIA &quot;Paybis Europe&quot;</td>
+        <td class="ms">LV</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><b>h</b><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="sia alpharoute ">
+        <td class="nm">SIA AlphaRoute</td>
+        <td class="ms">LV</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><i>·</i><b>f</b><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">11</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="simple coin s.r.o. ">
+        <td class="nm">Simple Coin s.r.o.</td>
+        <td class="ms">CZ</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="sino aktiengesellschaft ">
+        <td class="nm">sino Aktiengesellschaft</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="smart valor ag ">
+        <td class="nm">SMART VALOR AG</td>
+        <td class="ms">LI</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="smartbroker ag ">
+        <td class="nm">Smartbroker AG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="societe generale - forge ">
+        <td class="nm">SOCIETE GENERALE - FORGE</td>
+        <td class="ms">FR</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="socios europe services limited socios.com">
+        <td class="nm">Socios Europe Services Limited<span class="alt">Socios.com</span></td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><b>f</b><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">28</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="spar- und kreditbank rheinstetten eg ">
+        <td class="nm">Spar- und Kreditbank Rheinstetten eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="stable mint ltd. ">
+        <td class="nm">Stable Mint Ltd.</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="standard chartered luxembourg s.a. ">
+        <td class="nm">Standard Chartered Luxembourg S.A.</td>
+        <td class="ms">LU</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="stokr s.a. ">
+        <td class="nm">STOKR S.A.</td>
+        <td class="ms">LU</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="stonex digital international limited ">
+        <td class="nm">StoneX Digital International Limited</td>
+        <td class="ms">IE</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="stratos europe ltd tradu">
+        <td class="nm">Stratos Europe Ltd<span class="alt">Tradu</span></td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="sutor bank gmbh ">
+        <td class="nm">Sutor Bank GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="swissquote bank europe sa ">
+        <td class="nm">Swissquote Bank Europe SA</td>
+        <td class="ms">LU</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="sygnum europe ag ">
+        <td class="nm">Sygnum Europe AG</td>
+        <td class="ms">LI</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="system pay services (malta) limited bvnk">
+        <td class="nm">System Pay Services (Malta) Limited<span class="alt">BVNK</span></td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="tangany gmbh ">
+        <td class="nm">Tangany GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="teroxx digital asset ltd ">
+        <td class="nm">TEROXX DIGITAL ASSET LTD</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><i>·</i><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">31</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="tesseract investment oy ">
+        <td class="nm">Tesseract Investment Oy</td>
+        <td class="ms">FI</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="trade republic bank gmbh ">
+        <td class="nm">Trade Republic Bank GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="traders place gmbh &amp; co. kgaa ">
+        <td class="nm">Traders Place GmbH &amp; Co. KGaA</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="tradevest digital assets gmbh ">
+        <td class="nm">Tradevest Digital Assets GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="tradevest markets ag ">
+        <td class="nm">Tradevest Markets AG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><b>h</b><b>i</b><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="tradias gmbh ">
+        <td class="nm">Tradias GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="trading 212 markets ltd ">
+        <td class="nm">Trading 212 Markets Ltd</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="trading.com markets eu ltd ">
+        <td class="nm">Trading.com Markets EU Ltd</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><b>i</b><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="tria bridge limited (ex tokenomica bridge ltd) ">
+        <td class="nm">TRIA BRIDGE LIMITED (ex Tokenomica Bridge Ltd)</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">31</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="týr markets as ">
+        <td class="nm">TÝR MARKETS AS</td>
+        <td class="ms">NO</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">2</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="uab blue emi lt ">
+        <td class="nm">UAB BLUE EMI LT</td>
+        <td class="ms">LT</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">0</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="uab decentralized coingate">
+        <td class="nm">UAB Decentralized<span class="alt">Coingate</span></td>
+        <td class="ms">LT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="uab micar assets myriad capital">
+        <td class="nm">UAB Micar assets<span class="alt">Myriad Capital</span></td>
+        <td class="ms">LT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">0</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="unlimit crypto ltd unlimit crypto ltd (ex stable defi ltd)">
+        <td class="nm">Unlimit Crypto Ltd<span class="alt">Unlimit Crypto Ltd (ex Stable Defi Ltd)</span></td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="v-bank ag ">
+        <td class="nm">V-Bank AG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="validvent technology gmbh ">
+        <td class="nm">Validvent Technology GmbH</td>
+        <td class="ms">AT</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>h</b><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="vbu volksbank im unterland eg ">
+        <td class="nm">VBU Volksbank im Unterland eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="vereinigte volksbank raiffeisenbank eg, reinheim ">
+        <td class="nm">Vereinigte Volksbank Raiffeisenbank eG, Reinheim</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="vereinigte vr bank eg ">
+        <td class="nm">Vereinigte VR Bank eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="vermögensbutler gmbh ">
+        <td class="nm">Vermögensbutler GmbH</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><b>h</b><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="virtu financial ireland limited ">
+        <td class="nm">Virtu Financial Ireland Limited</td>
+        <td class="ms">IE</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="vivid money b.v. ">
+        <td class="nm">Vivid Money B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank alb eg ">
+        <td class="nm">Volksbank Alb eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank backnang eg ">
+        <td class="nm">Volksbank Backnang eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank baumberge eg ">
+        <td class="nm">Volksbank Baumberge eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank beilstein-ilsfeld-abstatt eg ">
+        <td class="nm">Volksbank Beilstein-Ilsfeld-Abstatt eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank eg - die gestalterbank ">
+        <td class="nm">Volksbank eG - Die Gestalterbank</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank euskirchen eg ">
+        <td class="nm">Volksbank Euskirchen eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank heiden eg ">
+        <td class="nm">Volksbank Heiden eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank mittlerer schwarzwald eg ">
+        <td class="nm">Volksbank Mittlerer Schwarzwald eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank olpe-wenden-drolshagen eg ">
+        <td class="nm">Volksbank Olpe-Wenden-Drolshagen eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank raiffeisenbank bayern mitte eg ">
+        <td class="nm">Volksbank Raiffeisenbank Bayern Mitte eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank raiffeisenbank dachau eg ">
+        <td class="nm">Volksbank Raiffeisenbank Dachau eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank raiffeisenbank oberbayern südost eg ">
+        <td class="nm">Volksbank Raiffeisenbank Oberbayern Südost eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank raiffeisenbank würzburg eg ">
+        <td class="nm">Volksbank Raiffeisenbank Würzburg eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank sauerland eg ">
+        <td class="nm">Volksbank Sauerland eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip namematch">MiFID II · name match</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank schwarzwald-donau-neckar eg ">
+        <td class="nm">Volksbank Schwarzwald-Donau-Neckar eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="volksbank zollernalb eg ">
+        <td class="nm">Volksbank Zollernalb eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="vr bank ihre heimatbank eg ">
+        <td class="nm">VR Bank Ihre Heimatbank eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="vr bank münchen land eg ">
+        <td class="nm">VR Bank München Land eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="vr bank ried-überwald eg ">
+        <td class="nm">VR Bank Ried-Überwald eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="vr bank schleswig-holstein mitte eg ">
+        <td class="nm">VR Bank Schleswig-Holstein Mitte eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="vr bank südpfalz eg ">
+        <td class="nm">VR Bank Südpfalz eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="vr teilhaberbank metropolregion nürnberg eg ">
+        <td class="nm">VR TeilhaberBank Metropolregion Nürnberg eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="vr-bank augsburg-ostallgäu eg ">
+        <td class="nm">VR-Bank Augsburg-Ostallgäu eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="vr-bank erding eg ">
+        <td class="nm">VR-Bank Erding eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="vr-bank landau-mengkofen eg ">
+        <td class="nm">VR-Bank Landau-Mengkofen eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="vr-bank mittelfranken mitte eg ">
+        <td class="nm">VR-Bank Mittelfranken Mitte eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="vr-bank rottal-inn eg ">
+        <td class="nm">VR-Bank Rottal-Inn eG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="wb-shields innovations gmbh whitebit eu">
+        <td class="nm">WB-Shields Innovations GmbH<span class="alt">WhiteBIT EU</span></td>
+        <td class="ms">AT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><b>f</b><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="wbtcb.cz, s.r.o. ">
+        <td class="nm">wBTCb.cz, s.r.o.</td>
+        <td class="ms">CZ</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="web3 technology b.v. ari10 | ari10 nl |  web3 technology b.v. | rgltd
+cashify">
+        <td class="nm">WEB3 Technology B.V.<span class="alt">Ari10 | Ari10 NL |  WEB3 Technology B.V. | RGL</span></td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="webull securities (europe) b.v. webull | webull europe">
+        <td class="nm">Webull Securities (Europe) B.V.<span class="alt">Webull | Webull Europe</span></td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="westerwald bank eg volks- und raiffeisenbank ">
+        <td class="nm">Westerwald Bank eG Volks- und Raiffeisenbank</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="white tech limited liability company for services white tech ltd">
+        <td class="nm">WHITE TECH Limited liability company for services<span class="alt">WHITE TECH LTD</span></td>
+        <td class="ms">HR</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">3</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="woorton sas ">
+        <td class="nm">WOORTON SAS</td>
+        <td class="ms">FR</td>
+        <td class="msk"><i>·</i><i>·</i><b>c</b><b>d</b><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">26</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="wsw portfoliomanagement ag ">
+        <td class="nm">wSw PortfolioManagement AG</td>
+        <td class="ms">DE</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="wyden capital ag ">
+        <td class="nm">Wyden Capital AG</td>
+        <td class="ms">LI</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>i</b><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr class="isdual" data-n="xtb limited ">
+        <td class="nm">XTB Limited</td>
+        <td class="ms">CY</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><b>e</b><i>·</i><b>g</b><i>·</i><i>·</i><i>·</i></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip namematch">MiFID II · name match</span></td>
+      </tr>
+      <tr data-n="young platform s.p.a. ">
+        <td class="nm">YOUNG PLATFORM S.P.A.</td>
+        <td class="ms">IT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><b>d</b><b>e</b><b>f</b><i>·</i><b>h</b><b>i</b><b>j</b></td>
+        <td class="num">2</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="zap (strike) europe limited ">
+        <td class="nm">Zap (Strike) Europe Limited</td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><b>e</b><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="zebedee europe b.v. ">
+        <td class="nm">Zebedee Europe B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><i>·</i><b>c</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="zerohash europe b.v. ">
+        <td class="nm">zerohash europe B.V.</td>
+        <td class="ms">NL</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr class="isdual" data-n="zeus anstalt für vermögensverwaltung ">
+        <td class="nm">ZEUS Anstalt für Vermögensverwaltung</td>
+        <td class="ms">LI</td>
+        <td class="msk"><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>i</b><i>·</i></td>
+        <td class="num">1</td>
+        <td class="flag"><span class="chip dual">MiFID II</span></td>
+      </tr>
+      <tr data-n="zillion bits limited zbx">
+        <td class="nm">Zillion Bits Limited<span class="alt">ZBX</span></td>
+        <td class="ms">MT</td>
+        <td class="msk"><b>a</b><b>b</b><b>c</b><b>d</b><b>e</b><b>f</b><b>g</b><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">29</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+      <tr data-n="zodia custody (europe) s.a. ">
+        <td class="nm">Zodia Custody (Europe) S.A.</td>
+        <td class="ms">LU</td>
+        <td class="msk"><b>a</b><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><i>·</i><b>j</b></td>
+        <td class="num">30</td>
+        <td class="flag"><span class="chip none">—</span></td>
+      </tr>
+        </tbody>
+      </table>
+      <p class="empty-note" id="nohits" hidden>No firm matches that search.</p>
+    </div>
+    <p style="margin-top:18px; font-size:14.5px; color:var(--text-soft)">
+      Services are the ten MiCA permissions lettered <b>a</b>–<b>j</b>; held ones are inked, withheld
+      ones are a stop. Countries is the passporting footprint the firm actually notified, not its
+      home member state. The cross-reference is an LEI match against the ESMA register unless the
+      chip says otherwise.
+    </p>
+  </div>
+</section>
+
 <section id="overwrite">
   <div class="wrap">
     <p class="kicker">Why the change column is the hard part</p>
@@ -1112,6 +3675,30 @@ uv run eufinreg watch --coverage</code></pre>
     </p>
   </div>
 </footer>
+
+
+<script>
+(function () {
+  var q = document.getElementById('q'), only = document.getElementById('only');
+  var table = document.getElementById('roster'), tally = document.getElementById('tally');
+  var nohits = document.getElementById('nohits');
+  if (!q || !table) return;                       // the table is complete without this
+  var rows = Array.prototype.slice.call(table.tBodies[0].rows);
+  function apply() {
+    var term = q.value.trim().toLowerCase(), dualOnly = only.checked, shown = 0;
+    rows.forEach(function (row) {
+      var ok = (!term || row.dataset.n.indexOf(term) !== -1) &&
+               (!dualOnly || row.classList.contains('isdual'));
+      row.hidden = !ok;
+      if (ok) shown++;
+    });
+    tally.textContent = shown + ' of ' + rows.length;
+    nohits.hidden = shown !== 0;
+  }
+  q.addEventListener('input', apply);
+  only.addEventListener('change', apply);
+})();
+</script>
 
 </body>
 </html>
